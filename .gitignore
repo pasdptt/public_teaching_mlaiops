@@ -16,3 +16,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+
+# Excel lock files — created while the specification workbook is open.
+~$*
