@@ -59,6 +59,19 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3
 
+      # The integration test below runs make_dataset/train/export on the runner to
+      # produce the artefact the serving container is then asked to serve, so this job
+      # needs the same interpreter and pins as the test job.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
       - name: Build training image
         run: docker buildx build --platform linux/amd64 -t itcs355:${{ github.sha }} --load .
 
