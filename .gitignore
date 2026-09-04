@@ -11,7 +11,7 @@ mlruns/
 mlartifacts/
 mlflow.db
 
-reports/metrics.json
+reports/*.json
 reports/*.joblib
 __pycache__/
 *.pyc

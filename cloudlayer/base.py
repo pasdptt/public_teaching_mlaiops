@@ -1,8 +1,9 @@
 """The portability seam.
 
-Ten methods. Every managed ML platform sells you the same ten operations under
+Eleven methods. Every managed ML platform sells you the same eleven operations under
 different names; writing this once is the difference between knowing a product and
-knowing the category.
+knowing the category. `generate` is the newest of them and the one the vendors are
+currently busiest renaming.
 
 You implement exactly ONE of aws.py, azure.py, or gcp.py. Lab 1 needs only `upload`,
 `download`, and `push_image`. The rest raise NotImplementedError until the lab that
@@ -58,6 +59,22 @@ class CloudAdapter(ABC):
         raise NotImplementedError("Lab 4")
 
     # --- Lab 5 ---------------------------------------------------------------
+    def generate(self, prompt: str, params: dict[str, Any]) -> dict[str, Any]:
+        """Call a managed LLM endpoint once. Returns at least:
+
+            {"response": str, "input_tokens": int,
+             "output_tokens": int, "latency_ms": int}
+
+        Token counts must be read from the provider's own usage fields. Estimating them
+        by counting words produces a cost report built on a number you made up, and
+        every provider tokenises differently.
+
+        `params` carries the knobs worth exposing at the seam — `max_output_tokens`
+        above all, since output tokens dominate the bill. Provider-specific options
+        belong here in Layer 3, never in the caller.
+        """
+        raise NotImplementedError("Lab 5")
+
     def teardown(self, tags: dict[str, str]) -> list[str]:
         """Delete every resource carrying these tags. Returns what was deleted.
 

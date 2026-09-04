@@ -84,12 +84,15 @@ class CloudAdapter(ABC):
     def deploy(self, model_ref: str, endpoint: str, instance: str) -> str: ...
     def invoke(self, endpoint: str, payload: dict) -> dict: ...
     def emit_metric(self, name: str, value: float, unit: str) -> None: ...
+    def generate(self, prompt: str, params: dict) -> dict: ...
     def teardown(self, tags: dict) -> list[str]: ...
 ```
 
-Ten methods. `submit_training` and `deploy` will take you the longest; the rest are thin wrappers.
+Eleven methods. `submit_training` and `deploy` will take you the longest; the rest are thin
+wrappers. `generate` returns the text **and** the provider's own token counts — Lab 5 prices a token
+bill from them, and an estimated count is a fabricated one.
 
-**Why you are made to write this.** Every managed ML platform sells you the same ten operations
+**Why you are made to write this.** Every managed ML platform sells you the same eleven operations
 under different names. Writing the adapter once makes that visible, and it is the difference between
 knowing a product and knowing the category. In Session 5 we compare adapters across the room.
 
@@ -108,6 +111,7 @@ knowing a product and knowing the category. In Session 5 we compare adapters acr
 | Model registry | SageMaker Model Registry | Azure ML Model Registry | Vertex AI Model Registry |
 | Online endpoint | SageMaker Real-Time Endpoint | Azure ML Managed Online Endpoint | Vertex AI Endpoint |
 | Batch inference | SageMaker Batch Transform | Azure ML Batch Endpoint | Vertex AI Batch Prediction |
+| Managed LLM endpoint | Bedrock | Azure OpenAI / AI Foundry | Vertex AI generative models |
 | Serverless container | App Runner / Fargate / Lambda | Container Apps | Cloud Run |
 | Pipelines | SageMaker Pipelines | Azure ML Pipelines | Vertex AI Pipelines |
 | Metrics | CloudWatch Metrics | Azure Monitor | Cloud Monitoring |

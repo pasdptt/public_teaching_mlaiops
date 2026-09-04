@@ -34,4 +34,5 @@ class AzureAdapter(CloudAdapter):
     # submit_training / register_model  -> Lab 2 (Azure ML command job + model registry)
     # deploy / invoke                   -> Lab 3 (managed online endpoint + deployment)
     # emit_metric                       -> Lab 4 (Azure Monitor custom metric)
+    # generate                          -> Lab 5 (managed LLM endpoint; read the usage block for tokens)
     # teardown                          -> Lab 5 (resource graph query by tag)

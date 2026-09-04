@@ -33,4 +33,5 @@ class AwsAdapter(CloudAdapter):
     # submit_training / register_model  -> Lab 2 (SageMaker training job + model package group)
     # deploy / invoke                   -> Lab 3 (SageMaker real-time endpoint)
     # emit_metric                       -> Lab 4 (CloudWatch put_metric_data)
+    # generate                          -> Lab 5 (managed LLM endpoint; read the usage block for tokens)
     # teardown                          -> Lab 5 (resourcegroupstaggingapi to find by tag)

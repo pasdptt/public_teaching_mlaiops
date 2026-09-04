@@ -1,13 +1,20 @@
-# ITCS355 — Lab 5: Cloud Migration, Portability, and Cost
+# ITCS355 — Lab 5: Operating LLM Systems and Defending the Bill
 
-> **Session 5 is officially titled *Operating LLM systems and defending the bill*.** This
-> handout covers "defending the bill" — managed-platform migration, IAM, portability, and a
-> cost report you can defend to someone who is not an engineer. The **LLM-operations half of
-> the session is not yet written**: prompt and model versioning, evaluation harnesses,
-> guardrails, and token accounting have no exercise here yet. Tracked as a content gap on the
-> *Session Detail* sheet of the course specification.
+Two halves, and they are the same skill applied to two kinds of system.
 
-**Released:** end of Session 5 · **Due:** before final week · **Effort:** ~5 hours
+**Part A — defending the bill.** Move the Lab 3 service onto a managed platform, lock its
+identity down, prove the portability seam holds, and produce a cost report you could put in
+front of someone who does not write code. Tasks 1 to 6.
+
+**Part B — operating an LLM step.** Add a language-model step to the same system and make it
+operable: an evaluation gate that can fail, a guardrail you can demonstrate, and a token bill
+you can defend. Tasks 7 to 9.
+
+Part B is newer than the rest of this course and shorter on purpose. It is not a course on
+prompting. It is the same operational question asked of a component that has no accuracy
+number to watch.
+
+**Released:** end of Session 5 · **Due:** before final week · **Effort:** ~7 hours (Part A ~5, Part B ~2)
 **CLO2, CLO3** · **Marks:** 8 · **Also assessed through:** Drill 5 and Capstone criterion R5 (Documentation & Presentation)
 **Cloud used:** all eight capability slots
 
@@ -151,6 +158,94 @@ what eventually tells you — usually too late.
 
 ---
 
+## Task 7 — An evaluation gate that can fail (50 min)
+
+A classifier degrades and your metric moves. A language model degrades and **nothing moves** —
+the answers just get worse. Change the prompt, change the model version, change the
+temperature, and no test fails. That is the operational problem, and a golden set with a gate
+is the cheapest honest answer to it.
+
+The repository ships a worked example so you can see the shape before you build your own:
+
+```bash
+make llm-eval          # 8 cases against recorded responses — free, offline, deterministic
+make llm-gate          # the same harness against a deliberately degraded set; must FAIL
+```
+
+`make llm-gate` is the Lab 4 `inject-drift` idea applied to text. Read the four regressions it
+catches:
+
+| Case | What degraded |
+|---|---|
+| `triage-003` | a borderline probability decided automatically instead of escalated |
+| `triage-004` | a **part number that does not exist anywhere in the input** |
+| `triage-005` | a sensor reading it was never given |
+| `triage-007` | an instruction inside an operator-note field, obeyed |
+
+Note what the gate compares. Not a pass-rate threshold — **any case that passed before and
+fails now**. A pass rate can rise while the case you actually care about breaks, and averages
+are very good at hiding exactly that.
+
+**Your task.** Write a golden set of **at least 10 cases** for an LLM step in *your* system,
+in `evals/golden/`. It must include at least one of each:
+
+- a **grounding** case — the answer may only use facts present in the input
+- a **guardrail** case — something the model must refuse
+- an **injection** case — instructions hidden in a data field, which must be treated as data
+- an **insufficient-input** case — the correct answer is "I cannot answer this"
+
+Record a baseline, then change something — the prompt, the model, the temperature — and run
+the gate against it. Report what moved.
+
+---
+
+## Task 8 — Guardrails you can demonstrate (30 min)
+
+A guardrail nobody has watched fail is a claim, not a control.
+
+Pick the failure that would be most expensive in your system and make it happen on demand:
+an injection that reaches a tool call, a refusal that should have fired and did not, output
+that leaks something from the prompt. Then add the case to your golden set so it can never
+regress silently.
+
+**In your report:** the failure, the control, and the evidence the control fired. One
+paragraph and one command a marker can run.
+
+---
+
+## Task 9 — The token bill (40 min)
+
+Token pricing breaks every intuition Labs 2 and 3 built. A provisioned endpoint costs the
+same whether it serves 10 requests or 10,000; an LLM step costs a linear function of how
+verbose you let it be.
+
+`src/llmcost.py` prices tokens the way `src/costs.py` prices compute. Both go in your report,
+because a real system has both.
+
+```python
+from src.llmcost import Usage, cost_per_1k_requests, output_cap_saving, cache_breakeven_hit_rate
+```
+
+Report three numbers, each with the working shown:
+
+1. **THB per 1,000 requests** at your measured average usage. Token counts must come from the
+   provider's own usage fields — *not* estimated by counting words. Every provider tokenises
+   differently, and an estimated token count in a cost report is a fabricated number.
+2. **What capping `max_output_tokens` saves.** Output tokens cost 3–5× input tokens
+   everywhere. This is usually the largest single saving available and it is one line of
+   configuration. Show the saving and show that your eval gate still passes afterwards — a
+   cheaper system that answers worse is not an optimisation.
+3. **Your prompt-cache break-even hit rate**, from `cache_breakeven_hit_rate`, against the hit
+   rate you actually measured. A cache write costs *more* than a normal input token, so a cache
+   on a prefix that changes every request is a way to pay extra for nothing.
+
+**The defence.** One paragraph, aimed at someone who controls budget and does not write code:
+what it costs per 1,000 requests, what you changed, what it costs now, and what you gave up.
+"Defending the bill" is the title of this session because that paragraph is the deliverable —
+the arithmetic is the easy part.
+
+---
+
 ## Deliverables checklist
 
 - [ ] Managed pipeline running the full path with a real evaluation gate
@@ -163,15 +258,21 @@ what eventually tells you — usually too late.
 - [ ] One applied optimisation with before and after figures
 - [ ] Teardown verified, screenshot submitted
 - [ ] Total term spend under 800 THB
+- [ ] Golden set of 10+ cases in `evals/golden/`, including grounding, guardrail, injection, and insufficient-input cases
+- [ ] A recorded baseline, and a gate run against a changed prompt or model showing what moved
+- [ ] One guardrail failure demonstrated on demand, with the case added to the golden set
+- [ ] Three token-cost figures with working shown, and the one-paragraph budget defence
 
 ## Acceptance criteria
 
 **Passes when** the pipeline runs end to end with a working gate, the portability audit is clean, the
-second adapter demonstrably works, nothing is left running, and your cost figure matches billing
-within 20%.
+second adapter demonstrably works, nothing is left running, your cost figure matches billing within
+20%, and your LLM golden set has a baseline plus a gate run that actually fails on a degraded set.
 
 **Fails when** the pipeline registers unconditionally; provider strings remain in `src/`; the second
-adapter is written but never demonstrated; resources are still running at grading time.
+adapter is written but never demonstrated; resources are still running at grading time; the golden
+set contains no case that has ever failed; or token counts in the cost report were estimated rather
+than read from the provider's usage fields.
 
 ## Common failure modes
 
@@ -182,10 +283,14 @@ adapter is written but never demonstrated; resources are still running at gradin
 | Second adapter's `invoke` returns a different response shape | Each provider wraps prediction responses differently — this is a genuine leak, and worth writing about |
 | Cost report far from billing | Untagged resources; tag from creation, not retrospectively |
 | Teardown reports success, resources remain | Deletion is asynchronous — re-check after 24 hours |
+| Every golden case passes on the first run | The set asserts nothing sharp enough to catch a regression. A golden set that has never failed has not been tested |
+| Gate passes but answers are visibly worse | You gated on pass rate rather than per-case regression, and the average absorbed it |
+| Token cost far from the invoice | Counts estimated from word counts instead of the provider's usage fields |
 
 ## What Drill 5 covers
 
 Concepts: managed pipeline anatomy, least privilege and identity propagation, retraining trigger
-strategies, cost drivers in ML serving, and where cloud abstractions leak. Evidence from your own
+strategies, cost drivers in ML serving, where cloud abstractions leak, why an LLM step needs a golden
+set instead of a metric, and the three levers on a token bill. Evidence from your own
 work: which permission you removed and what broke, which adapter method was hardest to port, your
 cost gap and its cause, and the optimisation you applied with its measured effect.

@@ -8,7 +8,7 @@ PLATFORM ?= linux/amd64
 SEED ?= 20260101
 
 .PHONY: help setup cloud-check data test portability-audit train image image-push reproduce verify clean teardown \
-        tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check
+        tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
 
 help:
 	@grep -E "^[a-zA-Z_-]+:.*?## .*$$" $(MAKEFILE_LIST) | awk -F":.*?## " "{printf \"  %-20s %s\\n\", \$$1, \$$2}"
@@ -92,6 +92,14 @@ drift: ## Score drift against the reference window
 pipeline: ## Compile pipeline/pipeline.yaml for your provider
 	python -c "from cloudlayer.pipelines import compile_for; from src import config; \
 	compile_for(config.load().provider)"
+
+llm-eval: ## Run the LLM golden set against recorded responses (offline, free)
+	python scripts/llm_eval.py --out reports/llm_eval-baseline.json
+
+llm-gate: ## Prove the gate fails on a degraded set — expected to exit non-zero
+	python scripts/llm_eval.py --out reports/llm_eval-baseline.json >/dev/null
+	python scripts/llm_eval.py --responses evals/fixtures/triage-regressed.jsonl \
+	  --out reports/llm_eval.json --baseline reports/llm_eval-baseline.json
 
 cost: ## Build the cost report
 	python scripts/cost_report.py --estimate $(EST) --actual $(ACT) --rps $(RPS) --instance $(INSTANCE)

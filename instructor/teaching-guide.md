@@ -60,11 +60,21 @@ in the course. Inject one of: a shifted feature distribution, a schema change, o
 regression. Teams must diagnose, decide retrain-versus-rollback, and write a five-line post-mortem.
 Score the reasoning, not the speed. Prepare three fault variants so adjacent teams cannot copy.
 
-**Session 5 — Operating LLM systems and defending the bill.** The faculty renamed this session, and
-the LLM-operations half of it is not written yet — see the content-gap note on the *Session Detail*
-sheet before you teach it. What follows applies to the cloud and cost half, which is complete.
+**Session 5 — Operating LLM systems and defending the bill.** Both halves now have lab material.
+The LLM half is Lab 5 Part B: an evaluation gate, guardrails, and token accounting, built on
+`scripts/llm_eval.py` and `src/llmcost.py`. Slides for that half and Drill 5 questions on it are
+still to write — see the note on the *Session Detail* sheet.
 
-The first failure will be a permissions error, for almost everyone.
+Teach Part B with `make llm-gate` on screen. It fails on purpose, and the four regressions it catches
+are the lesson: an invented part number, a fabricated sensor reading, an obeyed prompt injection, and
+a borderline case decided instead of escalated. Ask the room which of those a pass-rate threshold
+would have hidden — the answer is all four, if the other cases improved. That is why the gate
+compares per case.
+
+The lab runs on recorded responses, so nobody spends money and everyone gets the same failures. Say
+so explicitly; students assume an LLM exercise means an API key and a bill.
+
+On the cloud half, the first failure will be a permissions error, for almost everyone.
 Plan for it rather than firefighting: pre-create roles, and treat the first failed job as a live
 teaching moment about least privilege. Reserve the last 45 minutes for project architecture clinics —
 teams that have not had their architecture questioned before final week tend to submit incomplete
