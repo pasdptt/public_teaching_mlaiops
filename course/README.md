@@ -10,6 +10,9 @@ University · 5 sessions × 3 hours + final week
 
 ## Read in this order
 
+0. **[`getting-started-gcp.md`](getting-started-gcp.md)** — if you are on GCP and want the
+   commands in order, from an empty laptop to a finished Lab 1. Written for a student with
+   minimum access: one project, basic permissions, a small budget.
 1. **[`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)**
    — before anything else. Defines the contract that makes every lab work on AWS, Azure, or
    GCP, and contains the Week 0 setup checklist.
@@ -95,6 +98,8 @@ course/
 ├── slides/     Course overview deck. course-deck.md renders here with diagrams;
 │               the .html is a styled presentation version.
 ├── reference/  The cloud portability contract. Read first.
+├── getting-started-gcp.md
+│               Week 0 and Week 1, step by step, for students on GCP.
 ├── labs/       Five take-home lab handouts.
 └── project/    Capstone brief, milestones, and rubric.
 ```
