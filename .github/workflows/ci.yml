@@ -32,9 +32,9 @@ jobs:
           # TODO(Lab 4): once requirements.txt carries hashes, add --require-hashes.
 
       - name: Lint
-        run: |
-          pip install ruff
-          ruff check src/ service/ monitoring/ scripts/ tests/
+        # ruff is pinned in requirements.txt and installed above. Installing it unpinned
+        # here would let a new ruff release fail this build on unchanged code.
+        run: ruff check src/ service/ monitoring/ scripts/ tests/
 
       - name: Portability audit
         run: python scripts/portability_audit.py

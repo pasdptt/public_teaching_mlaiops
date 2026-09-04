@@ -12,6 +12,7 @@ mlartifacts/
 mlflow.db
 
 reports/metrics.json
+reports/*.joblib
 __pycache__/
 *.pyc
 .pytest_cache/
@@ -19,3 +20,6 @@ __pycache__/
 
 # Excel lock files — created while the specification workbook is open.
 ~$*
+
+# ruff cache
+.ruff_cache/

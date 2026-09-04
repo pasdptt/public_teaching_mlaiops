@@ -1,0 +1,14 @@
+# The lint rules are pinned here on purpose.
+#
+# CI used to run a bare `pip install ruff` with no configuration, so the rule set was
+# whatever ruff shipped that morning. A new ruff release then turns a green branch red
+# without a line of your code changing — the exact failure mode Lab 1 is about. The
+# linter is part of the build, so it gets pinned like everything else: the version in
+# requirements.in, the rules here.
+#
+# This is ruff's classic default set. Widening it is a reasonable change to make; do it
+# deliberately, in a commit that also fixes what it flags.
+line-length = 100
+
+[lint]
+select = ["E4", "E7", "E9", "F"]

@@ -19,7 +19,6 @@ import time
 from pathlib import Path
 
 import mlflow
-import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import average_precision_score, roc_auc_score
 
