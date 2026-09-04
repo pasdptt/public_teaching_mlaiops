@@ -12,3 +12,5 @@ pytest==9.1.1
 PyYAML==6.0.3
 joblib==1.4.2
 ruff==0.16.6
+fastapi==0.141.1
+httpx2==2.12.0
