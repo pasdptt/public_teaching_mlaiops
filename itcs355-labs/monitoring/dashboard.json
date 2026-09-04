@@ -1,0 +1,25 @@
+{
+  "_comment": "Lab 4 — dashboard as code. Portable Grafana definition; import it, or translate the panels to CloudWatch / Azure Monitor / Cloud Monitoring. Committing the dashboard is better than clicking one together, and is noted favourably.",
+  "title": "ITCS355 — Prediction service",
+  "refresh": "30s",
+  "panels": [
+    {"id": 1, "title": "Request rate", "type": "timeseries", "unit": "reqps",
+     "target": "sum(rate(http_requests_total[1m]))"},
+    {"id": 2, "title": "Error rate by class", "type": "timeseries", "unit": "percentunit",
+     "target": "sum by (status_class) (rate(http_requests_total{status_class=~\"4xx|5xx\"}[5m])) / sum(rate(http_requests_total[5m]))",
+     "_note": "4xx and 5xx must be split. 4xx is usually a caller problem; 5xx is yours."},
+    {"id": 3, "title": "Latency p50 / p95 / p99", "type": "timeseries", "unit": "ms",
+     "targets": [
+       "histogram_quantile(0.50, sum by (le) (rate(request_latency_ms_bucket[5m])))",
+       "histogram_quantile(0.95, sum by (le) (rate(request_latency_ms_bucket[5m])))",
+       "histogram_quantile(0.99, sum by (le) (rate(request_latency_ms_bucket[5m])))"
+     ],
+     "_note": "If p99 is far above p95 in a repeating pattern, suspect cold start or a per-request model load."},
+    {"id": 4, "title": "Feature drift (PSI, rolling)", "type": "timeseries",
+     "target": "drift_psi",
+     "_note": "TODO(Lab 4): at least one feature-distribution statistic is required. Emit it from monitoring/drift.py via adapter.emit_metric."},
+    {"id": 5, "title": "Model version in production", "type": "stat",
+     "target": "model_version_info",
+     "_note": "During a canary you should see two. If you see two when you are not deploying, something is wrong."}
+  ]
+}

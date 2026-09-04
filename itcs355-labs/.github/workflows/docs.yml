@@ -1,0 +1,51 @@
+# Validate the course documents. A broken diagram renders as raw text on the website and
+# nobody notices, because the failure is silent.
+
+name: Docs
+
+on:
+  push:
+    paths: ['**.md', 'course/**', 'scripts/export_spec_md.py', 'scripts/site/**']
+  pull_request:
+    paths: ['**.md', 'course/**']
+
+jobs:
+  diagrams:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund mermaid jsdom
+      - name: Parse every mermaid diagram
+        run: node scripts/site/validate-mermaid.mjs
+
+  spec-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install openpyxl
+      - name: Re-export the specification and check for drift
+        run: |
+          python scripts/export_spec_md.py
+          if ! git diff --quiet course/spec/course-specification.md; then
+            echo "::error::course-specification.md is out of date with the workbook."
+            echo "Run: python scripts/export_spec_md.py, then commit the result."
+            git diff --stat course/spec/course-specification.md
+            exit 1
+          fi
+          echo "specification markdown matches the workbook"
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check relative links resolve
+        run: python scripts/site/check_links.py

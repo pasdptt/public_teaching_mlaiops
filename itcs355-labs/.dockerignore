@@ -1,0 +1,13 @@
+.git
+.dvc/cache
+data/
+mlruns/
+mlartifacts/
+mlflow.db
+reports/
+notebooks/
+__pycache__/
+*.pyc
+.pytest_cache/
+cloud.env
+instructor/

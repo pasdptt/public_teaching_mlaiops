@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITCS355 — Machine Learning Operation and Deployment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2;
+  --panel:#FFFFFF;
+  --ink:#0F1419;
+  --muted:#5C6672;
+  --rule:#C7D0D7;
+  --ok:#0B7A75;
+  --warn:#B26A08;
+  --fail:#A62B22;
+  --deep:#16323F;
+  --display:"IBM Plex Sans Condensed",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+body{padding:24px 20px 96px}
+
+.deck{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+
+.slide{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:0;
+  display:flex;flex-direction:column;
+  min-height:600px;
+  scroll-margin-top:20px;
+  box-shadow:0 1px 0 rgba(15,20,25,.04);
+}
+
+/* ---- signature: the deployment rail ---- */
+.rail{display:flex;border-bottom:1px solid var(--rule);background:#F7F9FA}
+.rail span{
+  flex:1;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:#94A1AB;padding:9px 12px;border-right:1px solid var(--rule);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rail span:last-child{border-right:none}
+.rail span.on{color:var(--panel);background:var(--deep)}
+.rail span.done{color:var(--ok)}
+
+.body{padding:38px 46px 42px;flex:1;display:flex;flex-direction:column}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.eyebrow b{color:var(--ok);font-weight:600}
+h1{font-family:var(--display);font-size:clamp(38px,6vw,68px);line-height:.98;letter-spacing:-.02em;font-weight:700}
+h2{font-family:var(--display);font-size:clamp(26px,3.4vw,38px);line-height:1.06;letter-spacing:-.015em;font-weight:700;margin-bottom:6px}
+h3{font-family:var(--display);font-size:17px;letter-spacing:.01em;margin-bottom:6px}
+p{font-size:15.5px;line-height:1.62;color:#26303A;max-width:66ch}
+.lede{font-size:18px;line-height:1.55;color:var(--muted);max-width:60ch;margin-top:14px}
+.sub{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.02em}
+
+.grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:24px}
+.grid.two{grid-template-columns:1fr 1fr}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+.cell{background:var(--panel);padding:18px 20px}
+.cell p{font-size:14px;color:var(--muted);line-height:1.55}
+
+ul{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:11px;max-width:70ch}
+li{font-size:15.5px;line-height:1.5;padding-left:26px;position:relative}
+li::before{content:"";position:absolute;left:2px;top:9px;width:9px;height:1px;background:var(--ok)}
+li b{font-weight:600}
+li span.n{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+table{width:100%;border-collapse:collapse;margin-top:22px;font-size:14px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 14px 9px 0;border-bottom:1px solid var(--rule);font-weight:500}
+td{padding:12px 14px 12px 0;border-bottom:1px solid #E4E9EC;vertical-align:top;line-height:1.45}
+td.mono{font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule);color:var(--muted);display:inline-block}
+.tag.ok{color:var(--ok);border-color:var(--ok)}
+.tag.warn{color:var(--warn);border-color:var(--warn)}
+.tag.fail{color:var(--fail);border-color:var(--fail)}
+
+.split{display:flex;gap:44px;margin-top:26px;flex-wrap:wrap}
+.split>div{flex:1;min-width:240px}
+
+.big{font-family:var(--display);font-size:56px;line-height:1;letter-spacing:-.02em}
+.big.small{font-size:34px}
+
+.callout{margin-top:26px;border-left:3px solid var(--warn);padding:12px 0 12px 18px;background:#FDF8F1}
+.callout p{font-size:14.5px;color:#3A2E1C;max-width:64ch}
+
+.foot{margin-top:auto;padding-top:26px;display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.foot .sub{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+.term{background:var(--deep);color:#D6E3E8;font-family:var(--mono);font-size:13px;line-height:1.85;padding:18px 20px;margin-top:24px;overflow-x:auto}
+.term .c{color:#7FA6B3}
+.term .g{color:#5FD3B2}
+
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(237,240,242,.94);backdrop-filter:blur(8px);border-top:1px solid var(--rule);padding:10px 20px;display:flex;justify-content:center;gap:14px;align-items:center;z-index:10}
+.nav button{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel);border:1px solid var(--rule);color:var(--ink);padding:7px 14px;cursor:pointer;border-radius:2px}
+.nav button:hover{border-color:var(--deep)}
+.nav button:focus-visible,.slide:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.nav .count{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:64px;text-align:center}
+
+@media (max-width:760px){
+  .body{padding:26px 22px 30px}
+  .grid.three,.grid.two{grid-template-columns:1fr}
+  .slide{min-height:auto}
+  .rail span{font-size:8.5px;padding:7px 6px}
+}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
+@media print{
+  .nav{display:none}
+  .slide{page-break-after:always;min-height:auto;box-shadow:none}
+  body{padding:0}
+}
+</style>
+</head>
+<body>
+
+<main class="deck" id="deck">
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Faculty of ICT, Mahidol University &middot; Semester 1 &middot; Class level 4</div>
+    <h1>ITCS355<br>Machine Learning<br>Operation &amp;<br>Deployment</h1>
+    <p class="lede">Taking a model out of a notebook and running it as a service other people depend on — with pipelines, monitoring, and a bill someone has to pay.</p>
+    <div class="foot">
+      <span class="sub">1(1-0-2) &middot; 15 lecture hours &middot; 5 sessions &times; 3 hours + final week</span>
+      <span class="sub">Asst. Prof. Dr. Thanapon Noraset</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Why</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">The gap this course closes</div>
+    <h2>You already know how to fit a model.<br>That is the small part.</h2>
+    <p class="lede">Model code is a thin box inside a much larger system of data plumbing, serving infrastructure, configuration, and monitoring. Most production failures live in the box you didn't write.</p>
+    <div class="grid three">
+      <div class="cell"><h3>What courses teach</h3><p>Clean dataset, fixed split, one metric, one machine, one run.</p></div>
+      <div class="cell"><h3>What production is</h3><p>Data that shifts, traffic that spikes, dependencies that rot, costs that compound, users who complain.</p></div>
+      <div class="cell"><h3>What we do here</h3><p>Build the surrounding system, break it deliberately, and measure what happens.</p></div>
+    </div>
+    <div class="callout"><p>Pre-reading before Session 1: Sculley et al., <em>Hidden Technical Debt in Machine Learning Systems</em> (NeurIPS 2015). Nine pages. Bring one question.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">CLOs</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Course learning outcomes &middot; every mark in this course maps to one of these</div>
+    <h2>What you will be able to do</h2>
+    <ul>
+      <li><span class="n">CLO1</span> &nbsp;<b>Apply version control, data management, and experiment tracking</b> to construct reproducible machine learning workflows. <span class="sub">&rarr; 38 marks</span></li>
+      <li><span class="n">CLO2</span> &nbsp;<b>Develop machine learning inference services</b> by integrating model deployment, monitoring, and maintenance practices. <span class="sub">&rarr; 31 marks</span></li>
+      <li><span class="n">CLO3</span> &nbsp;<b>Deploy and manage machine learning applications</b> using cloud-based MLOps services. <span class="sub">&rarr; 31 marks</span></li>
+    </ul>
+    <div class="split" style="margin-top:34px">
+      <div><span class="big small">CLO1</span><p class="sub" style="margin-top:6px">Sessions 1–2 &middot; PLO1</p></div>
+      <div><span class="big small">CLO2</span><p class="sub" style="margin-top:6px">Sessions 3–5 &middot; SLO1</p></div>
+      <div><span class="big small">CLO3</span><p class="sub" style="margin-top:6px">Sessions 3–5 &middot; SLO1</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Scope</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">A term with two meanings — we use both, deliberately</div>
+    <h2>MLOps, and the other "AIOps"</h2>
+    <div class="split">
+      <div>
+        <span class="tag ok">The course</span>
+        <h3 style="margin-top:12px">Operating AI systems</h3>
+        <p>MLOps: versioning, tracking, deployment, drift, retraining, cloud platforms. This is Sessions 1, 2, 3 and 5.</p>
+      </div>
+      <div>
+        <span class="tag warn">One segment</span>
+        <h3 style="margin-top:12px">AI for IT operations</h3>
+        <p>Using ML on telemetry itself — anomaly detection over logs and metrics, alert correlation, noise reduction. Session 4 only.</p>
+      </div>
+    </div>
+    <p style="margin-top:30px">They meet at one point, and it is the interesting one: <b>the system that monitors your model is itself a model</b>, with its own false positives and its own way of being ignored.</p>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Entry</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Assumed, taught, and out of scope</div>
+    <h2>Where you start</h2>
+    <div class="grid three">
+      <div class="cell"><span class="tag ok">Assumed</span><p style="margin-top:12px">Python fluency. Git basics. One prior machine learning course. Basic Linux shell. Comfort reading API documentation.</p></div>
+      <div class="cell"><span class="tag warn">Taught here</span><p style="margin-top:12px">Docker. Experiment tracking. Model registries. Serving and scaling. CI/CD. Observability and drift. Cloud MLOps platforms. Cost.</p></div>
+      <div class="cell"><span class="tag fail">Out of scope</span><p style="margin-top:12px">Model architecture research. Pre-training. Deep networking. Kubernetes internals. Formal SRE theory.</p></div>
+    </div>
+    <div class="callout"><p><b>No prior Docker or cloud experience is required</b> — but Week 0 setup is mandatory and takes about 90 minutes. Arriving at Session 1 without it costs you the first lab, and the labs compound.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Arc</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Five topics, one artefact</div>
+    <h2>The through-line</h2>
+    <p class="lede">You build a single system across the whole term. Nothing is a toy example discarded at the end of the day, and the capstone is an extension of your labs rather than a separate effort.</p>
+    <div class="term">
+<span class="c"># the same repository, five sessions running</span>
+<span class="g">S1</span>  notebook.ipynb  <span class="c">→</span>  Dockerfile + train.py + versioned data
+<span class="g">S2</span>                  <span class="c">→</span>  tracked experiments + registered model v3
+<span class="g">S3</span>                  <span class="c">→</span>  /predict endpoint, p95 &lt; 200ms, load tested
+<span class="g">S4</span>                  <span class="c">→</span>  push → test → deploy, dashboards, drift alert
+<span class="g">S5</span>                  <span class="c">→</span>  running on managed cloud MLOps services
+    </div>
+    <p style="margin-top:26px">The rail at the top of every slide shows which stage you are in.</p>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="on">01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 1 &middot; 3 hours &middot; <b>CLO1</b></div>
+    <h2>From notebook to<br>reproducible ML</h2>
+    <div class="split">
+      <div>
+        <h3>Topics</h3>
+        <ul style="margin-top:10px">
+          <li>How ML systems rot: entanglement, hidden feedback loops, configuration debt</li>
+          <li>Project structure and Git discipline for ML work</li>
+          <li>Environment isolation and containers; why <span class="sub">pip freeze</span> is not reproducibility</li>
+          <li>Data versioning and leakage-safe splits</li>
+        </ul>
+      </div>
+      <div>
+        <h3>In the room</h3>
+        <ul style="margin-top:10px">
+          <li><span class="n">0:00</span> Post-mortem of a real ML incident</li>
+          <li><span class="n">0:40</span> Project layout and Git for experiments</li>
+          <li><span class="n">1:15</span> Live build: a training Dockerfile</li>
+          <li><span class="n">2:10</span> Reproduce your partner's run — most pairs fail, and that is the lesson</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span class="sub">Take-home: Lab 1 — reproducible training container (4 hr)</span><span class="sub">Quiz 1 opens Session 2</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="on">02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 2 &middot; 3 hours &middot; <b>CLO1</b></div>
+    <h2>Experiment tracking and<br>model management</h2>
+    <div class="split">
+      <div>
+        <h3>Topics</h3>
+        <ul style="margin-top:10px">
+          <li>Tracking parameters, metrics, and artifacts; what a run must record to be trusted</li>
+          <li>Comparing runs and <b>justifying</b> a chosen model, not just reporting the best number</li>
+          <li>Hyperparameter search as a budgeted activity</li>
+          <li>Model registry: versions, staging to production promotion, lineage back to code and data</li>
+          <li>Serialization pitfalls — the model that will not load next month</li>
+        </ul>
+      </div>
+      <div>
+        <h3>In the room</h3>
+        <ul style="margin-top:10px">
+          <li><span class="n">0:00</span> Quiz 1, then last lab's failures reviewed publicly</li>
+          <li><span class="n">0:35</span> Tracking server walkthrough</li>
+          <li><span class="n">1:20</span> Budgeted tuning contest — scored on cost per point of metric</li>
+          <li><span class="n">2:20</span> Registry promotion rules; who is allowed to promote what</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span class="sub">Take-home: Lab 2 — tracked study + registered model (4 hr)</span><span class="sub">Project teams formed</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="on">03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 3 &middot; 3 hours &middot; <b>CLO2 &middot; CLO3</b></div>
+    <h2>Serving models</h2>
+    <div class="split">
+      <div>
+        <h3>Topics</h3>
+        <ul style="margin-top:10px">
+          <li>Batch, online, and streaming inference — choosing by latency and freshness need</li>
+          <li>Inference API design: schema validation, health checks, error contracts</li>
+          <li>Containerized serving; cold starts; CPU against GPU economics</li>
+          <li>Reading p50, p95, and p99 honestly; load testing</li>
+          <li>Release patterns: canary, blue/green, shadow traffic, rollback as a first-class path</li>
+        </ul>
+      </div>
+      <div>
+        <h3>In the room</h3>
+        <ul style="margin-top:10px">
+          <li><span class="n">0:00</span> Quiz 2 and lab debrief</li>
+          <li><span class="n">0:35</span> Build and deploy an inference service</li>
+          <li><span class="n">1:20</span> Break it: concurrency, batch size, payload size</li>
+          <li><span class="n">2:15</span> Canary a deliberately worse model, detect it from metrics, roll back — timed</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span class="sub">Take-home: Lab 3 — deployed endpoint + load-test report (5 hr)</span><span class="sub">Project proposal due</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="done">03 Serve</span><span class="on">04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 4 &middot; 3 hours &middot; <b>CLO2 &middot; CLO3</b></div>
+    <h2>Operating ML systems</h2>
+    <div class="split">
+      <div>
+        <h3>Topics</h3>
+        <ul style="margin-top:10px">
+          <li>Testing ML: unit, data contract, and model behaviour tests — what should block a deploy</li>
+          <li>CI/CD and continuous training; what legitimately triggers a retrain</li>
+          <li>Observability: metrics, logs, traces, and an SLO for a prediction service</li>
+          <li>Data drift, concept drift, and plain pipeline breakage — identical on a dashboard, different in cause</li>
+          <li>Alert fatigue, and anomaly detection applied to telemetry</li>
+        </ul>
+      </div>
+      <div>
+        <h3>In the room</h3>
+        <ul style="margin-top:10px">
+          <li><span class="n">0:00</span> Quiz 3 and lab debrief</li>
+          <li><span class="n">0:35</span> Write a data test that fails the build; wire CI to deploy on green</li>
+          <li><span class="n">1:30</span> Dashboards on live traffic</li>
+          <li><span class="n">2:00</span> <b>Incident simulation</b> — an injected fault, 50 minutes, diagnose and write the post-mortem</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span class="sub">Take-home: Lab 4 — CI/CD + drift monitor + alert (5 hr)</span><span class="sub">Graded on reasoning, not speed</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="done">03 Serve</span><span class="done">04 Operate</span><span class="on">05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 5 &middot; 3 hours &middot; <b>CLO2 &middot; CLO3</b></div>
+    <h2>Cloud MLOps</h2>
+    <div class="split">
+      <div>
+        <h3>Topics</h3>
+        <ul style="margin-top:10px">
+          <li>Anatomy of a managed platform: training jobs, model registry, managed endpoints, pipelines</li>
+          <li>Identity and least privilege — the permission error is the most common first failure</li>
+          <li>Storage, artifact and container registries, and how they connect</li>
+          <li>Managed pipelines for scheduled retraining</li>
+          <li>Cost: spot and serverless compute, utilisation, cost per thousand predictions</li>
+          <li>Short case: operating a managed LLM endpoint — evaluation sets, guardrails, token cost</li>
+        </ul>
+      </div>
+      <div>
+        <h3>In the room</h3>
+        <ul style="margin-top:10px">
+          <li><span class="n">0:00</span> Quiz 4 and lab debrief</li>
+          <li><span class="n">0:35</span> Migrate the Session 3 service onto managed infrastructure</li>
+          <li><span class="n">1:40</span> Cost teardown of a running service</li>
+          <li><span class="n">2:15</span> Project architecture clinic, 15 minutes per team</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span class="sub">Take-home: Lab 5 — cloud migration + cost report (5 hr)</span><span class="sub">Teardown is graded</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span>Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span class="on">Final week</span></div>
+  <div class="body">
+    <div class="eyebrow">Final week &middot; no new content</div>
+    <h2>Presentations<br>and defence</h2>
+    <div class="grid two">
+      <div class="cell"><h3>Project presentation</h3><p>8 minutes plus 5 minutes of questions. The problem in 60 seconds, the architecture, a live demo, the failure you engineered, your costs, and what another week would buy. Expect unexpected input to be sent during your demo.</p></div>
+      <div class="cell"><h3>Quiz 5 and submission</h3><p>The final quiz is held this week. There is no final examination. Your repository is due 7 days later, and the five rubric criteria are marked from what is in it.</p></div>
+    </div>
+    <div class="callout"><p>The demo carries 5 of the project's 50 marks. A system that only runs when its author is holding it loses them.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span>Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span class="on">Assessment</span></div>
+  <div class="body">
+    <div class="eyebrow">Take-home &middot; individual &middot; self-study hours</div>
+    <h2>The five labs</h2>
+    <table>
+      <thead><tr><th>Lab</th><th>You deliver</th><th>Passes when</th><th>Hr</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">01</td><td>Dockerfile, pinned dependencies, versioned data, tracked runs, README</td><td>A grader clones it, runs one command, and reproduces your metric</td><td class="mono">4</td></tr>
+        <tr><td class="mono">02</td><td>Study of 12+ trials; best model registered with lineage</td><td>The registered model traces to exact code and data, and your choice is justified</td><td class="mono">4</td></tr>
+        <tr><td class="mono">03</td><td>Deployed endpoint, load-test report, canary config</td><td>Your stated p95 target is met, and rollback evidence shows traffic actually moved</td><td class="mono">5</td></tr>
+        <tr><td class="mono">04</td><td>CI/CD workflow, data tests, dashboard, drift alert</td><td>A bad commit is blocked; an injected drift event fires a real alert</td><td class="mono">5</td></tr>
+        <tr><td class="mono">05</td><td>The service running on a managed cloud platform, with a cost report</td><td>It runs on managed infrastructure, resources are torn down, cost matches billing</td><td class="mono">5</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><p><b>Labs are marked directly, 5 marks each</b>, against the acceptance criteria above — met or not met. Quizzes additionally ask questions answerable only from your own lab output: your p95, your run ID, your alert. A copied lab earns nothing.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span>Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span class="on">Assessment</span></div>
+  <div class="body">
+    <div class="eyebrow">Teams of 2–3 &middot; proposed after Session 3 &middot; presented in final week</div>
+    <h2>Capstone: ship one<br>ML service, end to end</h2>
+    <p class="lede">Any problem and dataset you can defend, subject to proposal approval. The grade is on the operational system.</p>
+    <div class="grid two">
+      <div class="cell"><h3>Must have</h3><p>Versioned data and code &middot; automated reproducible training &middot; registered model with lineage &middot; deployed inference &middot; CI/CD with tests that can fail &middot; monitoring dashboard &middot; one working alert &middot; documented cost per 1,000 predictions &middot; model card</p></div>
+      <div class="cell"><h3>Must survive</h3><p>A live demo where the instructor sends unexpected input, and five minutes of questions about what breaks first. Plus one deliberate failure you designed for and can demonstrate.</p></div>
+    </div>
+    <div class="split" style="margin-top:26px">
+      <div><span class="big small">45</span><p class="sub" style="margin-top:6px">marks — the largest component</p></div>
+      <div><span class="big small">5</span><p class="sub" style="margin-top:6px">rubric criteria, 9 marks each</p></div>
+      <div><span class="big small">−</span><p class="sub" style="margin-top:6px">credentials in the repo: automatic deduction</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span>Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span class="on">Assessment</span></div>
+  <div class="body">
+    <div class="eyebrow">100 marks &middot; ABC grading system</div>
+    <h2>Assessment and grading</h2>
+    <div class="split">
+      <div>
+        <table>
+          <thead><tr><th>Component</th><th>Marks</th><th>CLO 1 / 2 / 3</th></tr></thead>
+          <tbody>
+            <tr><td>Project</td><td class="mono">50</td><td class="mono">20 / 16 / 14</td></tr>
+            <tr><td>Quiz (5 &times; 5)</td><td class="mono">25</td><td class="mono">8 / 8 / 9</td></tr>
+            <tr><td>Lab completion (5 &times; 5)</td><td class="mono">25</td><td class="mono">10 / 7 / 8</td></tr>
+            <tr><td><b>Total</b></td><td class="mono"><b>100</b></td><td class="mono"><b>38 / 31 / 31</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>Grade</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td class="mono">&ge; 80</td></tr>
+            <tr><td>B+ / B</td><td class="mono">&ge; 75 / &ge; 70</td></tr>
+            <tr><td>C+ / C</td><td class="mono">&ge; 65 / &ge; 60</td></tr>
+            <tr><td>D+ / D</td><td class="mono">&ge; 55 / &ge; 50</td></tr>
+            <tr><td>F</td><td class="mono">&lt; 50</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="callout"><p><b>Model accuracy is not graded anywhere in this course.</b> A 0.71 AUC model with clean lineage, a working rollback, and an honest cost report outscores a 0.94 model that only runs on its author's laptop.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span>Course brief</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span class="on">Logistics</span></div>
+  <div class="body">
+    <div class="eyebrow">The shape of a 3-hour block</div>
+    <h2>How each session runs</h2>
+    <table>
+      <thead><tr><th>Time</th><th>Mode</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">0:00–0:15</td><td>Quiz</td><td>Six marks on the previous session and its lab</td></tr>
+        <tr><td class="mono">0:15–0:35</td><td>Debrief</td><td>Last lab's failures, shown publicly and without names</td></tr>
+        <tr><td class="mono">0:35–1:15</td><td>Concepts</td><td>Lecture, tight, carrying the day's mental model</td></tr>
+        <tr><td class="mono">1:15–1:30</td><td>Break</td><td>&mdash;</td></tr>
+        <tr><td class="mono">1:30–2:15</td><td>Live build</td><td>Instructor builds on screen; students follow in their own repository</td></tr>
+        <tr><td class="mono">2:15–2:50</td><td>Drill</td><td>Timed exercise — break something, fix it, or diagnose it</td></tr>
+        <tr><td class="mono">2:50–3:00</td><td>Handover</td><td>Lab brief, blockers, teardown check</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:22px">Laptops open throughout. Everything demonstrated lives in a repository students already have.</p>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="on">Week 0</span><span>01 Reproduce</span><span>02 Track</span><span>03 Serve</span><span>04 Operate</span><span>05 Cloud</span></div>
+  <div class="body">
+    <div class="eyebrow">Do this before Session 1 &middot; about 90 minutes</div>
+    <h2>Setup checklist</h2>
+    <div class="term">
+<span class="c"># every line must return a version, not an error</span>
+python --version            <span class="c"># 3.11+</span>
+docker run hello-world       <span class="c"># daemon running</span>
+git --version
+&lt;cloud-cli&gt; --version        <span class="c"># aws / gcloud / az</span>
+&lt;cloud-cli&gt; whoami           <span class="c"># credentials actually work</span>
+
+<span class="c"># then, in the course repository</span>
+gh repo fork &lt;course-repo&gt; --clone
+make setup                   <span class="c"># ends with: </span><span class="g">environment ok</span>
+    </div>
+    <ul style="margin-top:22px">
+      <li>Cloud account created, multi-factor authentication on, <b>billing alarm set</b></li>
+      <li>Read Sculley et al. (2015) and bring one question</li>
+      <li>Post your setup output in the course channel — blockers get fixed before Session 1, not during it</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</main>
+
+<nav class="nav" aria-label="Slide navigation">
+  <button id="prev" type="button">&larr; Prev</button>
+  <span class="count" id="count">1 / 17</span>
+  <button id="next" type="button">Next &rarr;</button>
+</nav>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var count = document.getElementById('count');
+  function render(){ count.textContent = (i+1) + ' / ' + slides.length; }
+  function go(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides[i].scrollIntoView({block:'start'});
+    slides[i].focus({preventScroll:true});
+    render();
+  }
+  document.getElementById('next').addEventListener('click', function(){ go(i+1); });
+  document.getElementById('prev').addEventListener('click', function(){ go(i-1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'PageDown'){ e.preventDefault(); go(i+1); }
+    if(e.key === 'ArrowLeft'  || e.key === 'PageUp'){ e.preventDefault(); go(i-1); }
+  });
+  // keep counter honest when the user scrolls manually
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ i = slides.indexOf(en.target); render(); }
+    });
+  }, {threshold:0.55});
+  slides.forEach(function(s){ obs.observe(s); });
+  render();
+})();
+</script>
+</body>
+</html>

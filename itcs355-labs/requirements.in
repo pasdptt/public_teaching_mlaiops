@@ -1,0 +1,11 @@
+# Source of truth. Compile to requirements.txt WITH HASHES:
+#   pip install pip-tools
+#   pip-compile --generate-hashes requirements.in -o requirements.txt
+# Commit both files. The lock file is what makes the build reproducible.
+scikit-learn==1.8.0
+pandas==3.0.2
+numpy==2.4.4
+mlflow==3.15.2
+pytest==9.1.1
+PyYAML==6.0.3
+joblib==1.4.2

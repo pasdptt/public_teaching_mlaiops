@@ -1,0 +1,34 @@
+# GitHub Pages configuration.
+#
+# Only needed if you serve the course as a Pages site. If you are happy for students to
+# browse the repository on github.com — which renders Mermaid natively with zero setup —
+# you can delete this file and _layouts/.
+
+title: ITCS355 — Machine Learning Operation and Deployment
+description: Faculty of ICT, Mahidol University
+theme: jekyll-theme-minimal
+
+# Code and instructor material stay out of the published site.
+exclude:
+  - instructor/
+  - src/
+  - service/
+  - monitoring/
+  - cloudlayer/
+  - pipeline/
+  - loadtest/
+  - tests/
+  - scripts/
+  - data/
+  - reports/
+  - notebooks/
+  - Dockerfile
+  - Makefile
+  - requirements.in
+  - requirements.txt
+  - requirements-serve.txt
+  - node_modules/
+
+defaults:
+  - scope: { path: "" }
+    values: { layout: "default" }

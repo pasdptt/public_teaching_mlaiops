@@ -1,0 +1,18 @@
+# NEVER commit this. Real credentials and account identifiers live here.
+cloud.env
+
+# DVC manages these; Git must not.
+data/raw/
+data/_local_blob/
+.dvc/cache/
+
+# Local tracking store
+mlruns/
+mlartifacts/
+mlflow.db
+
+reports/metrics.json
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/

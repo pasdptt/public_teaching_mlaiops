@@ -1,0 +1,62 @@
+# ITCS355 Lab 4 — continuous deployment.
+#
+# Runs only on main, only after CI is green. Credentials come from OIDC federation, not
+# from stored keys — TODO(Lab 4): uncomment the block for YOUR provider and delete the
+# other two.
+
+name: CD
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-staging:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- AWS ---------------------------------------------------------------
+      # - uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+      #     aws-region: ${{ vars.REGION }}
+      # - run: aws ecr get-login-password --region ${{ vars.REGION }} | docker login --username AWS --password-stdin ${{ vars.CONTAINER_REGISTRY }}
+
+      # --- Azure -------------------------------------------------------------
+      # - uses: azure/login@v2
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - run: az acr login --name ${{ vars.ACR_NAME }}
+
+      # --- GCP ---------------------------------------------------------------
+      # - uses: google-github-actions/auth@v2
+      #   with:
+      #     workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+      #     service_account: ${{ secrets.GCP_DEPLOY_SA }}
+      # - run: gcloud auth configure-docker ${{ vars.REGION }}-docker.pkg.dev
+
+      - name: Push image
+        run: |
+          echo "TODO(Lab 4): push the SHA-tagged image through your adapter"
+          # python -c "from src import config; from cloudlayer.factory import get_adapter; \
+          #   print(get_adapter(config.load()).push_image('itcs355-serve:${{ github.sha }}'))"
+
+      - name: Deploy to staging
+        run: |
+          echo "TODO(Lab 4): adapter.deploy(model_ref, endpoint, instance)"
+
+      - name: Smoke test
+        run: |
+          echo "TODO(Lab 4): adapter.invoke() with three known payloads."
+          echo "A deploy that is not smoke-tested is a deploy you have not verified."

@@ -1,0 +1,3 @@
+# DVC tracks data/raw. Git must not.
+raw/
+_local_blob/

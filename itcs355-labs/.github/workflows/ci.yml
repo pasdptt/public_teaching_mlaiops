@@ -1,0 +1,89 @@
+# ITCS355 Lab 4 — continuous integration.
+#
+# The sequence matters: cheap checks first, so a schema mistake fails in 30 seconds
+# rather than after a build. Deploy is in cd.yml and runs only on main, only on green.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write        # required for OIDC. See cd.yml — no long-lived keys anywhere.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          # TODO(Lab 4): once requirements.txt carries hashes, add --require-hashes.
+
+      - name: Lint
+        run: |
+          pip install ruff
+          ruff check src/ service/ monitoring/ scripts/ tests/
+
+      - name: Portability audit
+        run: python scripts/portability_audit.py
+
+      - name: Generate dataset
+        run: python scripts/make_dataset.py
+
+      - name: Data contract tests
+        run: pytest -q tests/test_data.py
+
+      - name: Model behaviour tests
+        run: pytest -q tests/test_model_behaviour.py
+
+      - name: Service tests
+        run: pytest -q tests/test_service.py
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build training image
+        run: docker buildx build --platform linux/amd64 -t itcs355:${{ github.sha }} --load .
+
+      - name: Build serving image
+        run: docker buildx build --platform linux/amd64 -f service/Dockerfile.serve -t itcs355-serve:${{ github.sha }} --load .
+
+      - name: Integration test
+        run: |
+          python scripts/make_dataset.py
+          python -m src.train --metrics-out reports/metrics.json
+          python scripts/export_model.py --out reports/model.joblib
+          docker run -d --rm --name svc -p 8080:8080 \
+            -v "$PWD/reports:/app/reports:ro" \
+            -e MODEL_PATH=/app/reports/model.joblib \
+            -e MODEL_VERSION=${{ github.sha }} \
+            itcs355-serve:${{ github.sha }}
+          for i in $(seq 1 30); do
+            curl -sf localhost:8080/ready && break || sleep 2
+          done
+          curl -sf -X POST localhost:8080/predict \
+            -H 'content-type: application/json' \
+            -d '{"temp_c":78.4,"vibration_mm_s":3.1,"pressure_kpa":315.2,"hours_since_service":4200,"load_pct":68,"ambient_humidity":55}' \
+            | tee /dev/stderr | grep -q probability
+          docker stop svc
+
+      # Images are tagged with the commit SHA, never `latest`. A `latest` tag makes it
+      # impossible to say which code is serving, which is the question you will be asked
+      # during an incident.
