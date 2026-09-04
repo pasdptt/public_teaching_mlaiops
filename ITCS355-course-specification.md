@@ -37,7 +37,7 @@ Sheets marked *faculty* are the original template, unmodified except for five co
 | Course Objective | This course aims to <br>1. Provide students with the knowledge and practical skills to design, deploy, and operate production-ready machine learning applications using Machine Learning Operations (MLOps) practices. <br>2. Learn to construct reproducible machine learning workflows, deploy and monitor machine learning services, and utilize cloud-based MLOps platforms to manage the machine learning lifecycle. |   |
 | SDGs | 9 Industry, Innovation and Infrastructure |   |
 | Instructor | Name | E-mail |
-|   | Asst. Prof. Dr. Thanapon Noraset | thanapon.nor@mahidol.ac.th |
+|   | Dr. Pasd Putthapipat | Pasd.Putthapipat@gmail.com |
 
 ---
 
