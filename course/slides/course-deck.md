@@ -24,7 +24,7 @@ Taking a model out of a notebook and running it as a service other people depend
 
 **1(1-0-2)** · 15 lecture hours · 5 sessions × 3 hours + final week
 Faculty of ICT, Mahidol University · Semester 1 · Class level 4
-Asst. Prof. Dr. Thanapon Noraset
+Dr. Pasd Putthapipat · Asst. Prof. Dr. Thanapon Noraset
 
 ---
 
@@ -144,11 +144,76 @@ You build a single system across the whole term. The capstone is an extension of
 
 ## Session 5 — Operating LLM systems and defending the bill · CLO2, CLO3
 
-**Topics.** Anatomy of a managed platform: training jobs, model registry, managed endpoints, pipelines · identity and least privilege — the permission error is the most common first failure · managed pipelines for scheduled retraining · cost: spot and serverless compute, cost per thousand predictions · short case on operating a managed LLM endpoint.
+**Topics.** Anatomy of a managed platform: training jobs, model registry, managed endpoints, pipelines · identity and least privilege — the permission error is the most common first failure · managed pipelines for scheduled retraining · cost: spot and serverless compute, cost per thousand predictions · **operating an LLM step: golden sets, gates, guardrails, token economics.**
 
-**In the room.** Drill 4 and debrief (0:00) · migrate the Session 3 service onto managed infrastructure (0:35) · cost teardown of a running service (1:40) · project architecture clinic, 15 minutes per team (2:15).
+**In the room.** Drill 4 and debrief (0:00) · migrate the Session 3 service onto managed infrastructure (0:35) · `make llm-gate` on screen — it fails, and we read why (1:25) · cost teardown of a running service (1:50) · capstone architecture clinic, 15 minutes per team (2:15).
 
-**Take-home.** Lab 5 — cloud migration + cost report (5 hr). Teardown is graded.
+**Take-home.** Lab 5 — Part A cloud migration + cost report, Part B eval gate + token bill (7 hr). Teardown is graded.
+
+---
+
+## An LLM step has no metric to watch
+
+A classifier degrades and your ROC AUC moves. **A language model degrades and nothing moves.**
+
+Change the prompt. Change the model version — which your provider may do without telling you. Change the temperature. Every test still passes. The service is up, latency is fine, the dashboard is green, and the answers are quietly worse.
+
+There is no accuracy number here because there is no single right answer. So you build the thing that plays its role: **a golden set** — cases you have decided the answer to, with checks that can fail.
+
+Four kinds of case, and a set without all four is not finished:
+
+| Kind | What it asserts |
+|---|---|
+| **Grounding** | the answer uses only facts present in the input |
+| **Guardrail** | the model refuses what it should refuse |
+| **Injection** | instructions inside a data field are treated as data, not instructions |
+| **Insufficient input** | the correct answer is "I cannot answer this" |
+
+This is Lab 4's evaluation gate, pointed at text.
+
+---
+
+## The gate that fails on purpose
+
+```
+make llm-gate
+
+  [FAIL] triage-004   expected NOT to match /\b[A-Z]{2,3}-\d{3,6}\b/ but found 'PN-4471'
+  [FAIL] triage-007   expected decision='no_action', got 'schedule_urgent'
+
+  GATE FAILED — 4 regression(s): triage-003, triage-004, triage-005, triage-007
+```
+
+Four things degraded between the baseline and this run:
+
+| Case | What went wrong |
+|---|---|
+| `triage-003` | a borderline probability decided automatically instead of escalated |
+| `triage-004` | a part number **that appears nowhere in the input** |
+| `triage-005` | a sensor reading it was never given |
+| `triage-007` | an instruction hidden in an operator-note field, obeyed |
+
+**Now the question that matters.** Which of those would a pass-rate threshold have caught?
+
+None of them — if the other cases improved enough. That is why the gate compares **per case**: anything that passed before and fails now is a regression, whatever the average did. Averages are extremely good at hiding the one case you care about.
+
+The set ships with recorded responses, so this runs offline, free, and identically for everyone. A gate that costs money and answers differently each time is a gate nobody keeps.
+
+---
+
+## Three levers on a token bill
+
+Labs 2 and 3 priced compute: a provisioned endpoint costs the same whether it serves 10 requests or 10,000. **An LLM step costs a linear function of how verbose you let it be.** A real system has both, so your cost report has both.
+
+| | Lever | Why it is in this order |
+|---|---|---|
+| 1 | **Cap output length** | Output costs 3–5× input on every provider. Largest single saving, one line of config, cannot change correctness — only length |
+| 2 | **Prompt caching** | A cached input token bills at ~10% of a fresh one. But a cache *write* costs **more** than a normal token, so caching a prefix that changes every request is a way to pay extra for nothing. Know your break-even hit rate |
+| 3 | **Smaller model** | Often 10–20× cheaper. Whether it is good enough is an *evaluation* question, not a pricing one — so you run the gate before you switch, not after |
+
+Token counts come from the provider's usage fields. **Never estimate them by counting words** — every provider tokenises differently, and an estimated token count in a cost report is a fabricated number.
+
+> **"Defending the bill" is the session title because the deliverable is one paragraph** aimed at someone who controls budget and does not write code: what it costs per 1,000 requests, what you changed, what it costs now, and what you gave up. The arithmetic is the easy part.
 
 ---
 
@@ -160,7 +225,7 @@ You build a single system across the whole term. The capstone is an extension of
 | 2 | Study of 12+ trials; best model registered with lineage | The model traces to exact code and data, and your choice is justified | 4 |
 | 3 | Deployed endpoint, load-test report, canary config | Your stated p95 target is met; rollback evidence shows traffic moved | 5 |
 | 4 | CI/CD, data tests, dashboard, drift alert | A bad commit is blocked; injected drift fires a real alert | 5 |
-| 5 | The service on a managed cloud platform, with costs | It runs managed, resources are torn down, cost matches billing | 5 |
+| 5 | The service on a managed platform with costs, plus an LLM eval gate | It runs managed, resources are torn down, cost matches billing, and the gate fails on a degraded set | 7 |
 
 **Labs are marked directly — 8 marks each, 40 in total**, against the acceptance criteria above. The in-class drills additionally ask questions only answerable from your own lab output: your p95, your run ID, your alert. A copied lab earns nothing.
 

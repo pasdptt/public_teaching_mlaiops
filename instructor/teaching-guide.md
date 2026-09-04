@@ -4,8 +4,8 @@ Companion to `Course_Specification_ITCS355_merged.xlsx`. The workbook is the aut
 specification; this document holds the teaching judgement that does not fit in a template cell.
 
 **Course:** ITCS355 Machine Learning Operation and Deployment · 1(1-0-2) · Semester 1 · Class level 4
-**Delivery:** 5 sessions × 3 hours + final week · 15 lecture hours · ~40 hours self-study
-**Instructor:** Asst. Prof. Dr. Thanapon Noraset
+**Delivery:** 5 sessions × 3 hours + final week · 15 lecture hours · ~42 hours self-study
+**Instructors:** Dr. Pasd Putthapipat · Asst. Prof. Dr. Thanapon Noraset
 
 ---
 

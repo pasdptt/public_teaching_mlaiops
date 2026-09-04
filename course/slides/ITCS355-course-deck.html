@@ -97,6 +97,7 @@ tr:last-child td{border-bottom:none}
 .term{background:var(--deep);color:#D6E3E8;font-family:var(--mono);font-size:13px;line-height:1.85;padding:18px 20px;margin-top:24px;overflow-x:auto}
 .term .c{color:#7FA6B3}
 .term .g{color:#5FD3B2}
+.term .r{color:#E08A8A}
 
 .nav{position:fixed;bottom:0;left:0;right:0;background:rgba(237,240,242,.94);backdrop-filter:blur(8px);border-top:1px solid var(--rule);padding:10px 20px;display:flex;justify-content:center;gap:14px;align-items:center;z-index:10}
 .nav button{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel);border:1px solid var(--rule);color:var(--ink);padding:7px 14px;cursor:pointer;border-radius:2px}
@@ -132,7 +133,7 @@ tr:last-child td{border-bottom:none}
     <p class="lede">Taking a model out of a notebook and running it as a service other people depend on — with pipelines, monitoring, and a bill someone has to pay.</p>
     <div class="foot">
       <span class="sub">1(1-0-2) &middot; 15 lecture hours &middot; 5 sessions &times; 3 hours + final week</span>
-      <span class="sub">Asst. Prof. Dr. Thanapon Noraset</span>
+      <span class="sub">Dr. Pasd Putthapipat &middot; Asst. Prof. Dr. Thanapon Noraset</span>
     </div>
   </div>
 </section>
@@ -356,7 +357,7 @@ tr:last-child td{border-bottom:none}
           <li>Storage, artifact and container registries, and how they connect</li>
           <li>Managed pipelines for scheduled retraining</li>
           <li>Cost: spot and serverless compute, utilisation, cost per thousand predictions</li>
-          <li>Short case: operating a managed LLM endpoint — evaluation sets, guardrails, token cost</li>
+          <li><b>Operating an LLM step: golden sets, gates that can fail, guardrails, token economics</b></li>
         </ul>
       </div>
       <div>
@@ -364,12 +365,72 @@ tr:last-child td{border-bottom:none}
         <ul style="margin-top:10px">
           <li><span class="n">0:00</span> Drill 4 and lab debrief</li>
           <li><span class="n">0:35</span> Migrate the Session 3 service onto managed infrastructure</li>
-          <li><span class="n">1:40</span> Cost teardown of a running service</li>
-          <li><span class="n">2:15</span> Project architecture clinic, 15 minutes per team</li>
+          <li><span class="n">1:25</span> <b><code>make llm-gate</code> on screen</b> — it fails, and we read why</li>
+          <li><span class="n">1:50</span> Cost teardown of a running service</li>
+          <li><span class="n">2:15</span> Capstone architecture clinic, 15 minutes per team</li>
         </ul>
       </div>
     </div>
-    <div class="foot"><span class="sub">Take-home: Lab 5 — cloud migration + cost report (5 hr)</span><span class="sub">Teardown is graded</span></div>
+    <div class="foot"><span class="sub">Take-home: Lab 5 — Part A migration + cost, Part B eval gate + token bill (7 hr)</span><span class="sub">Teardown is graded</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="done">03 Serve</span><span class="done">04 Operate</span><span class="on">05 LLM &amp; cost</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 5 &middot; the problem</div>
+    <h2>An LLM step has<br>no metric to watch</h2>
+    <p class="lede">A classifier degrades and your ROC AUC moves. A language model degrades and <b>nothing moves</b> &mdash; the answers just get quietly worse.</p>
+    <p class="sub" style="margin-top:14px">Change the prompt. Change the model version, which your provider may do without telling you. Change the temperature. Every test still passes, the service is up, latency is fine, the dashboard is green.</p>
+    <p class="sub" style="margin-top:14px">There is no accuracy number because there is no single right answer. So you build the thing that plays its role: a <b>golden set</b> &mdash; cases you have decided the answer to, with checks that can fail.</p>
+    <div class="grid two" style="margin-top:22px">
+      <div class="cell"><h3>Grounding</h3><p>The answer uses only facts present in the input.</p></div>
+      <div class="cell"><h3>Guardrail</h3><p>The model refuses what it should refuse.</p></div>
+      <div class="cell"><h3>Injection</h3><p>Instructions inside a data field are treated as data, not instructions.</p></div>
+      <div class="cell"><h3>Insufficient input</h3><p>The correct answer is &ldquo;I cannot answer this&rdquo;.</p></div>
+    </div>
+    <div class="foot"><span class="sub">Lab 4's evaluation gate, pointed at text</span><span class="sub">A set without all four is not finished</span></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="done">03 Serve</span><span class="done">04 Operate</span><span class="on">05 LLM &amp; cost</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 5 &middot; live on screen</div>
+    <h2>The gate that<br>fails on purpose</h2>
+    <div class="term">
+<span class="c">$ make llm-gate</span>
+<span class="r">  [FAIL] triage-004</span>   expected NOT to match /\b[A-Z]{2,3}-\d{3,6}\b/ but found <span class="g">'PN-4471'</span>
+<span class="r">  [FAIL] triage-007</span>   expected decision=<span class="g">'no_action'</span>, got <span class="g">'schedule_urgent'</span>
+
+<span class="r">  GATE FAILED</span> &mdash; 4 regression(s): triage-003, triage-004, triage-005, triage-007
+    </div>
+    <div class="grid two" style="margin-top:22px">
+      <div class="cell"><h3>What degraded</h3><p><b>003</b> a borderline probability decided automatically instead of escalated &middot; <b>004</b> a part number that appears nowhere in the input &middot; <b>005</b> a sensor reading it was never given &middot; <b>007</b> an instruction hidden in an operator-note field, obeyed.</p></div>
+      <div class="cell"><h3>Which would a pass-rate threshold catch?</h3><p><b>None of them</b>, if the other cases improved enough. So the gate compares <b>per case</b>: anything that passed before and fails now is a regression, whatever the average did.</p></div>
+    </div>
+    <div class="callout"><p>Recorded responses, so this runs offline, free, and identically for everyone. A gate that costs money and answers differently each time is a gate nobody keeps.</p></div>
+  </div>
+</section>
+
+<section class="slide" tabindex="-1">
+  <div class="rail"><span class="done">Course brief</span><span class="done">01 Reproduce</span><span class="done">02 Track</span><span class="done">03 Serve</span><span class="done">04 Operate</span><span class="on">05 LLM &amp; cost</span></div>
+  <div class="body">
+    <div class="eyebrow">Session 5 &middot; defending the bill</div>
+    <h2>Three levers on<br>a token bill</h2>
+    <p class="lede">An endpoint costs the same serving 10 requests or 10,000. An LLM step costs a linear function of how verbose you let it be.</p>
+    <div style="margin-top:20px">
+      <table>
+        <thead><tr><th>#</th><th>Lever</th><th>Why in this order</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td><b>Cap output length</b></td><td>Output costs 3&ndash;5&times; input. Biggest saving, one line of config, and it cannot change correctness &mdash; only length.</td></tr>
+          <tr><td class="mono">2</td><td><b>Prompt caching</b></td><td>A cache hit bills at ~10%. But a cache <i>write</i> costs <b>more</b> than a normal token &mdash; caching a prefix that changes every request pays extra for nothing.</td></tr>
+          <tr><td class="mono">3</td><td><b>Smaller model</b></td><td>Often 10&ndash;20&times; cheaper. Whether it is good enough is an <i>evaluation</i> question &mdash; run the gate before you switch.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><p>Token counts come from the provider's usage fields. Never estimate them by counting words &mdash; an estimated token count in a cost report is a fabricated number.</p></div>
+    <div class="foot"><span class="sub">The deliverable is one paragraph for someone who controls budget and does not write code</span><span class="sub">The arithmetic is the easy part</span></div>
   </div>
 </section>
 
@@ -398,7 +459,7 @@ tr:last-child td{border-bottom:none}
         <tr><td class="mono">02</td><td>Study of 12+ trials; best model registered with lineage</td><td>The registered model traces to exact code and data, and your choice is justified</td><td class="mono">4</td></tr>
         <tr><td class="mono">03</td><td>Deployed endpoint, load-test report, canary config</td><td>Your stated p95 target is met, and rollback evidence shows traffic actually moved</td><td class="mono">5</td></tr>
         <tr><td class="mono">04</td><td>CI/CD workflow, data tests, dashboard, drift alert</td><td>A bad commit is blocked; an injected drift event fires a real alert</td><td class="mono">5</td></tr>
-        <tr><td class="mono">05</td><td>The service running on a managed cloud platform, with a cost report</td><td>It runs on managed infrastructure, resources are torn down, cost matches billing</td><td class="mono">5</td></tr>
+        <tr><td class="mono">05</td><td>The service on a managed platform with a cost report, plus an LLM eval gate</td><td>It runs on managed infrastructure, resources are torn down, cost matches billing, and the gate fails on a degraded set</td><td class="mono">7</td></tr>
       </tbody>
     </table>
     <div class="callout"><p><b>Labs are marked directly, 8 marks each — 40 in total</b>, against the acceptance criteria above — met or not met. The in-class drills additionally ask questions answerable only from your own lab output: your p95, your run ID, your alert. A copied lab earns nothing.</p></div>
@@ -509,7 +570,7 @@ make setup                   <span class="c"># ends with: </span><span class="g"
 
 <nav class="nav" aria-label="Slide navigation">
   <button id="prev" type="button">&larr; Prev</button>
-  <span class="count" id="count">1 / 17</span>
+  <span class="count" id="count">1 / 20</span>
   <button id="next" type="button">Next &rarr;</button>
 </nav>
 
