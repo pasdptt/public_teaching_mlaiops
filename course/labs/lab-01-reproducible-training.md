@@ -1,7 +1,7 @@
 # ITCS355 — Lab 1: Reproducible Training Container
 
 **Released:** end of Session 1 · **Due:** before Session 2 · **Effort:** ~4 hours
-**CLO1** · **Marks:** 5 · **Also assessed through:** Quiz 1 and Project criterion R1
+**CLO1** · **Marks:** 8 · **Also assessed through:** Drill 1 and Capstone criterion R1 (Reproducible ML Pipeline)
 **Cloud used:** object storage only — this lab is deliberately the least cloud-dependent
 
 **In this repository**
@@ -185,7 +185,7 @@ Nothing persistent is created in this lab beyond storage, which costs almost not
 `make teardown` to confirm the tagging and teardown path works — you will rely on it from Lab 3
 onward, and finding out it is broken then is expensive.
 
-## What Quiz 1 will ask
+## What Drill 1 covers
 
 Concept questions on technical debt, container layering, and leakage. Plus evidence questions
 answerable only from your own work: your data version hash, your five runs' parameter spread, and

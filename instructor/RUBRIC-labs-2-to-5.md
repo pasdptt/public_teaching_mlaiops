@@ -4,12 +4,14 @@ Lab 1 has its own file. These four share a pattern: run the mechanical script, t
 your time on the judgement items, which are listed per lab below and are where the actual
 learning shows up.
 
-Each lab is worth **5 marks**, awarded against the acceptance criteria in its handout — met
-or not met. They also feed **Quizzes 2–5** and **Project criteria R2–R5**. Draw each quiz's
-evidence questions from the student's own submission; that is what makes copying a lab
-useless, and it still matters now that labs carry marks of their own.
+Each lab is worth **8 marks**, awarded against the acceptance criteria in its handout — met
+or not met. They also feed **Drills 2–5** and the capstone criteria: Lab 2 to R1 (Reproducible
+ML Pipeline), Lab 3 to R2 (Deployment & CI/CD), Lab 4 to R3 (Monitoring & Reliability) and R4
+(Failure Handling & Technical Defense), Lab 5 to R5 (Documentation & Presentation). Draw each
+drill's evidence questions from the student's own submission; that is what makes copying a lab
+useless, and it matters all the more now that labs carry 40 of the 100 marks.
 
-Award the 5 marks when the mechanical script passes and the judgement items below hold.
+Award the 8 marks when the mechanical script passes and the judgement items below hold.
 Award 0 otherwise. Partial credit on a binary criterion invites argument and costs you hours
 you do not have across five labs.
 
@@ -95,7 +97,10 @@ than one whose alert simply fired.
 
 ---
 
-## Lab 5 — Cloud MLOps, portability, cost
+## Lab 5 — Cloud migration, portability, cost
+
+*Session 5 is officially 'Operating LLM systems and defending the bill'. The LLM-operations half
+is not yet written; see the content-gap note on the Session Detail sheet.*
 
 **Judgement items**
 

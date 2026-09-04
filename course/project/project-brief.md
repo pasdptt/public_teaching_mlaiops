@@ -1,6 +1,6 @@
 # ITCS355 — Capstone Project Brief
 
-**50 marks · Teams of 2–3 · Proposal end of Session 3 · Presented final week · Repository due +7 days**
+**45 marks · Teams of 2–3 · Proposal end of Session 3 · Presented final week · Repository due +7 days**
 
 Lab handouts are in [`../labs/`](../labs/); this brief covers the capstone only. Read
 [`../reference/cloud-portability-reference.md`](../reference/cloud-portability-reference.md)
@@ -54,8 +54,8 @@ engineered, observed, and then fed back into your tests.
 | M1 | End of Session 2 | Team formed, problem area chosen |
 | M2 | End of Session 3 | One-page proposal — approval required before you build |
 | M3 | Session 5 | Architecture review, 15-minute clinic slot |
-| M4 | Final week | Presentation: 8 minutes plus 5 minutes of questions |
-| M5 | +7 days | Final repository submission |
+| M4 | Final week | Presentation: 8 minutes plus 5 minutes of questions — **15 marks** |
+| M5 | +7 days | Final repository submission — **30 marks** |
 
 **Proposal contents:** problem and who would use it · dataset and its licence · latency and freshness
 requirements · the serving pattern you chose and why · your planned failure mode · rough cost
@@ -71,9 +71,23 @@ a minute.
 
 ## Marking
 
-Five rubric criteria at 9 marks each — Organization & Reproducibility, Experiment Tracking & Model
-Management, Model Serving & Deployment, Monitoring & Operational Readiness, and Cloud Deployment &
-Integration. Full descriptors are on the Rubric Scoring sheet of the course specification.
+The capstone is scored on two lines of the course specification, 45 marks together.
+
+**Capstone System — 30 marks.** Five rubric criteria at 6 marks each:
+
+| | Criterion | Evidenced mainly by |
+|---|---|---|
+| R1 | Reproducible ML Pipeline | Labs 1 and 2 |
+| R2 | Deployment & CI/CD | Lab 3 |
+| R3 | Monitoring & Reliability | Lab 4 |
+| R4 | Failure Handling & Technical Defense | Lab 4, and your deliberate failure |
+| R5 | Documentation & Presentation | Lab 5 cost report, model card, README |
+
+Full descriptors are on the Rubric Scoring sheet of the course specification.
+
+**Capstone demo & defense — 15 marks.** The live demo and the questions that follow it, scored
+separately from the repository. Preparing the system well and presenting it badly costs a third
+of the capstone.
 
 **Automatic deductions:** credentials or API keys committed to the repository · cloud resources left
 running after submission · a README that assumes anything not in the repo.

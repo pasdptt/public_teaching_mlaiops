@@ -1,7 +1,14 @@
-# ITCS355 — Lab 5: Cloud MLOps, Portability, and Cost
+# ITCS355 — Lab 5: Cloud Migration, Portability, and Cost
+
+> **Session 5 is officially titled *Operating LLM systems and defending the bill*.** This
+> handout covers "defending the bill" — managed-platform migration, IAM, portability, and a
+> cost report you can defend to someone who is not an engineer. The **LLM-operations half of
+> the session is not yet written**: prompt and model versioning, evaluation harnesses,
+> guardrails, and token accounting have no exercise here yet. Tracked as a content gap on the
+> *Session Detail* sheet of the course specification.
 
 **Released:** end of Session 5 · **Due:** before final week · **Effort:** ~5 hours
-**CLO2, CLO3** · **Marks:** 5 · **Also assessed through:** Quiz 5 and Project criterion R5
+**CLO2, CLO3** · **Marks:** 8 · **Also assessed through:** Drill 5 and Capstone criterion R5 (Documentation & Presentation)
 **Cloud used:** all eight capability slots
 
 **In this repository**
@@ -66,7 +73,7 @@ Document each in a table: identity, what it can do, and why each permission is n
 scoping by removing one permission you believe is unnecessary and confirming what breaks.
 
 **That last step is the assessed part.** Anyone can write a permissions table. Finding out what
-actually breaks is how you learn where the boundaries are, and it is what Quiz 5 asks about.
+actually breaks is how you learn where the boundaries are, and it is what Drill 5 asks about.
 
 ## Task 3 — Scheduled retraining (40 min)
 
@@ -176,7 +183,7 @@ adapter is written but never demonstrated; resources are still running at gradin
 | Cost report far from billing | Untagged resources; tag from creation, not retrospectively |
 | Teardown reports success, resources remain | Deletion is asynchronous — re-check after 24 hours |
 
-## What Quiz 5 will ask
+## What Drill 5 covers
 
 Concepts: managed pipeline anatomy, least privilege and identity propagation, retraining trigger
 strategies, cost drivers in ML serving, and where cloud abstractions leak. Evidence from your own

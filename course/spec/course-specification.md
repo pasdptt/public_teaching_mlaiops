@@ -7,7 +7,7 @@ Sheets marked *faculty* are the original template, unmodified except for five co
 ## Contents
 
 - [Course Information](#course-information) — *faculty*
-- [CLOs](#clos) — *added*
+- [CLOs](#clos) — *faculty*
 - [Teaching Method](#teaching-method) — *faculty*
 - [Teaching Plan](#teaching-plan) — *faculty*
 - [Evaluation Method](#evaluation-method) — *faculty*
@@ -38,12 +38,13 @@ Sheets marked *faculty* are the original template, unmodified except for five co
 | SDGs | 9 Industry, Innovation and Infrastructure |   |
 | Instructor | Name | E-mail |
 |   | Dr. Pasd Putthapipat | Pasd.Putthapipat@gmail.com |
+|   | Asst. Prof. Dr. Thanapon Noraset | thanapon.nor@mahidol.ac.th |
 
 ---
 
 ## CLOs
 
-*added during course design*
+*faculty template*
 
 | NO | CLO | PLO | LEVEL | TEACHING<br>METHOD | TEACHING<br>PLAN | EVALUATION<br>METHOD |
 |---|---|---|---|---|---|---|
@@ -73,11 +74,10 @@ _Teaching Lecture Hour : 15_
 | NO | TOPIC | LECTURE<br>(HR) | LAB<br>(HR) | CLO1 | CLO2 | CLO3 |
 |---|---|---|---|---|---|---|
 | 1 | From Notebook to Reproducible ML | 3 | 0 | ✓ |   |   |
-| 2 | Experiment Tracking and Model Management | 3 | 0 | ✓ |   |   |
-| 3 | Serving Models | 3 | 0 |   | ✓ | ✓ |
-| 4 | Operating ML Systems | 3 | 0 |   | ✓ | ✓ |
-| 5 | Cloud MLOps | 3 | 0 |   | ✓ | ✓ |
-| 6 | Final Week |   |   |   |   |   |
+| 2 | Pipelines, features, and managed training | 3 | 0 | ✓ |   |   |
+| 3 | Deployment, scaling, and release safety | 3 | 0 |   | ✓ | ✓ |
+| 4 | CI/CD/CT, monitoring, and drift | 3 | 0 |   | ✓ | ✓ |
+| 5 | Operating LLM systems and defending the bill | 3 | 0 |   | ✓ | ✓ |
 | Total |   | 15 | 0 |   |   |   |
 
 ---
@@ -88,10 +88,11 @@ _Teaching Lecture Hour : 15_
 
 | NO | EVALUATION METHOD | FULLSCORE | CLO1 | CLO2 | CLO3 |
 |---|---|---|---|---|---|
-| 1 | Project | 50 | 20 | 16 | 14 |
-| 2 | Quiz | 25 | 8 | 8 | 9 |
-| 3 | Lab Completion | 25 | 10 | 7 | 8 |
-| Total |   | 100 | 38 | 31 | 31 |
+| 1 | Capstone demo & defense | 15 | 5 | 5 | 5 |
+| 2 | Capstone System | 30 | 10 | 10 | 10 |
+| 3 | In-class drills | 15 | 5 | 5 | 5 |
+| 4 | Labs | 40 | 15 | 15 | 10 |
+| Total |   | 100 | 35 | 35 | 30 |
 |   |   |   |   |   |   |
 | GRADING SYSTEM |   | ABC |   |   |   |
 | Grade Criteria |   | A | >= | 80 |   |
@@ -111,10 +112,10 @@ _Teaching Lecture Hour : 15_
 
 | CLO | TOTAL | PLO1 | SLO1 |
 |---|---|---|---|
-| CLO 1 Apply version control, data management, and experiment tracking techniques to construct reproducible machine learning workflows. | 38 | 38 | - |
-| CLO 2 Develop machine learning inference services by integrating model deployment, monitoring, and maintenance practices. | 31 | - | 31 |
-| CLO 3 Deploy and manage machine learning applications using cloud-based MLOps services. | 31 | - | 31 |
-| Total | 100 | 38 | 62 |
+| CLO 1 Apply version control, data management, and experiment tracking techniques to construct reproducible machine learning workflows. | 35 | 35 | - |
+| CLO 2 Develop machine learning inference services by integrating model deployment, monitoring, and maintenance practices. | 35 | - | 35 |
+| CLO 3 Deploy and manage machine learning applications using cloud-based MLOps services. | 30 | - | 30 |
+| Total | 100 | 35 | 65 |
 
 ---
 
@@ -124,16 +125,15 @@ _Teaching Lecture Hour : 15_
 
 _Rubric Name : Project_
 
-| Evaluation Method : Project |   |   |   |   |   |   |   |   |   |
-|---|---|---|---|---|---|---|---|---|---|
-| CRITERIA NAME | MAX<br>LEVEL | 3 | 2 | 1 | 0 | WEIGHT | SCORE |   | CLO MAPPING |
-| Project Organization & Reproducibility | 3 | Well-structured project with reproducible workflow, clear documentation, version control, and data/model management. | Mostly reproducible with minor issues. | Partial reproducibility; organization needs improvement. | Poor organization; workflow cannot be reproduced. | 3 | 9 |   | CLO1 (9) |
-| Experiment Tracking & Model Management | 3 | Experiments are systematically tracked and compared; best model justified and managed appropriately. | Experiments tracked with minor omissions. | Limited experiment tracking or weak justification. | Little or no experiment tracking. | 3 | 9 |   | CLO1 (9) |
-| Model Serving & Deployment | 3 | Fully functional inference service with proper API design, containerization, and deployment. | Functional deployment with minor issues. | Partially functional deployment. | Deployment incomplete or non-functional. | 3 | 9 |   | CLO2 (9) |
-| Monitoring & Operational Readiness | 3 | Monitoring strategy addresses system health, model performance, and data/model drift; maintenance plan is appropriate. | Monitoring covers most operational aspects. | Basic monitoring with limited analysis. | Minimal or no monitoring considerations. | 3 | 9 |   | CLO2 (5) + CLO3 (4) |
-| Cloud Deployment & Integration | 3 | Successfully deploys and integrates cloud MLOps services with appropriate architecture and documentation. | Cloud deployment mostly successful. | Partial cloud deployment. | Cloud deployment incomplete or absent. | 3 | 9 |   | CLO3 (9) |
-| Total |   |   |   |   |   |   | 45 |   |   |
-| Project full score is 50: this rubric contributes 45, and the live demo and defence contributes 5, scored on the Assessment Blueprint sheet. The rubric itself is unchanged from the faculty template. |   |   |   |   |   |   |   |   |   |
+| Evaluation Method : Capstone System |   |   |   |   |   |   |   |
+|---|---|---|---|---|---|---|---|
+| CRITERIA NAME | MAX<br>LEVEL | 3 | 2 | 1 | 0 | WEIGHT | SCORE |
+| Reproducible ML Pipeline | 3 | Complete, working, automated, and well justified. | Mostly complete and working; minor gaps or manual steps. | Partially working; significant gaps or weak integration. | Missing, non-functional, or cannot be demonstrated. | 2 | 6 |
+| Deployment & CI/CD | 3 | Complete, working, automated, and well justified. | Mostly complete and working; minor gaps or manual steps. | Partially working; significant gaps or weak integration. | Missing, non-functional, or cannot be demonstrated. | 2 | 6 |
+| Monitoring & Reliability | 3 | Complete, working, automated, and well justified. | Mostly complete and working; minor gaps or manual steps. | Partially working; significant gaps or weak integration. | Missing, non-functional, or cannot be demonstrated. | 2 | 6 |
+| Failure Handling & Technical Defense | 3 | Complete, working, automated, and well justified. | Mostly complete and working; minor gaps or manual steps. | Partially working; significant gaps or weak integration. | Missing, non-functional, or cannot be demonstrated. | 2 | 6 |
+| Documentation & Presentation | 3 | Complete, working, automated, and well justified. | Mostly complete and working; minor gaps or manual steps. | Partially working; significant gaps or weak integration. | Missing, non-functional, or cannot be demonstrated. | 2 | 6 |
+| Total |   |   |   |   |   |   | 30 |
 
 ---
 
@@ -145,15 +145,16 @@ _Session-level teaching detail — expands 'Teaching Plan'. Topic names and CLO 
 
 | NO | TOPIC (as per Teaching Plan) | CLO | KEY SUBTOPICS | IN-CLASS ACTIVITY (3 HR) | TAKE-HOME (SELF-STUDY) | EST. HR | ASSESSED BY |
 |---|---|---|---|---|---|---|---|
-| 1 | From Notebook to Reproducible ML | CLO1 | Why ML systems accumulate technical debt (Sculley et al. 2015); notebook-to-project structure; Git discipline for ML; environment isolation and containers; data versioning and leakage-safe splits | Reproduce-a-peer's-run exercise (most pairs fail — debrief this); live build of a training Dockerfile; DVC remote setup | Lab 1 — Reproducible training container | 4 | Lab 1, Quiz 1, Project R1 |
-| 2 | Experiment Tracking and Model Management | CLO1 | Experiment tracking with MLflow: params, metrics, artifacts; comparing and justifying runs; hyperparameter studies under a fixed budget; model registry, versioning, staging-to-production promotion, lineage; serialization pitfalls | Tracking server walkthrough; budgeted tuning contest scored on cost per point of metric; registry promotion rules | Lab 2 — Tracked study + registered model | 4 | Lab 2, Quiz 2, Project R2 |
-| 3 | Serving Models | CLO2, CLO3 | Batch vs online vs streaming inference; FastAPI service design, schema validation, health checks; containerized serving; latency p50/p95/p99 and load testing; release patterns — canary, blue/green, rollback | Deploy an endpoint and load-test it; break it via concurrency and payload size; timed rollback drill | Lab 3 — Deployed endpoint + load-test report | 5 | Lab 3, Quiz 3, Project R3 |
-| 4 | Operating ML Systems | CLO2, CLO3 | Testing ML: unit, data-contract, and model-behaviour tests; CI/CD and continuous training triggers; observability (metrics, logs, traces) and SLOs; data drift vs concept drift vs pipeline breakage; retrain-or-rollback decisions; alert fatigue and AI-assisted anomaly detection on telemetry | Write a data test that fails the build; wire CI to deploy on green; 50-min incident simulation with an injected fault and a written post-mortem | Lab 4 — CI/CD + drift monitor + alert | 5 | Lab 4, Quiz 4, Project R4 |
-| 5 | Cloud MLOps | CLO2, CLO3 | Managed platform anatomy (SageMaker / Vertex AI / Azure ML): managed training jobs, model registry, managed endpoints, pipelines; IAM and least privilege; artifact and container registries; managed pipelines for scheduled retraining; cost model, spot and serverless compute, FinOps; brief case on operating managed LLM endpoints (evals, guardrails, token cost) | Migrate the Lab 3 service onto a managed platform; cost teardown per 1,000 predictions; project consultation clinic | Lab 5 — Cloud migration + cost report | 5 | Lab 5, Quiz 5, Project R5 |
-| 6 | Final Week | CLO1, CLO2, CLO3 | No new content. Project presentations with live demo and defence. No final examination. | Project presentation (8 min + 5 min questions); Quiz 5 | Project work and submission (spread across the term) | 17 | Project, Quiz 5 |
+| 1 | From Notebook to Reproducible ML | CLO1 | Why ML systems accumulate technical debt (Sculley et al. 2015); notebook-to-project structure; Git discipline for ML; environment isolation and containers; data versioning and leakage-safe splits | Reproduce-a-peer's-run exercise (most pairs fail — debrief this); live build of a training Dockerfile; DVC remote setup | Lab 1 — Reproducible training container | 4 | Lab 1, Drill 1, Capstone R1 |
+| 2 | Pipelines, features, and managed training | CLO1 | Experiment tracking with MLflow: params, metrics, artifacts; comparing and justifying runs; hyperparameter studies under a fixed budget; model registry, versioning, staging-to-production promotion, lineage; feature reuse and training/serving skew; moving a training job onto managed infrastructure | Tracking server walkthrough; budgeted tuning contest scored on cost per point of metric; registry promotion rules; submit one training run as a managed job | Lab 2 — Tracked study + registered model | 4 | Lab 2, Drill 2, Capstone R1 |
+| 3 | Deployment, scaling, and release safety | CLO2, CLO3 | Batch vs online vs streaming inference; FastAPI service design, schema validation, health checks; containerized serving; latency p50/p95/p99 and load testing; autoscaling and concurrency limits; release patterns — canary, blue/green, rollback | Deploy an endpoint and load-test it; break it via concurrency and payload size; timed rollback drill | Lab 3 — Deployed endpoint + load-test report | 5 | Lab 3, Drill 3, Capstone R2 |
+| 4 | CI/CD/CT, monitoring, and drift | CLO2, CLO3 | Testing ML: unit, data-contract, and model-behaviour tests; CI/CD and continuous training (CT) triggers; observability (metrics, logs, traces) and SLOs; data drift vs concept drift vs pipeline breakage; retrain-or-rollback decisions; alert fatigue and AI-assisted anomaly detection on telemetry | Write a data test that fails the build; wire CI to deploy on green; 50-min incident simulation with an injected fault and a written post-mortem | Lab 4 — CI/CD + drift monitor + alert | 5 | Lab 4, Drill 4, Capstone R3 and R4 |
+| 5 | Operating LLM systems and defending the bill | CLO2, CLO3 | Managed platform anatomy (SageMaker / Vertex AI / Azure ML): managed endpoints, pipelines, registries; IAM and least privilege; LLM-specific operations — prompt and model versioning, evaluation harnesses, guardrails, hallucination and regression checks, token accounting, caching and batching; cost model, spot and serverless compute, FinOps; defending a cost estimate to a non-engineer | Migrate the Lab 3 service onto a managed platform; cost teardown per 1,000 predictions; token-cost estimation for an LLM endpoint; project consultation clinic | Lab 5 — Cloud migration + cost report | 5 | Lab 5, Drill 5, Capstone R5 |
 |   | Total self-study hours |   |   |   |   | 40 |   |
 |   |   |   |   |   |   |   |   |
-| Workload note: the 1(1-0-2) credit structure allocates a nominal 30 self-study hours over the term. The plan above totals 40 (23 hours of labs plus 17 of project work). Options to close the gap: drop Lab 5 and fold the cloud migration into the project (-5), and trim project scope (-5). A modest overrun is normal for a project-based course, but it should be a deliberate choice rather than an accident. |   |   |   |   |   |   |   |
+| Workload note: the 1(1-0-2) credit structure allocates a nominal 30 self-study hours over the term. The plan above totals 40 (23 hours of labs plus 17 of project work). Options to close the gap: drop Lab 5 and fold the cloud migration into the capstone (-5), and trim capstone scope (-5). A modest overrun is normal for a project-based course, but it should be a deliberate choice rather than an accident. |   |   |   |   |   |   |   |
+|   |   |   |   |   |   |   |   |
+| CONTENT GAP — Session 5. The official topic is 'Operating LLM systems and defending the bill'. The cost and FinOps half is fully written (Lab 5, scripts/cost_report.py). The LLM-operations half is currently one subtopic line and has no lab exercise, no slide detail, and no drill questions behind it. It needs authoring before the session runs. |   |   |   |   |   |   |   |
 
 ---
 
@@ -165,33 +166,34 @@ _Mark allocation by CLO. Every subtotal reconciles to 'Evaluation Method' — se
 
 | COMPONENT | INSTRUMENT | WHEN | CLO1 | CLO2 | CLO3 | TOTAL |
 |---|---|---|---|---|---|---|
-| Lab Completion | Lab 1 — reproducible training container | Before Session 2 | 5 | 0 | 0 | 5 |
-| Lab Completion | Lab 2 — tracked study and registered model | Before Session 3 | 5 | 0 | 0 | 5 |
-| Lab Completion | Lab 3 — deployed endpoint and load test | Before Session 4 | 0 | 3 | 2 | 5 |
-| Lab Completion | Lab 4 — CI/CD, monitoring and drift alert | Before Session 5 | 0 | 3 | 2 | 5 |
-| Lab Completion | Lab 5 — cloud migration and cost report | Before Final Week | 0 | 1 | 4 | 5 |
-| Quiz | Quiz 1 — reproducibility, containers, data versioning | Start of Session 2 | 5 | 0 | 0 | 5 |
-| Quiz | Quiz 2 — experiment tracking, registry, lineage | Start of Session 3 | 3 | 2 | 0 | 5 |
-| Quiz | Quiz 3 — serving patterns, latency, rollback | Start of Session 4 | 0 | 3 | 2 | 5 |
-| Quiz | Quiz 4 — testing, observability, drift diagnosis | Start of Session 5 | 0 | 3 | 2 | 5 |
-| Quiz | Quiz 5 — cloud MLOps services, IAM, cost | Final Week | 0 | 0 | 5 | 5 |
-| Project | R1 Project Organization and Reproducibility (rubric) | Final Week | 9 | 0 | 0 | 9 |
-| Project | R2 Experiment Tracking and Model Management (rubric) | Final Week | 9 | 0 | 0 | 9 |
-| Project | R3 Model Serving and Deployment (rubric) | Final Week | 0 | 9 | 0 | 9 |
-| Project | R4 Monitoring and Operational Readiness (rubric) | Final Week | 0 | 5 | 4 | 9 |
-| Project | R5 Cloud Deployment and Integration (rubric) | Final Week | 0 | 0 | 9 | 9 |
-| Project | Live demo and defence (not on the rubric sheet) | Final Week | 2 | 2 | 1 | 5 |
-| Lab Completion subtotal |   |   | 10 | 7 | 8 | 25 |
-| Quiz subtotal |   |   | 8 | 8 | 9 | 25 |
-| Project subtotal |   |   | 20 | 16 | 14 | 50 |
-| COURSE TOTAL |   |   | 38 | 31 | 31 | 100 |
+| Labs | Lab 1 — reproducible training container | Before Session 2 | 8 | 0 | 0 | 8 |
+| Labs | Lab 2 — tracked study and registered model | Before Session 3 | 7 | 0 | 1 | 8 |
+| Labs | Lab 3 — deployed endpoint and load test | Before Session 4 | 0 | 5 | 3 | 8 |
+| Labs | Lab 4 — CI/CD, monitoring and drift alert | Before Session 5 | 0 | 6 | 2 | 8 |
+| Labs | Lab 5 — cloud migration, LLM ops and cost report | Before Final Week | 0 | 4 | 4 | 8 |
+| In-class drills | Drill 1 — reproducibility, containers, data versioning | Start of Session 2 | 3 | 0 | 0 | 3 |
+| In-class drills | Drill 2 — pipelines, tracking, registry, managed training | Start of Session 3 | 2 | 0 | 1 | 3 |
+| In-class drills | Drill 3 — serving patterns, latency, release safety | Start of Session 4 | 0 | 2 | 1 | 3 |
+| In-class drills | Drill 4 — testing, observability, drift diagnosis | Start of Session 5 | 0 | 2 | 1 | 3 |
+| In-class drills | Drill 5 — LLM operations, IAM, cost defence | Final Week | 0 | 1 | 2 | 3 |
+| Capstone System | R1 Reproducible ML Pipeline (rubric) | Final Week | 6 | 0 | 0 | 6 |
+| Capstone System | R2 Deployment & CI/CD (rubric) | Final Week | 0 | 4 | 2 | 6 |
+| Capstone System | R3 Monitoring & Reliability (rubric) | Final Week | 0 | 3 | 3 | 6 |
+| Capstone System | R4 Failure Handling & Technical Defense (rubric) | Final Week | 0 | 3 | 3 | 6 |
+| Capstone System | R5 Documentation & Presentation (rubric) | Final Week | 4 | 0 | 2 | 6 |
+| Capstone demo & defense | Live demo and defence | Final Week | 5 | 5 | 5 | 15 |
+| Labs subtotal |   |   | 15 | 15 | 10 | 40 |
+| In-class drills subtotal |   |   | 5 | 5 | 5 | 15 |
+| Capstone System subtotal |   |   | 10 | 10 | 10 | 30 |
+| Capstone demo & defense subtotal |   |   | 5 | 5 | 5 | 15 |
+| COURSE TOTAL |   |   | 35 | 35 | 30 | 100 |
 |   |   |   |   |   |   |   |
-| CHECK | Declared in 'Evaluation Method' (row 5) |   | 38 | 31 | 31 | 100 |
+| CHECK | Declared in 'Evaluation Method' (row 6) |   | 35 | 35 | 30 | 100 |
 | CHECK | Variance (must be zero) |   | 0 | 0 | 0 | 0 |
-| CHECK | Declared in 'CLO & PLO Alignment' (column B) |   | 38 | 31 | 31 | 100 |
+| CHECK | Declared in 'CLO & PLO Alignment' (column B) |   | 35 | 35 | 30 | 100 |
 | CHECK | Variance (must be zero) |   | 0 | 0 | 0 | 0 |
 |   |   |   |   |   |   |   |
-| Design note: labs are now marked directly (5 marks each, pass/fail against the acceptance criteria in each handout) rather than assessed indirectly through quizzes. Quizzes still carry evidence questions drawn from each student's own lab output, which is what makes copying a lab useless. There is no final examination; the 25 marks it carried have moved to lab completion, and the project has risen from 45 to 50. |   |   |   |   |   |   |
+| Design note: the four components are the ones named in the official specification. 'In-class drills' replace the quizzes of the earlier draft at 3 marks each; they still draw evidence questions from each student's own lab output — their p95 figure, their run ID, the true cause behind their drift alert — which is what makes copying a lab worthless. Labs are marked directly at 8 marks each against the acceptance criteria in each handout. There is no final examination. |   |   |   |   |   |   |
 
 ---
 
@@ -199,29 +201,29 @@ _Mark allocation by CLO. Every subtotal reconciles to 'Evaluation Method' — se
 
 *added during course design*
 
-_Take-home labs (self-study, 2 hr/week per 1(1-0-2)) and capstone project milestones._
+_Take-home labs (self-study, 2 hr/week per 1(1-0-2)) and capstone milestones._
 
 | LAB | DELIVERABLE | PASSES WHEN | CLO | EST. HR | DUE | MARKS |
 |---|---|---|---|---|---|---|
-| Lab 1 | Repo with Dockerfile, pinned dependencies, DVC-tracked data, MLflow runs, and a README | A grader on a different machine runs one command and reproduces the reported metric within tolerance | CLO1 | 4 | Before Session 2 | 5 |
-| Lab 2 | Hyperparameter study of >=12 trials, best model registered with lineage to commit and data version | The registered model traces to exact code and data; the run comparison justifies the chosen model | CLO1 | 4 | Before Session 3 | 5 |
-| Lab 3 | Deployed inference endpoint, load-test report at three concurrency levels, canary or blue/green config | The stated p95 latency target is met at the stated concurrency, and rollback evidence shows traffic actually moved | CLO2, CLO3 | 5 | Before Session 4 | 5 |
-| Lab 4 | CI/CD workflow with data-contract and model-behaviour tests, dashboard, scheduled drift detector, alert | A deliberately bad commit is blocked, and an injected distribution shift fires a real alert with a written post-mortem | CLO2, CLO3 | 5 | Before Session 5 | 5 |
-| Lab 5 | The Lab 3 service migrated onto a managed cloud platform, with IAM roles and a cost report | The service runs on managed infrastructure, resources are torn down, and the cost figure matches billing within 20% | CLO2, CLO3 | 5 | Before Final Week | 5 |
-|   | Total lab hours |   |   | 23 |   | 25 |
+| Lab 1 | Repo with Dockerfile, pinned dependencies, DVC-tracked data, MLflow runs, and a README | A grader on a different machine runs one command and reproduces the reported metric within tolerance | CLO1 | 4 | Before Session 2 | 8 |
+| Lab 2 | Hyperparameter study of >=12 trials, best model registered with lineage to commit and data version | The registered model traces to exact code and data; the run comparison justifies the chosen model | CLO1, CLO3 | 4 | Before Session 3 | 8 |
+| Lab 3 | Deployed inference endpoint, load-test report at three concurrency levels, canary or blue/green config | The stated p95 latency target is met at the stated concurrency, and rollback evidence shows traffic actually moved | CLO2, CLO3 | 5 | Before Session 4 | 8 |
+| Lab 4 | CI/CD workflow with data-contract and model-behaviour tests, dashboard, scheduled drift detector, alert | A deliberately bad commit is blocked, and an injected distribution shift fires a real alert with a written post-mortem | CLO2, CLO3 | 5 | Before Session 5 | 8 |
+| Lab 5 | The Lab 3 service migrated onto a managed cloud platform, with IAM roles and a cost report | The service runs on managed infrastructure, resources are torn down, and the cost figure matches billing within 20% | CLO2, CLO3 | 5 | Before Final Week | 8 |
+|   | Total lab hours |   |   | 23 |   | 40 |
 |   |   |   |   |   |   |   |
-| CAPSTONE PROJECT MILESTONES |   |   |   |   |   |   |
+| CAPSTONE MILESTONES |   |   |   |   |   |   |
 | STAGE | WHAT IS DUE | NOTES | CLO | EST. HR | DUE | MARKS |
 | M1 | Team formed (2-3 students) and problem area chosen | Teams registered with the instructor | - | 1 | End of Session 2 |   |
-| M2 | One-page proposal: problem, dataset and licence, latency and freshness needs, serving pattern, planned failure mode, cost estimate | Approval required before build starts; unapproved scope is the main cause of failed projects | - | 3 | End of Session 3 |   |
+| M2 | One-page proposal: problem, dataset and licence, latency and freshness needs, serving pattern, planned failure mode, cost estimate | Approval required before build starts; unapproved scope is the main cause of failed capstones | - | 3 | End of Session 3 |   |
 | M3 | Architecture review — pipeline, serving, and monitoring design walked through with the instructor | 15-minute clinic slot during Session 5 | - | 1 | Session 5 |   |
-| M4 | Presentation with live demo and defence | 8 minutes plus 5 minutes of questions; expect unexpected input to be sent during the demo | All | 4 | Final Week | 5 |
-| M5 | Final repository submission | Graded against the five rubric criteria on the 'Rubric Scoring' sheet | All | 8 | 7 days after Final Week | 45 |
-|   | Total project hours |   |   | 17 |   |   |
+| M4 | Presentation with live demo and defence | 8 minutes plus 5 minutes of questions; expect unexpected input to be sent during the demo. Scored as 'Capstone demo & defense'. | All | 4 | Final Week | 15 |
+| M5 | Final repository submission | Graded against the five rubric criteria on the 'Rubric Scoring' sheet, scored as 'Capstone System' | All | 8 | 7 days after Final Week | 30 |
+|   | Total capstone hours |   |   | 17 |   | 45 |
 |   |   |   |   |   |   |   |
-| Project requirements, in addition to the rubric: versioned data and code; automated reproducible training; registered model with lineage; deployed inference; CI/CD with tests that can fail; monitoring dashboard; at least one working alert; documented cost per 1,000 predictions; a one-page model card; and one deliberate failure the team designed for and can demonstrate. Committing credentials to the repository is an automatic deduction. |   |   |   |   |   |   |
+| Capstone requirements, in addition to the rubric: versioned data and code; automated reproducible training; registered model with lineage; deployed inference; CI/CD with tests that can fail; monitoring dashboard; at least one working alert; documented cost per 1,000 predictions; a one-page model card; and one deliberate failure the team designed for and can demonstrate. Committing credentials to the repository is an automatic deduction. |   |   |   |   |   |   |
 |   |   |   |   |   |   |   |
-| Labs are marked directly at 5 marks each against the acceptance criteria in each handout — a lab either meets them or it does not. The project's 50 marks are the five rubric criteria (45) plus the live demo and defence (5). There is no final examination. |   |   |   |   |   |   |
+| Labs are marked directly at 8 marks each against the acceptance criteria in each handout — a lab either meets them or it does not. The capstone's 45 marks are the five rubric criteria (30, 'Capstone System') plus the live demo and defence (15, 'Capstone demo & defense'). There is no final examination. |   |   |   |   |   |   |
 
 ---
 
@@ -233,17 +235,15 @@ _Change log and open decisions — delete this sheet before submitting to the fa
 
 | # | SHEET | CHANGE OR ASSUMPTION | ACTION NEEDED FROM INSTRUCTOR |
 |---|---|---|---|
-| 1 | Rubric Scoring | Five descriptor cells (C4, E4, D5, D6, E6) contained text duplicated from the adjacent performance level — for example, level 1 of criterion 1 began with the tail of level 2. Corrected to the intended descriptor only. | Confirm the corrected wording matches your intent. |
-| 2 | Rubric Scoring | Added column J mapping each criterion to the CLO it evidences: R1 to CLO1, R2 split 6/3 between CLO1 and CLO2, R3 to CLO2, R4 split 3/6 between CLO2 and CLO3, R5 to CLO3. This is what makes the project's 45 marks land exactly on 15/15/15. | Approve the split, particularly R2 and R4. |
-| 3 | Session Detail | New sheet. Expands each Teaching Plan topic into subtopics, in-class activity, and take-home work. Topic names and CLO ticks are copied from Teaching Plan without alteration. | Review subtopic depth against your 3-hour blocks. |
-| 4 | Assessment Blueprint | New sheet. Allocates Quiz 30, Final Exam 25, and Project 45 across CLOs so the totals reconcile to 38/31/31. Variance check rows must read zero. | None if variances are zero. |
-| 5 | Lab & Project Plan | New sheet. Five take-home labs plus five project milestones, mapped to CLOs. | Confirm lab count — five labs is one per session. |
-| 6 | Teaching Plan | Not modified. Note that LAB (HR) is 0 across all rows while 'Teaching Method' ticks Lab for all three CLOs. The labs are delivered as self-study under the 1(1-0-2) structure, which is consistent, but a reviewer may query it. | Consider a footnote on the Teaching Plan sheet stating that lab work is assessed through quizzes and the project. |
-| 7 | Course Information | Not modified. Cloud platform is not named anywhere in the specification. | Decide AWS, GCP, or Azure. Session 5 and Lab 5 are written platform-neutral and need one named before materials are finalised. |
-| 8 | Whole workbook | Planned self-study is 40 hours (23 labs + 17 project) against a nominal 30 in the 1(1-0-2) structure. | Either accept, drop Lab 5, or move to teams of 3. See the note on 'Session Detail'. |
-| 9 | Evaluation Method | ASSESSMENT RESTRUCTURED at the instructor's request. Final Exam (25) removed. New split: Project 50, Quiz 25, Lab Completion 25. CLO totals are unchanged at 38/31/31, so 'CLO & PLO Alignment' needed no edit. | FACULTY APPROVAL LIKELY REQUIRED — removing the final examination changes an approved specification. |
-| 10 | Evaluation Method | 'Lab Completion' is a new evaluation line. Labs were previously unmarked and assessed indirectly through quizzes; they are now marked directly at 5 marks each. This resolves the tension with the Teaching Method sheet, which ticks Lab for all three CLOs. | Confirm that a directly-marked lab component is acceptable under the 1(1-0-2) structure. |
-| 11 | Rubric Scoring | Unchanged in structure. The rubric scores 45; the remaining 5 project marks are the live demo and defence, scored on the Assessment Blueprint. A 3-level rubric with integer weights cannot total 50, which is why the demo is a separate line rather than a sixth criterion. | Alternative if you prefer the rubric to carry all 50: change performance levels from 4 to 6 (max level 5, weight 2 per criterion). That rewrites every descriptor. |
-| 12 | Rubric Scoring | Column J CLO mapping updated for the new project weighting: R1 CLO1 9, R2 CLO1 9, R3 CLO2 9, R4 CLO2 5 + CLO3 4, R5 CLO3 9, demo CLO1 2 + CLO2 2 + CLO3 1. | Approve the split, particularly R2 and R4. |
-| 13 | Whole workbook | Instructor specified 'Quiz (5x6) 25'. Five quizzes of six marks total 30, not 25. Implemented as 5 quizzes x 5 marks = 25, because 50 + 25 + 25 = 100 exactly. | Confirm 5 marks per quiz, or restate the intended quiz weight. |
-| 14 | Grading load | Marking five labs directly is a substantial increase over the previous indirect model — roughly 15 minutes per student per lab if graded by cloning and running. | For a cohort of 40 this is about 50 hours across the term. Budget TA time or automate with the scripts in instructor/. |
+| 1 | Whole workbook | REBASED ON THE OFFICIAL UNIVERSITY FILE (Course_Specification_691_ITCSB_ITCS355.xlsx, downloaded 4 Sep 2026). The seven faculty sheets are that file's content; the four sheets after them are course-design working papers. | None. Re-rebase whenever the university system issues a new version. |
+| 2 | Rubric Scoring | INTERNAL CONFLICT IN THE OFFICIAL FILE. Column G (WEIGHT) is 3 for all five criteria, so SCORE = MAX LEVEL 3 x WEIGHT 3 = 9 each and the sheet totals 45. The same workbook's 'Evaluation Method' prices 'Capstone System' at 30. Set WEIGHT to 2, which makes each criterion 6 and the sheet total exactly 30. | CONFIRM. The alternative is to keep weight 3 and reprice 'Capstone System' to 45, which then breaks the 100-mark total. |
+| 3 | Teaching Plan / Evaluation Method / CLO & PLO Alignment | The official file stores its totals as SUM formulas with no cached values, so any tool reading values (including scripts/export_spec_md.py) sees blanks. Replaced with literals: Teaching Plan 15/0; Evaluation Method 100/35/35/30; CLO & PLO 100/35/65. | None, unless you re-import from the university system — then re-run the rebase. |
+| 4 | Evaluation Method | ASSESSMENT RESTRUCTURED BY THE FACULTY relative to the earlier draft. Quiz (25) is gone. The components are now Capstone demo & defense 15, Capstone System 30, In-class drills 15, Labs 40. CLO totals moved from 38/31/31 to 35/35/30. | None — this is the official record. Course materials have been updated to match. |
+| 5 | Assessment Blueprint | Rebuilt for the new components. Labs 8 marks each (5 x 8 = 40); drills 3 marks each (5 x 3 = 15); the five rubric criteria 6 marks each (30); demo and defence 15. Variance check rows read zero against both 'Evaluation Method' and 'CLO & PLO Alignment'. | Approve the per-CLO splits, particularly Lab 2 (7 CLO1 + 1 CLO3) and R5 (4 CLO1 + 2 CLO3). |
+| 6 | Whole workbook | 'In-class drills' is a new evaluation line with no faculty definition attached. Implemented as the former quizzes, rebranded and reweighted to 3 marks, run at the start of each session and drawing evidence questions from each student's own lab output. | CONFIRM that a short written drill is what the faculty intends, rather than a live hands-on exercise. |
+| 7 | Session Detail / Teaching Plan | Session titles 2 to 5 were renamed by the faculty. Session 5 is now 'Operating LLM systems and defending the bill'. The cost and FinOps half of that session exists and is strong. THE LLM-OPERATIONS HALF DOES NOT EXIST YET — no lab exercise, no slides, no drill questions. | AUTHOR THE LLM CONTENT before Session 5 runs, or ask the faculty to restore the previous 'Cloud MLOps' title. |
+| 8 | Course Information | The official file lists two instructors: Dr. Pasd Putthapipat and Asst. Prof. Dr. Thanapon Noraset. Carried through unchanged. | Confirm the teaching split. |
+| 9 | Rubric Scoring | All five criteria were renamed by the faculty (R1 Reproducible ML Pipeline, R2 Deployment & CI/CD, R3 Monitoring & Reliability, R4 Failure Handling & Technical Defense, R5 Documentation & Presentation). The official level descriptors are generic — the same four sentences for every criterion. | Consider writing criterion-specific descriptors. Generic descriptors are hard to mark consistently and hard to appeal against. |
+| 10 | Rubric Scoring | The official file has no CLO MAPPING column. The CLO attribution now lives only on 'Assessment Blueprint' so the faculty sheet stays as issued. | None. |
+| 11 | Grading load | Marking five labs directly is roughly 15 minutes per student per lab if graded by cloning and running. For a cohort of 40 that is about 50 hours across the term. | Budget TA time or automate with the scripts in instructor/. |
+| 12 | Course Information | Cloud platform is still not named anywhere in the specification. Session 5 and Lab 5 are written platform-neutral. | Decide AWS, GCP, or Azure before materials are finalised. |

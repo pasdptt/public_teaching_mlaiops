@@ -203,7 +203,7 @@ before the session, not during it.
 
 ## 9. Where the abstraction genuinely leaks
 
-Be aware of these; they show up in the labs and are fair game in quizzes.
+Be aware of these; they show up in the labs and are fair game in the in-class drills.
 
 - **Cold start.** Scale-to-zero services (Cloud Run, Container Apps) have startup latency that a
   provisioned endpoint does not. This will dominate your p99 in Lab 3 if you choose one.

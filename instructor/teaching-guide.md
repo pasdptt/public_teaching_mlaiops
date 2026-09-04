@@ -11,23 +11,25 @@ specification; this document holds the teaching judgement that does not fit in a
 
 ## 1. How this plan relates to the specification
 
-The five topic names, the three CLOs, and the 25/45/30 assessment split come from the faculty
-specification and are not changed. What was added: subtopic detail, in-class activity design, a
-mark-level assessment blueprint that reconciles to 38/31/31, and five take-home labs.
+The five topic names, the three CLOs, and the four-component assessment split — Capstone demo
+& defense 15, Capstone System 30, In-class drills 15, Labs 40 — come from the faculty
+specification in the university system and are not changed. What was added: subtopic detail,
+in-class activity design, a mark-level assessment blueprint that reconciles to 35/35/30, and
+five take-home labs.
 
 **The one structural decision worth understanding.** The credit structure is 1(1-0-2): one
 lecture hour, zero lab hours, two self-study hours per week. But the Teaching Method sheet
 ticks *Lab* for all three CLOs, and MLOps cannot be taught without hands-on work.
 
-Labs are therefore marked directly — 5 marks each, 25 in total — against the acceptance
-criteria in each handout. Quizzes additionally carry evidence questions drawn from each
-student's own lab output: their p95 figure, their run ID, the true cause behind their drift
-alert. That second mechanism is what makes a copied lab worthless, and it is worth keeping
-even though the labs now carry marks of their own.
+The specification resolves this by making Labs the largest single component — 40 marks, 8 per
+lab — awarded against the acceptance criteria in each handout. The in-class drills additionally
+carry evidence questions drawn from each student's own lab output: their p95 figure, their run
+ID, the true cause behind their drift alert. That second mechanism is what makes a copied lab
+worthless, and it is worth keeping even though the labs carry substantial marks of their own.
 
-**There is no final examination.** The 25 marks it carried moved to lab completion, and the
-project rose from 45 to 50. Note that removing an examination changes an approved
-specification, so confirm with the faculty before publishing.
+**There is no final examination**, and there are no quizzes. The former quiz component is now
+*In-class drills* at 15 marks, 3 per session. The capstone is split across two specification
+lines: *Capstone System* (30, the five rubric criteria) and *Capstone demo & defense* (15).
 
 **Grading load is the real cost of this choice.** Five labs marked by cloning and running is
 roughly 15 minutes per student per lab — about 50 hours across a term for a cohort of 40.
@@ -44,28 +46,32 @@ Most pairs fail. Do not rescue them; let the failure land, then debrief it. This
 does more to motivate the whole course than any lecture on technical debt. Budget the full 50
 minutes — it always runs long.
 
-**Session 2 — Experiment Tracking and Model Management.** The budgeted tuning contest scores teams
+**Session 2 — Pipelines, features, and managed training.** The budgeted tuning contest scores teams
 on *cost per point of metric*, not on the metric. Students find this genuinely disorienting, which
 is the point. Announce the scoring rule before they start, or they will optimise the wrong thing and
 feel cheated.
 
-**Session 3 — Serving Models.** Students will report mean latency because it flatters them. Insist
+**Session 3 — Deployment, scaling, and release safety.** Students will report mean latency because it flatters them. Insist
 on p95 and p99 from the first measurement. The timed rollback drill works best if the canary model
 is only *slightly* worse — an obviously broken model teaches nothing about detection.
 
-**Session 4 — Operating ML Systems.** The 50-minute incident simulation is the highest-value block
+**Session 4 — CI/CD/CT, monitoring, and drift.** The 50-minute incident simulation is the highest-value block
 in the course. Inject one of: a shifted feature distribution, a schema change, or a latency
 regression. Teams must diagnose, decide retrain-versus-rollback, and write a five-line post-mortem.
 Score the reasoning, not the speed. Prepare three fault variants so adjacent teams cannot copy.
 
-**Session 5 — Cloud MLOps.** The first failure will be a permissions error, for almost everyone.
+**Session 5 — Operating LLM systems and defending the bill.** The faculty renamed this session, and
+the LLM-operations half of it is not written yet — see the content-gap note on the *Session Detail*
+sheet before you teach it. What follows applies to the cloud and cost half, which is complete.
+
+The first failure will be a permissions error, for almost everyone.
 Plan for it rather than firefighting: pre-create roles, and treat the first failed job as a live
 teaching moment about least privilege. Reserve the last 45 minutes for project architecture clinics —
 teams that have not had their architecture questioned before final week tend to submit incomplete
 monitoring.
 
-**Final week.** Presentations and Quiz 5. There is no final examination. During demos, send
-unexpected input yourself — the demo carries 5 of the project's 50 marks. Graceful handling
+**Final week.** Presentations and Drill 5. There is no final examination. During demos, send
+unexpected input yourself — the demo and defence carry 15 of the capstone's 45 marks. Graceful handling
 scores; crashing scores partial credit if the team's logging makes the cause obvious within a
 minute.
 

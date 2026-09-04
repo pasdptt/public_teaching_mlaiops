@@ -1,7 +1,7 @@
 # ITCS355 — Lab 2: Experiment Tracking and Model Registry
 
 **Released:** end of Session 2 · **Due:** before Session 3 · **Effort:** ~4 hours
-**CLO1** · **Marks:** 5 · **Also assessed through:** Quiz 2 and Project criterion R2
+**CLO1, CLO3** · **Marks:** 8 · **Also assessed through:** Drill 2 and Capstone criterion R1 (Reproducible ML Pipeline)
 **Cloud used:** object storage, container registry, managed training, model registry
 
 **In this repository**
@@ -46,7 +46,7 @@ you are probably fighting the SDK's convenience wrappers; drop to the lower-leve
 **Expect a permissions failure on your first submission.** This is normal on all three providers and
 is not a sign you have done something wrong. The job's *submit-time* identity and its *run-time*
 identity are different things. Read the error, fix the specific missing permission, and record what
-it was — Quiz 2 asks.
+it was — Drill 2 asks.
 
 ## Task 2 — Run a budgeted study (75 min)
 
@@ -163,7 +163,7 @@ make cost-report     # confirm actual spend
 
 The registered model and its artifacts stay — Lab 3 needs them.
 
-## What Quiz 2 will ask
+## What Drill 2 covers
 
 Concepts: tracking versus registry, lineage, promotion, serialization risk. Evidence from your own
 work: the specific permission that failed on your first submission, your chosen run ID, the seed

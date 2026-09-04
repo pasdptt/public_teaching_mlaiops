@@ -22,8 +22,8 @@ OUTPUT = ROOT / "course" / "spec" / "course-specification.md"
 
 # Sheets the faculty owns, versus sheets added during course design.
 ORIGINAL = {
-    "Course Information", "CLO & PLO Alignment", "Teaching Plan", "Teaching Method",
-    "Evaluation Method", "Grading Criteria", "Rubric Scoring",
+    "Course Information", "CLOs", "CLO & PLO Alignment", "Teaching Plan",
+    "Teaching Method", "Evaluation Method", "Grading Criteria", "Rubric Scoring",
 }
 
 
@@ -71,12 +71,38 @@ def sheet_to_markdown(ws) -> list[str]:
     return lines
 
 
+def uncached_formulas() -> list[str]:
+    """Cells holding a formula that carries no cached result."""
+    formulas = openpyxl.load_workbook(WORKBOOK, data_only=False)
+    values = openpyxl.load_workbook(WORKBOOK, data_only=True)
+    stale = []
+    for name in formulas.sheetnames:
+        fws, vws = formulas[name], values[name]
+        for row in fws.iter_rows():
+            for cell in row:
+                if isinstance(cell.value, str) and cell.value.startswith("="):
+                    if vws[cell.coordinate].value is None:
+                        stale.append(f"{name}!{cell.coordinate}  {cell.value}")
+    return stale
+
+
 def main() -> int:
     if not WORKBOOK.exists():
         print(f"missing workbook: {WORKBOOK}")
         return 1
 
     wb = openpyxl.load_workbook(WORKBOOK, data_only=True)
+
+    # A formula whose cached value is missing reads as None here and would publish as an
+    # empty cell — a total silently vanishing from the specification. The university
+    # system exports workbooks in exactly that state, so check rather than trust.
+    stale = uncached_formulas()
+    if stale:
+        print("formula cells have no cached value; they would export blank:")
+        for ref in stale:
+            print(f"  {ref}")
+        print("Open the workbook in Excel and save it, or replace these with literals.")
+        return 1
 
     out: list[str] = [
         "# ITCS355 — Course Specification",

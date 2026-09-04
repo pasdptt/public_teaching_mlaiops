@@ -1,14 +1,15 @@
 # Lab 1 — Marking Notes
 
-Lab 1 is worth **5 marks**, awarded against the acceptance criteria in the handout — met or
-not met, no partial credit for a repo that almost reproduces. It also feeds **Quiz 1** and
-**Project criterion R1**. These notes exist so marking is consistent across the cohort.
+Lab 1 is worth **8 marks**, awarded against the acceptance criteria in the handout — met or
+not met, no partial credit for a repo that almost reproduces. It also feeds **Drill 1** and
+**Capstone criterion R1 (Reproducible ML Pipeline)**. These notes exist so marking is
+consistent across the cohort.
 
-The mechanical script decides most of it. Award the 5 marks when `make reproduce` works from
+The mechanical script decides most of it. Award the 8 marks when `make reproduce` works from
 a fresh clone on a machine that is not the student's and the metric matches the claim. Award
 0 when it does not, and put the reason in the debrief. This is a harsh-looking rule that is
 kinder in practice: it is unambiguous, it is the same standard for everyone, and a student
-who fails Lab 1 still has four labs and the project ahead of them.
+who fails Lab 1 still has four labs and the capstone ahead of them.
 
 ## Run this first
 
@@ -47,7 +48,7 @@ at least one hyperparameter varied with intent.
 | Hashes present but `--require-hashes` missing from the Dockerfile | Minor. Note it; the intent is there |
 | Tolerance padded to ±0.1 | Raise it in the debrief anonymously. This is the most instructive failure in the lab |
 
-## Feeding Quiz 1
+## Feeding Drill 1
 
 Draw the evidence questions from each student's own submission:
 

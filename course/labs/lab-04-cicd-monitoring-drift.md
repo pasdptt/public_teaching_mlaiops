@@ -1,7 +1,7 @@
 # ITCS355 — Lab 4: CI/CD, Observability, and Drift
 
 **Released:** end of Session 4 · **Due:** before Session 5 · **Effort:** ~5 hours
-**CLO2, CLO3** · **Marks:** 5 · **Also assessed through:** Quiz 4 and Project criterion R4
+**CLO2, CLO3** · **Marks:** 8 · **Also assessed through:** Drill 4 and Capstone criteria R3 (Monitoring & Reliability) and R4 (Failure Handling & Technical Defense)
 **Cloud used:** container registry, managed endpoint, monitoring, scheduler, secrets
 
 **In this repository**
@@ -23,7 +23,7 @@ when something is wrong — and prove it does, by breaking it on purpose.
 
 ## Task 1 — Tests that can actually fail (60 min)
 
-Four categories. The point of each is different, and Quiz 4 asks you to distinguish them.
+Four categories. The point of each is different, and Drill 4 asks you to distinguish them.
 
 **Unit tests** — your preprocessing and feature code. Fast, no network.
 
@@ -74,7 +74,7 @@ Requirements:
 **Provider notes.** All three support OIDC federation from GitHub Actions, so you do not need
 long-lived keys: `aws-actions/configure-aws-credentials`, `azure/login` with a federated credential,
 or `google-github-actions/auth` with workload identity federation. Using OIDC rather than a stored
-key is worth doing — it is the modern default and it is asked about in Quiz 4.
+key is worth doing — it is the modern default and it is asked about in Drill 4.
 
 ## Task 3 — Prove a bad commit is blocked (25 min)
 
@@ -204,7 +204,7 @@ Scheduled jobs are the ones people forget — a schedule that survives teardown 
 deleted endpoint and generating errors, or worse, keep a container warm. Check the scheduler
 explicitly.
 
-## What Quiz 4 will ask
+## What Drill 4 covers
 
 Concepts: the four test categories and what each protects against, continuous training triggers, SLOs
 and error budgets, distinguishing data drift from concept drift from pipeline breakage. Evidence from

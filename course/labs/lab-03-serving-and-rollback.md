@@ -1,7 +1,7 @@
 # ITCS355 — Lab 3: Serving, Load Testing, and Rollback
 
 **Released:** end of Session 3 · **Due:** before Session 4 · **Effort:** ~5 hours
-**CLO2, CLO3** · **Marks:** 5 · **Also assessed through:** Quiz 3 and Project criterion R3
+**CLO2, CLO3** · **Marks:** 8 · **Also assessed through:** Drill 3 and Capstone criterion R2 (Deployment & CI/CD)
 **Cloud used:** container registry, model registry, managed endpoint, monitoring
 
 > **Cost warning.** This is the first lab that creates a resource billed by the hour whether or not
@@ -176,7 +176,7 @@ make cost-report
 Verify in the console afterwards. Teardown scripts fail silently more often than you would like, and
 the bill is the thing that eventually tells you.
 
-## What Quiz 3 will ask
+## What Drill 3 covers
 
 Concepts: serving patterns, health versus readiness, latency percentiles, canary and rollback
 mechanics. Evidence from your own work: your p95 at concurrency 10, your breaking concurrency, your

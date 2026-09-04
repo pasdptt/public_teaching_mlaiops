@@ -22,10 +22,10 @@ University · 5 sessions × 3 hours + final week
 ```mermaid
 flowchart TD
     W0["Week 0<br>setup + portability reference"] --> S1
-    S1["Session 1<br>Reproducible ML"] -->|Lab 1| S2["Session 2<br>Tracking and Registry"]
-    S2 -->|Lab 2| S3["Session 3<br>Serving Models"]
-    S3 -->|Lab 3| S4["Session 4<br>Operating ML Systems"]
-    S4 -->|Lab 4| S5["Session 5<br>Cloud MLOps"]
+    S1["Session 1<br>Reproducible ML"] -->|Lab 1| S2["Session 2<br>Pipelines and managed training"]
+    S2 -->|Lab 2| S3["Session 3<br>Deployment and release safety"]
+    S3 -->|Lab 3| S4["Session 4<br>CI/CD/CT, monitoring, drift"]
+    S4 -->|Lab 4| S5["Session 5<br>LLM systems and cost"]
     S5 -->|Lab 5| F["Final week<br>presentation and defence"]
     S2 -.->|teams form| PR["Capstone project"]
     S3 -.->|proposal due| PR
@@ -41,10 +41,10 @@ flowchart TD
 | Session | Topic | CLO | Handout | Code you touch |
 |---|---|---|---|---|
 | 1 | From Notebook to Reproducible ML | CLO1 | [Lab 1](labs/lab-01-reproducible-training.md) | `src/train.py`, `Dockerfile`, `tests/test_data.py` |
-| 2 | Experiment Tracking and Model Management | CLO1 | [Lab 2](labs/lab-02-tracking-and-registry.md) | `src/tune.py`, `src/costs.py`, `scripts/compare_runs.py` |
-| 3 | Serving Models | CLO2, CLO3 | [Lab 3](labs/lab-03-serving-and-rollback.md) | `service/`, `loadtest/` |
-| 4 | Operating ML Systems | CLO2, CLO3 | [Lab 4](labs/lab-04-cicd-monitoring-drift.md) | `.github/workflows/`, `monitoring/` |
-| 5 | Cloud MLOps | CLO2, CLO3 | [Lab 5](labs/lab-05-cloud-mlops-and-cost.md) | `pipeline/`, `cloudlayer/pipelines.py` |
+| 2 | Pipelines, features, and managed training | CLO1 | [Lab 2](labs/lab-02-tracking-and-registry.md) | `src/tune.py`, `src/costs.py`, `scripts/compare_runs.py` |
+| 3 | Deployment, scaling, and release safety | CLO2, CLO3 | [Lab 3](labs/lab-03-serving-and-rollback.md) | `service/`, `loadtest/` |
+| 4 | CI/CD/CT, monitoring, and drift | CLO2, CLO3 | [Lab 4](labs/lab-04-cicd-monitoring-drift.md) | `.github/workflows/`, `monitoring/` |
+| 5 | Operating LLM systems and defending the bill | CLO2, CLO3 | [Lab 5](labs/lab-05-cloud-mlops-and-cost.md) | `pipeline/`, `cloudlayer/pipelines.py` |
 | Final | Presentations and defence | All | [Project brief](project/project-brief.md) | everything |
 
 ---
@@ -53,21 +53,25 @@ flowchart TD
 
 | Component | Marks | CLO1 / CLO2 / CLO3 |
 |---|---|---|
-| Project | 50 | 20 / 16 / 14 |
-| Quiz (5 × 5) | 25 | 8 / 8 / 9 |
-| Lab completion (5 × 5) | 25 | 10 / 7 / 8 |
-| **Total** | **100** | **38 / 31 / 31** |
+| Capstone demo & defense | 15 | 5 / 5 / 5 |
+| Capstone System | 30 | 10 / 10 / 10 |
+| In-class drills (5 × 3) | 15 | 5 / 5 / 5 |
+| Labs (5 × 8) | 40 | 15 / 15 / 10 |
+| **Total** | **100** | **35 / 35 / 30** |
 
-**There is no final examination.** The project's 50 marks are the five rubric criteria (45)
-plus the live demo and defence (5).
+**There is no final examination.** The capstone is worth 45 across two lines: the five rubric
+criteria score 30 as **Capstone System**, and the live demo and defence scores 15 as
+**Capstone demo & defense**.
 
-**Labs are marked directly**, 5 marks each, against the acceptance criteria in each handout.
+**Labs are marked directly**, 8 marks each, against the acceptance criteria in each handout.
 A lab either meets them or it does not — there is no partial credit for a service that almost
-deploys.
+deploys. At 40 marks the labs are the single largest component: this course is graded on what
+you build and operate, not on what you can recall.
 
-Quizzes still carry evidence questions drawn from your own lab output: your p95 figure, your
-run ID, the true cause behind your drift alert. So a copied lab earns nothing in the quiz. The
-labs also compound, which means skipping Lab 1 makes Lab 3 impossible.
+**In-class drills** run at the start of each session, 3 marks each. They carry evidence
+questions drawn from your own lab output: your p95 figure, your run ID, the true cause behind
+your drift alert. So a copied lab earns nothing in the drill. The labs also compound, which
+means skipping Lab 1 makes Lab 3 impossible.
 
 **Model accuracy is not graded anywhere.** A 0.71 AUC model with clean lineage, a working
 rollback, and an honest cost report outscores a 0.94 model that only runs on its author's
@@ -83,9 +87,11 @@ readable as [`spec/course-specification.md`](spec/course-specification.md), auth
 
 ```
 course/
-├── spec/       Faculty course specification. The .xlsx is authoritative; the .md is
-│               generated from it by scripts/export_spec_md.py and renders on GitHub.
-│               Seven original sheets untouched; four added.
+├── spec/       Faculty course specification. Course_Specification_691_ITCSB_ITCS355.xlsx
+│               is the file issued by the university system, kept unmodified for
+│               provenance. The *_merged.xlsx is that file's seven sheets plus four
+│               course-design sheets, and is what scripts/export_spec_md.py turns into
+│               the .md that renders on GitHub.
 ├── slides/     Course overview deck. course-deck.md renders here with diagrams;
 │               the .html is a styled presentation version.
 ├── reference/  The cloud portability contract. Read first.
