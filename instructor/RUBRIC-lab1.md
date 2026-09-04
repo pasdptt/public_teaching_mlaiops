@@ -58,7 +58,9 @@ Draw the evidence questions from each student's own submission:
 - your stated tolerance and how you chose it
 
 Concept questions cover technical debt, container layering, digest versus tag pinning, and group
-leakage. Six marks total, all CLO1.
+leakage. Three marks total, all CLO1 — half concepts, half evidence, in the shape set out in
+[`drills/README.md`](drills/README.md). The full Drill 1 paper is not written yet;
+[`drills/drill-05.md`](drills/drill-05.md) is the worked example to follow.
 
 ## Time budget
 
