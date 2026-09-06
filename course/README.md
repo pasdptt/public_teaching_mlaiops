@@ -10,9 +10,12 @@ University · 5 sessions × 3 hours + final week
 
 ## Read in this order
 
-0. **[`getting-started-gcp.md`](getting-started-gcp.md)** — if you are on GCP and want the
-   commands in order, from an empty laptop to a finished Lab 1. Written for a student with
-   minimum access: one project, basic permissions, a small budget.
+0. **Week 0 setup, step by step.** Pick **one** provider and stay on it for the term:
+   **[`getting-started-gcp.md`](getting-started-gcp.md)** (cheaper registry; the free trial
+   wants a credit card) or **[`getting-started-azure.md`](getting-started-azure.md)** (credit
+   from your university email, no card; the registry bills daily). Either takes you from an
+   empty laptop to a finished Lab 1, and both assume minimum access — one subscription or
+   project, basic permissions, a small budget.
 1. **[`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)**
    — before anything else. Defines the contract that makes every lab work on AWS, Azure, or
    GCP, and contains the Week 0 setup checklist.
@@ -99,7 +102,8 @@ course/
 │               the .html is a styled presentation version.
 ├── reference/  The cloud portability contract. Read first.
 ├── getting-started-gcp.md
-│               Week 0 and Week 1, step by step, for students on GCP.
+├── getting-started-azure.md
+│               Week 0 and Week 1, step by step. Do one, not both.
 ├── labs/       Five take-home lab handouts.
 └── project/    Capstone brief, milestones, and rubric.
 ```

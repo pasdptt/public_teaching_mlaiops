@@ -32,13 +32,19 @@ please keep that naming, it is how I find your work.
 
 ## Billing
 
-[FILL: one of —
- • "The faculty billing account is being attached to your projects. Send me your project ID and
-    I will confirm when it is active."
- • "Please enable the Google Cloud free trial when you create the project. It gives $300 of
-    credit for 90 days, which is far more than this course needs."
- • "We are using Azure for this course instead. $100 of credit, no credit card required, and it
-    verifies with your university email. A setup guide follows."]
+**You may use either Google Cloud or Azure. Pick one and stay on it for the term.** The labs are
+written provider-neutral, so your choice does not affect your marks — the grader only ever calls
+the neutral interface.
+
+| | Google Cloud | Azure |
+|---|---|---|
+| Getting credit | Free trial, **asks for a credit card** to verify identity | **Azure for Students — no credit card**, verified from your university email |
+| Sign in with | A **personal** Google account | Your **university** email |
+| Container registry cost | Bills for what you store — cheaper | Flat daily rate whether used or not |
+| Guide | `course/getting-started-gcp.md` | `course/getting-started-azure.md` |
+
+**If you have no credit card, or would rather not use one, take the Azure path.** That is exactly
+what it is there for, and nobody should put a personal card behind a course exercise.
 
 If you cannot get billing sorted, tell me. Do not spend a weekend fighting it, and do not put a
 personal credit card at risk for a course exercise.

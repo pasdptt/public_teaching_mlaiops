@@ -1,11 +1,25 @@
 # ITCS355 — Getting Started on GCP (Week 0 and Week 1)
 
-For students who have a Google Cloud account with **minimum access** — one project, basic
-permissions, a small budget. This guide takes you from a laptop with nothing installed to a
-finished Lab 1.
+The GCP path through Week 0, from a laptop with nothing installed to a finished Lab 1. Written
+for **minimum access** — one project, basic permissions, a small budget.
 
-Everything here is GCP-specific. The rest of the course is written provider-neutral; this is
-the one document that names a vendor, because you have to start somewhere.
+Its sibling is [`getting-started-azure.md`](getting-started-azure.md) — do **one** of them, not
+both, and stay on the provider you pick for the whole term.
+
+## Why you might pick GCP
+
+**The registry is cheaper.** Artifact Registry bills for what you store — half a gigabyte free,
+then cents per gigabyte per month — where Azure's Container Registry charges a flat daily rate
+whether you push anything or not. For a term of small images that difference is real.
+
+**The catch:** the Google Cloud free trial asks for a credit card to verify identity. It does not
+charge it, but if you have no card, or you would rather not put a personal card behind a course
+exercise, take the Azure path instead — Azure for Students issues credit from your university
+email with no card at all.
+
+**Your university address will not work here.** Google Cloud is not enabled for student accounts
+in the university's Workspace tenant, so sign in with a personal Google account. That is a
+setting on our side, not something you can fix.
 
 > **Read [`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)
 > alongside this.** It explains *why* the repository is shaped the way it is. This guide is the
