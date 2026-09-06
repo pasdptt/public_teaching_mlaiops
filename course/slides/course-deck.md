@@ -66,6 +66,8 @@ flowchart LR
     end
     A4 -.->|"the monitor is itself a model"| B1
     B3 -.->|"with its own false positives"| A3
+
+    linkStyle 5,6 stroke:#eb6c36,stroke-width:2px
 ```
 
 They meet at one point, and it is the interesting one: **the system that monitors your model is itself a model**, with its own failure modes and its own way of being ignored.
@@ -86,16 +88,15 @@ They meet at one point, and it is the interesting one: **the system that monitor
 
 ```mermaid
 flowchart TD
-    S1["Session 1<br>From Notebook to Reproducible ML"] --> A1["Dockerfile + train.py<br>versioned data"]
-    A1 --> S2["Session 2<br>Pipelines, features, and managed training"]
-    S2 --> A2["tracked runs<br>registered model v3"]
-    A2 --> S3["Session 3<br>Deployment, scaling, and release safety"]
-    S3 --> A3["/predict endpoint<br>p95 under 200ms, load tested"]
-    A3 --> S4["Session 4<br>CI/CD/CT, monitoring, and drift"]
-    S4 --> A4["push → test → deploy<br>dashboards, drift alert"]
-    A4 --> S5["Session 5<br>Operating LLM systems and defending the bill"]
-    S5 --> A5["running on managed<br>cloud services"]
-    A5 --> P["Final week<br>Presentation and defence"]
+    A1["Dockerfile + train.py<br>versioned data"]
+    A1 -->|"Session 2 — pipelines, features,<br>managed training"| A2["tracked runs<br>registered model v3"]
+    A2 -->|"Session 3 — deployment, scaling,<br>release safety"| A3["/predict endpoint<br>p95 under 200ms, load tested"]
+    A3 -->|"Session 4 — CI/CD/CT,<br>monitoring, drift"| A4["push → test → deploy<br>dashboards, drift alert"]
+    A4 -->|"Session 5 — LLM operations,<br>defending the bill"| A5["running on managed cloud<br>with an eval gate"]
+    A5 -->|"Final week"| P["one system<br>demonstrated and defended"]
+
+    classDef focus fill:#eb6c36,stroke:#eb6c36,color:#ffffff
+    class P focus
 ```
 
 You build a single system across the whole term. The capstone is an extension of your labs, not a separate effort.

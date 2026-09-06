@@ -37,28 +37,25 @@ and fails the build on any hit.
 ```mermaid
 flowchart TD
     subgraph L1["Layer 1 — provider-neutral"]
-        SRC["src/<br>training, data, costs"]
-        SVC["service/<br>inference API"]
-        MON["monitoring/<br>drift, SLOs"]
+        SRC["src/ · service/ · monitoring/<br>training, inference, drift"]
     end
     subgraph L2["Layer 2 — the environment contract"]
         ENV["cloud.env<br>8 capability slots"]
     end
     subgraph L3["Layer 3 — the only place SDKs live"]
-        BASE["cloudlayer/base.py<br>10-method interface"]
+        BASE["cloudlayer/base.py<br>11-method interface"]
         AWS["aws.py"]
         AZ["azure.py"]
         GCP["gcp.py"]
     end
-    SRC --> ENV
-    SVC --> ENV
-    MON --> ENV
-    ENV --> BASE
+    SRC --> ENV --> BASE
     BASE --> AWS
     BASE --> AZ
     BASE --> GCP
     AUDIT["make portability-audit"] -.->|"fails the build on any<br>provider string in Layer 1"| L1
-    GRADER["the grader"] -.->|"only ever calls this"| BASE
+
+    classDef focus fill:#eb6c36,stroke:#eb6c36,color:#ffffff
+    class AUDIT focus
 ```
 
 This is why your choice of cloud does not affect your marks.

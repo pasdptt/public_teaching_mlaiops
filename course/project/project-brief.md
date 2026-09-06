@@ -30,18 +30,20 @@ and **one deliberate failure you designed for and can demonstrate.**
 ```mermaid
 flowchart LR
     subgraph BUILD["build"]
-        D["1 versioned data<br>+ code"] --> T["2 automated training"] --> RG["3 registry<br>+ lineage"]
+        D["versioned data<br>+ code"] --> T["automated training"] --> RG["registry<br>+ lineage"]
     end
     subgraph SHIP["ship"]
-        RG --> CI["5 CI/CD<br>tests that can fail"] --> EP["4 deployed inference"]
+        RG --> CI["CI/CD<br>tests that can fail"] --> EP["deployed inference"]
     end
     subgraph RUN["operate"]
-        EP --> DASH["6 dashboard"] --> AL["7 working alert"]
-        EP --> COST["8 cost per 1k"]
+        EP --> DASH["dashboard"] --> AL["working alert"]
     end
-    AL --> FAIL["10 your deliberate failure"]
+    AL --> FAIL["your deliberate failure"]
     FAIL -.->|"what it revealed"| CI
-    RG --> MC["9 model card"]
+
+    classDef focus fill:#eb6c36,stroke:#eb6c36,color:#ffffff
+    class FAIL focus
+    linkStyle 7 stroke:#eb6c36,stroke-width:2px
 ```
 
 The dotted edge is the one that separates a good project from a complete one: a failure you
