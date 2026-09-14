@@ -10,8 +10,8 @@ Predicting machine failure within 7 days from sensor readings. The model is not 
 whether a stranger can reproduce it is.
 
 > **This README is graded.** A grader with Docker and nothing else from your setup runs one
-> command and compares the result against the claim below. Edit every `<...>` and delete the
-> instruction blocks marked **REPLACE** before submitting.
+> command and compares the result against the claim below. Edit every `<...>` and delete all
+> placeholder instruction blocks before submitting.
 
 ---
 
@@ -125,7 +125,7 @@ However, the pipeline remains functionally reproducible: it builds, installs, an
 - [x] Image builds for `linux/amd64` and is pushed, digest-pinned
 - [x] `dvc push` completed; a grader can `dvc pull`
 - [x] Five or more tracked runs with params, metrics, data fingerprint, and commit SHA
-- [x] Every **REPLACE** block above is gone (the course-materials block at the top stays)
+- [x] Every template instruction block above is gone (the course-materials block at the top stays)
 - [x] `git log -p | grep -i -E "secret|password|AKIA|BEGIN PRIVATE"` returns nothing
 
 That last check is not optional. A credential in Git history is an automatic deduction in this
