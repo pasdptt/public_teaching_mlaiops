@@ -21,11 +21,11 @@ Experiment `itcs355-lab2` · 12 trials · total spend 0.0016 THB
 
 ## Which model did you register, and why?
 
-TODO(Lab 2): 200 words maximum. Must address all four:
+We registered `n_estimators=100, max_depth=4, min_samples_leaf=5` (run `55e93760`), achieving val ROC-AUC 0.8426 and test ROC-AUC 0.8532 at 0.0002 THB. While tripling trees to 300 (`e4ccf157`) yields 0.8412, it provides no metric gain while tripling compute cost and inference latency. Crucially, across all 12 trials, scores cluster tightly between 0.8257 and 0.8426 (a spread of 0.0169), which is comparable to the random variation across seeds. Deeper trees overfit to noise (depth 12 dropped to 0.8257), so shallow depth-4 with leaf regularization (min_samples_leaf=5) is the most parsimonious, robust choice.
 
-1. Why this model rather than the highest-scoring one, if they differ
-2. The variance across seeds for your chosen configuration
-3. What it costs to train, and to retrain monthly
-4. One way this choice could be wrong
+Across 5 evaluation seeds (20260101–20260105), this configuration demonstrated solid generalization: validation ROC-AUC 0.8556 ± 0.0126 and test ROC-AUC 0.8534 ± 0.0086.
 
-An answer that only says "highest validation score" scores zero on this task.
+Training cost is 0.0002 THB on GCP `e2-standard-4` spot instances (rate 1.92 THB/h). Monthly retraining costs ~0.0002 THB (<0.003 THB annually), well below our 150 THB budget.
+This choice could be wrong if future machine degradation manifests as complex high-order sensor interactions that shallow depth-4 trees cannot capture, leading to underfitting if failure patterns become non-linear.
+### Model Promotion and Staging Policy
+In a production organization, model promotion to Staging should be restricted to the **Lead ML Engineer or MLOps Platform Owner**, requiring an automated CI audit showing: (1) verified lineage across git commit, data digest, container sha, and training job; (2) passing data contract and regression tests; (3) latency p95 within SLA; and (4) demonstrable metric gain exceeding observed seed variance without budget regression.
