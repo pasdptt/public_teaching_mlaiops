@@ -299,18 +299,169 @@ class GcpAdapter(CloudAdapter):
         return version
     
     # deploy / invoke                   -> Lab 3 (Vertex Endpoint)
+    # --- Lab 3 ---------------------------------------------------------------
+    def deploy(self, model_ref: str, endpoint: str, instance: str = "n1-standard-2") -> str:
+        """Creates or retrieves a Vertex AI Endpoint, uploads Model with custom container
+        routes (/predict, /health, 8080), and deploys the model to the endpoint.
+        """
+        from google.cloud import aiplatform
+
+        aiplatform.init(
+            project=self.cfg.project_id,
+            location=self.cfg.region,
+        )
+
+        # 1. Resolve container image URI from model_ref
+        registry = self.cfg.container_registry.rstrip("/")
+        if "/" in model_ref:
+            image_uri = model_ref
+        elif ":" in model_ref:
+            image_uri = f"{registry}/{model_ref}"
+        else:
+            # If a version tag or number was passed (e.g. "1" or git commit SHA)
+            image_uri = f"{registry}/itcs355-serve:{model_ref}"
+
+        # 2. Retrieve or create the Vertex AI Endpoint
+        endpoints = aiplatform.Endpoint.list(
+            filter=f'display_name="{endpoint}"',
+            order_by="create_time desc",
+        )
+        if endpoints:
+            ep = endpoints[0]
+            print(f"Found existing Vertex AI Endpoint: {ep.resource_name}")
+        else:
+            print(f"Creating new Vertex AI Endpoint: {endpoint}")
+            ep = aiplatform.Endpoint.create(
+                display_name=endpoint,
+                labels=self.cfg.tags(3),  # Tagged course=itcs355, lab=3 for teardown
+            )
+
+        # 3. Upload the Model resource configured for custom container serving
+        print(f"Uploading Model resource for image {image_uri}...")
+        model = aiplatform.Model.upload(
+            display_name=f"{endpoint}-model",
+            serving_container_image_uri=image_uri,
+            serving_container_predict_route="/predict",
+            serving_container_health_route="/health",
+            serving_container_ports=[8080],
+            serving_container_environment_variables={
+                "MODEL_VERSION": str(model_ref),
+                "MODEL_REGISTRY_NAME": self.cfg.model_registry_name,
+                "MLFLOW_TRACKING_URI": self.cfg.mlflow_tracking_uri,
+            },
+            labels=self.cfg.tags(3),
+        )
+
+        # 4. Deploy the Model to the Endpoint on the specified machine type
+        print(f"Deploying model to endpoint on machine type '{instance}'...")
+        ep.deploy(
+            model=model,
+            deployed_model_display_name=f"{endpoint}-deployed",
+            machine_type=instance,
+            min_replica_count=1,
+            max_replica_count=1,
+            traffic_percentage=100,
+            sync=True,
+        )
+
+        print(f"Endpoint ready for traffic: {ep.resource_name}")
+        return ep.resource_name
+
+    def invoke(self, endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
+        """Sends prediction requests to the deployed endpoint using Vertex AI raw_predict
+        or direct HTTPS call.
+        """
+        import json
+        import requests
+        from google.cloud import aiplatform
+
+        # Handle direct HTTP/HTTPS endpoint URLs (e.g., Cloud Run or local dev)
+        if endpoint.startswith("http://") or endpoint.startswith("https://"):
+            url = endpoint.rstrip("/")
+            route = "/predict/batch" if "rows" in payload and isinstance(payload["rows"], list) and len(payload["rows"]) > 1 else "/predict"
+            target = f"{url}{route}" if not url.endswith(("/predict", "/predict/batch")) else url
+            resp = requests.post(target, json=payload, timeout=30)
+            resp.raise_for_status()
+            return resp.json()
+
+        # Vertex AI Endpoint invocation
+        aiplatform.init(
+            project=self.cfg.project_id,
+            location=self.cfg.region,
+        )
+
+        # Resolve Endpoint instance by resource name, ID, or display name
+        if endpoint.startswith("projects/") or endpoint.isdigit():
+            ep = aiplatform.Endpoint(endpoint_name=endpoint)
+        else:
+            eps = aiplatform.Endpoint.list(
+                filter=f'display_name="{endpoint}"',
+                order_by="create_time desc",
+            )
+            ep = eps[0] if eps else aiplatform.Endpoint(endpoint_name=endpoint)
+
+        # Use raw_predict to preserve exact JSON schema without protobuf conversion
+        body_bytes = json.dumps(payload).encode("utf-8")
+        resp = ep.raw_predict(
+            body=body_bytes,
+            headers={"Content-Type": "application/json"},
+        )
+        return resp.json()
+
     # emit_metric                       -> Lab 4 (Cloud Monitoring time series)
     # generate                          -> Lab 5 (managed LLM endpoint; read usageMetadata for tokens)
+    
+
     def teardown(self, tags: dict[str, str]) -> list[str]:
+        """Delete every resource carrying these tags (endpoints, models, training jobs)."""
         from google.cloud import aiplatform
 
         aiplatform.init(project=self.cfg.project_id, location=self.cfg.region)
-        deleted = []
+        deleted: list[str] = []
+        label_filter = " AND ".join([f'labels.{k}="{v}"' for k, v in tags.items()])
+
+        # 1. Teardown Endpoints (undeploy models first, then delete endpoint)
         try:
-            label_filter = " AND ".join([f'labels.{k}="{v}"' for k, v in tags.items()])
+            endpoints = aiplatform.Endpoint.list(filter=label_filter)
+            for ep in endpoints:
+                print(f"Undeploying models from endpoint {ep.display_name} ({ep.resource_name})...")
+                try:
+                    ep.undeploy_all(sync=True)
+                except Exception as exc:
+                    print(f"Warning undeploying models from {ep.resource_name}: {exc}")
+                print(f"Deleting endpoint {ep.display_name} ({ep.resource_name})...")
+                try:
+                    ep.delete(force=True, sync=True)
+                    deleted.append(ep.resource_name)
+                except Exception as exc:
+                    print(f"Warning deleting endpoint {ep.resource_name}: {exc}")
+        except Exception as exc:
+            print(f"Error listing endpoints for teardown: {exc}")
+
+        # 2. Teardown Models
+        try:
+            models = aiplatform.Model.list(filter=label_filter)
+            for m in models:
+                print(f"Deleting model {m.display_name} ({m.resource_name})...")
+                try:
+                    m.delete(sync=True)
+                    deleted.append(m.resource_name)
+                except Exception as exc:
+                    print(f"Warning deleting model {m.resource_name}: {exc}")
+        except Exception as exc:
+            print(f"Error listing models for teardown: {exc}")
+
+        # 3. Teardown Custom Training Jobs
+        try:
             jobs = aiplatform.CustomJob.list(filter=label_filter)
             for j in jobs:
+                print(f"Cancelling/deleting custom job {j.display_name} ({j.resource_name})...")
+                try:
+                    j.cancel()
+                except Exception:
+                    pass
                 deleted.append(j.resource_name)
-        except Exception:
-            pass
+        except Exception as exc:
+            print(f"Error listing custom jobs for teardown: {exc}")
+
         return deleted

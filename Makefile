@@ -6,9 +6,10 @@ IMAGE ?= itcs355-lab1
 TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
 SEED ?= 20260101
+LAB ?= 3
 
 .PHONY: help setup cloud-check data test portability-audit train train-remote image image-push reproduce verify clean teardown \
-        tune compare register lineage-check reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
+        tune compare register lineage-check reload-check serve serve-image serve-image-push deploy smoke loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
 
 help:
 	@grep -E "^[a-zA-Z_-]+:.*?## .*$$" $(MAKEFILE_LIST) | awk -F":.*?## " "{printf \"  %-20s %s\\n\", \$$1, \$$2}"
@@ -63,7 +64,7 @@ verify: ## Check the produced metric against the README claim
 
 teardown: ## Delete every resource tagged course=itcs355 for this lab
 	python -c "from src import config; from cloudlayer.factory import get_adapter; \
-	cfg=config.load(); print(get_adapter(cfg).teardown(cfg.tags(1)))"
+	cfg=config.load(); print(get_adapter(cfg).teardown(cfg.tags($(LAB))))"
 
 clean: ## Remove local artifacts
 	rm -rf mlruns mlartifacts mlflow.db reports/metrics.json .pytest_cache
@@ -101,6 +102,22 @@ serve: ## Run the inference service locally on :8080
 
 serve-image: ## Build the serving image
 	docker buildx build --platform $(PLATFORM) -f service/Dockerfile.serve -t itcs355-serve:$(TAG) --load .
+
+serve-image-push: serve-image ## Push the serving image to CONTAINER_REGISTRY via your adapter
+	python -c "from src import config; from cloudlayer.factory import get_adapter; \
+	print(get_adapter(config.load()).push_image('itcs355-serve:$(TAG)'))"
+
+deploy: ## Deploy inference container to managed cloud endpoint (Vertex AI)
+	python -c "from src import config; from cloudlayer.factory import get_adapter; \
+	cfg = config.load(); adapter = get_adapter(cfg); \
+	model_ref = '$(if $(MODEL_REF),$(MODEL_REF),$(if $(VERSION),$(VERSION),$(TAG)))'; \
+	endpoint = '$(if $(ENDPOINT),$(ENDPOINT),itcs355-serve)'; \
+	instance = '$(if $(INSTANCE),$(INSTANCE),n1-standard-2)'; \
+	res = adapter.deploy(model_ref, endpoint, instance); \
+	print(f'Deployed {model_ref} to endpoint {endpoint}: {res}')"
+
+smoke: ## Smoke test the deployed endpoint with three known payloads
+	python scripts/smoke_test.py $(if $(TARGET),--target $(TARGET),--endpoint $(if $(ENDPOINT),$(ENDPOINT),itcs355-serve))
 
 loadtest: ## Load test at three concurrency levels
 	@for vus in 1 10 50; do \
