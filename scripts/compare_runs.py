@@ -45,7 +45,7 @@ def main() -> int:
     table = pd.DataFrame({
         "run_id": runs["run_id"].str[:8],
         args.metric: runs[metric_col].round(4),
-        "cost_thb": runs.get(cost_col, 0).round(4),
+        "cost_thb": runs[cost_col].fillna(0.0).round(4) if cost_col in runs else 0.0,
         "n_estimators": runs.get("params.n_estimators"),
         "max_depth": runs.get("params.max_depth"),
         "min_samples_leaf": runs.get("params.min_samples_leaf"),

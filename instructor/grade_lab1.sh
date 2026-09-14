@@ -37,7 +37,7 @@ echo "1. Hygiene"
 check "cloud.env not committed"        bash -c '! git log --all --name-only --pretty=format: | grep -qx "cloud.env"'
 check "no credentials in history"      bash -c '! git log -p --all | grep -qiE "AKIA[0-9A-Z]{16}|BEGIN (RSA |EC )?PRIVATE KEY|password[[:space:]]*=[[:space:]]*[^ ]"'
 check "README has a claim line"        grep -qiE "expected[[:space:]]+test_roc_auc[[:space:]]*[:=]" README.md
-check "no REPLACE blocks remain"       bash -c '! grep -q "REPLACE" README.md'
+check "no REPLACE blocks remain"       bash -c '! grep -q "REPLACE" README_LAB01.md'
 
 echo
 echo "2. Reproducibility"

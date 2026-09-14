@@ -24,7 +24,7 @@ from src import config, data
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--name", required=True, help="registered model name")
+    ap.add_argument("--name", default=None, help="registered model name (default: cfg.model_registry_name)")
     ap.add_argument("--version", required=True)
     ap.add_argument("--rows", type=int, default=5)
     args = ap.parse_args()
@@ -32,7 +32,8 @@ def main() -> int:
     cfg = config.load(strict=False)
     mlflow.set_tracking_uri(cfg.mlflow_tracking_uri)
 
-    uri = f"models:/{args.name}/{args.version}"
+    name = args.name or cfg.model_registry_name
+    uri = f"models:/{name}/{args.version}"
     print(f"loading {uri}")
     model = mlflow.sklearn.load_model(uri)
 

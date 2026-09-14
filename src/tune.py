@@ -44,6 +44,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--trials", type=int, default=12, help="minimum 12 for the lab")
     p.add_argument("--budget-thb", type=float, default=150.0)
     p.add_argument("--instance", default="local", help="key into src/costs.py PRICE_TABLE")
+    p.add_argument("--spot", action="store_true", default=True, help="use spot/discounted rate")
     p.add_argument("--seed", type=int, default=seeds.DEFAULT_SEED)
     p.add_argument("--experiment", default="itcs355-lab2")
     p.add_argument("--checkpoint", type=Path, default=Path("reports/tune_checkpoint.json"),
@@ -74,9 +75,18 @@ def main() -> None:
     mlflow.set_tracking_uri(cfg.mlflow_tracking_uri)
     mlflow.set_experiment(args.experiment)
 
+    instance = args.instance
+    if instance == "local" and cfg.provider != "local":
+        provider_defaults = {
+            "gcp": "e2-standard-4",
+            "aws": "ml.m5.large",
+            "azure": "Standard_F4s_v2",
+        }
+        instance = provider_defaults.get(cfg.provider.lower(), "local")
+
     state = load_checkpoint(args.checkpoint)
     candidates = grid(SEARCH_SPACE)[: args.trials]
-    rate = costs.hourly_rate(cfg.provider, args.instance)
+    rate = costs.hourly_rate(cfg.provider, instance, spot=args.spot)
 
     skipped: list[dict] = []
     for i, params in enumerate(candidates):
@@ -104,7 +114,7 @@ def main() -> None:
             trial_cost = elapsed_h * rate
             state["spent_thb"] += trial_cost
 
-            mlflow.log_params({**params, "seed": seed, "instance": args.instance})
+            mlflow.log_params({**params, "seed": seed, "instance": instance, "spot": args.spot})
             mlflow.log_metrics({
                 **metrics,
                 "duration_s": round(elapsed_h * 3600, 3),

@@ -7,8 +7,8 @@ TAG   ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 PLATFORM ?= linux/amd64
 SEED ?= 20260101
 
-.PHONY: help setup cloud-check data test portability-audit train image image-push reproduce verify clean teardown \
-        tune compare reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
+.PHONY: help setup cloud-check data test portability-audit train train-remote image image-push reproduce verify clean teardown \
+        tune compare register lineage-check reload-check serve serve-image loadtest drift inject-drift pipeline cost swap-check llm-eval llm-gate
 
 help:
 	@grep -E "^[a-zA-Z_-]+:.*?## .*$$" $(MAKEFILE_LIST) | awk -F":.*?## " "{printf \"  %-20s %s\\n\", \$$1, \$$2}"
@@ -69,14 +69,30 @@ clean: ## Remove local artifacts
 	rm -rf mlruns mlartifacts mlflow.db reports/metrics.json .pytest_cache
 
 # --- Lab 2 -------------------------------------------------------------------
+train-remote: image ## Submit training to managed cloud compute (Vertex AI)
+	python -c "from src import config; from cloudlayer.factory import get_adapter; \
+	cfg = config.load(); adapter = get_adapter(cfg); \
+	adapter.upload('data/raw/sensors.csv', 'data/raw/sensors.csv'); \
+	img = adapter.push_image('$(IMAGE):$(TAG)'); \
+	job_id = adapter.submit_training(img, {'seed': $(SEED)}); \
+	print(f'Submitted training job: {job_id}'); \
+	res = adapter.wait_training(job_id); \
+	print('Job result:', res)"
+
 tune: ## Budgeted hyperparameter study (>=12 trials)
 	python -m src.tune --trials 12 --budget-thb 150
 
 compare: ## Rank runs by metric and by cost per point
 	python scripts/compare_runs.py --experiment itcs355-lab2
 
+register: ## Register the best model from the study with lineage tags and promote to Staging
+	python scripts/register_model.py
+
+lineage-check: ## Verify the 8 lineage fields on the registered model
+	python scripts/lineage_check.py --version $(if $(VERSION),$(VERSION),1)
+
 reload-check: ## Load the registered model by version and score rows
-	python scripts/reload_check.py --name $(MODEL_REGISTRY_NAME) --version $(VERSION)
+	python scripts/reload_check.py $(if $(MODEL_REGISTRY_NAME),--name $(MODEL_REGISTRY_NAME)) --version $(VERSION)
 
 # --- Lab 3 -------------------------------------------------------------------
 serve: ## Run the inference service locally on :8080

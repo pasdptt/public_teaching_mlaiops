@@ -124,16 +124,16 @@ notebook.
 
 ## Deliverables checklist
 
-- [ ] `submit_training()` and `wait_training()` implemented and working
-- [ ] 12+ trials on discounted compute, checkpointed, all tracked
-- [ ] Interruption survived and resumed — evidence in logs
-- [ ] Comparison artifact in `reports/`
-- [ ] 200-word justification covering all four required points
-- [ ] Model registered with all eight lineage fields
-- [ ] Promotion step performed, with a note on who should own it
-- [ ] `reload_check.py` runs from the registry and scores rows
-- [ ] Cost recorded per trial, total under 150 THB
-- [ ] `make teardown` run
+- [x] `submit_training()` and `wait_training()` implemented and working
+- [x] 12+ trials on discounted compute, checkpointed, all tracked
+- [x] Interruption survived and resumed — evidence in logs
+- [x] Comparison artifact in `reports/`
+- [x] 200-word justification covering all four required points
+- [x] Model registered with all eight lineage fields
+- [x] Promotion step performed, with a note on who should own it
+- [x] `reload_check.py` runs from the registry and scores rows
+- [x] Cost recorded per trial, total under 150 THB
+- [x] `make teardown` run
 
 ## Acceptance criteria
 

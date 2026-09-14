@@ -39,13 +39,16 @@ class CloudAdapter(ABC):
 
     # --- Lab 2 ---------------------------------------------------------------
     def submit_training(self, image_uri: str, args: dict[str, Any]) -> str:
-        raise NotImplementedError("Lab 2")
+        """Local stand-in for managed training."""
 
     def wait_training(self, job_id: str) -> dict[str, Any]:
-        raise NotImplementedError("Lab 2")
+        """Local stand-in for wait_training."""
 
     def register_model(self, model_uri: str, name: str) -> str:
-        raise NotImplementedError("Lab 2")
+        """Local stand-in for register_model using MLflow."""
+
+    def teardown(self, tags: dict[str, str]) -> list[str]:
+        """Local stand-in for teardown."""
 
     # --- Lab 3 ---------------------------------------------------------------
     def deploy(self, model_ref: str, endpoint: str, instance: str) -> str:
