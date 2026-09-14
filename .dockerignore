@@ -4,7 +4,8 @@ data/
 mlruns/
 mlartifacts/
 mlflow.db
-reports/
+reports/*
+!reports/model.joblib
 notebooks/
 __pycache__/
 *.pyc

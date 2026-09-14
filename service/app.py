@@ -38,10 +38,13 @@ def _load_model():
     name = os.environ.get("MODEL_REGISTRY_NAME")
     version = os.environ.get("MODEL_VERSION")
     if name and version:
-        import mlflow.sklearn  # imported lazily so tests can run without a registry
+        try:
+            import mlflow.sklearn  # imported lazily so tests can run without a registry
 
-        mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db"))
-        return mlflow.sklearn.load_model(f"models:/{name}/{version}")
+            mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db"))
+            return mlflow.sklearn.load_model(f"models:/{name}/{version}")
+        except Exception as exc:
+            log.warning("Could not load from MLflow registry (%s), checking fallback: %s", f"models:/{name}/{version}", exc)
 
     # Fallback for local development and tests only. Submitting this is not acceptable:
     # your deployed service must load a registered version.
