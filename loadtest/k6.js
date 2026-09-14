@@ -20,7 +20,7 @@ export const options = {
   thresholds: {
     // TODO(Lab 3): set YOUR p95 target here, BEFORE you measure.
     // A target chosen after seeing the numbers is not a target, and this is graded.
-    'predict_latency_ms': ['p(95)<200'],
+    'predict_latency_ms': ['p(95)<150'],
     'predict_failures': ['rate<0.01'],
   },
 };

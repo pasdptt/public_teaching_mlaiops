@@ -1,27 +1,51 @@
-# ITCS355 Lab 3 — serving image
-#
-# TODO(Lab 3): pin by digest, as you did for the training image in Lab 1.
-FROM python:3.11-slim AS builder
-ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
-WORKDIR /build
-COPY requirements-serve.txt ./
-RUN pip install --prefix=/install -r requirements-serve.txt
+# ITCS355 Lab 3 — Reproducible Inference Serving Image
+# Multi-stage build pinned to linux/amd64 by digest
 
-FROM python:3.11-slim AS runtime
+# ==============================================================================
+# STAGE 1: Builder (Dependency Resolution & Pre-compilation)
+# ==============================================================================
+FROM --platform=linux/amd64 python@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea AS builder
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /build
+
+# Dependencies first so this layer caches independently of your source code
+COPY requirements-serve.txt ./
+RUN pip install --require-hashes --prefix=/install -r requirements-serve.txt
+
+
+# ==============================================================================
+# STAGE 2: Runtime (Minimal, Non-Root Production Image)
+# ==============================================================================
+FROM --platform=linux/amd64 python@sha256:78387bc3881b8273120a12ebe6c1ab22b018ccc2c9adf565ae1ac9b536e184ea AS runtime
+
+# Non-root user: a production serving container should not run as root
 RUN useradd --create-home --uid 10001 runner
-ENV PYTHONUNBUFFERED=1 PYTHONPATH=/app
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    GIT_PYTHON_REFRESH=quiet
+
+# Copy only the compiled/installed packages from the builder stage
 COPY --from=builder /install /usr/local
+
 WORKDIR /app
+
+# Pre-create directories and ensure non-root runner has full write permissions
+RUN mkdir -p /app/reports /app/mlruns && chmod -R 777 /app && chown -R runner:runner /app
+
+# Copy application code with non-root ownership
 COPY --chown=runner:runner service/ ./service/
 COPY --chown=runner:runner src/ ./src/
 COPY --chown=runner:runner cloudlayer/ ./cloudlayer/
+COPY --chown=runner:runner scripts/ ./scripts/
+
 USER runner
 
 EXPOSE 8080
-# TODO(Lab 3): your provider expects specific health and predict paths.
-#   AWS SageMaker  -> /ping and /invocations
-#   Azure ML       -> configurable liveness route on the deployment
-#   Vertex AI      -> health and predict routes declared on the Model resource
-# Absorb the difference in cloudlayer/, or map the paths here. Do NOT rename the routes
-# in service/app.py — that is what makes the image non-portable.
+
 CMD ["uvicorn", "service.app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]
