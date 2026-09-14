@@ -33,14 +33,20 @@ const payload = JSON.stringify({
 });
 
 export default function () {
-  const res = http.post(__ENV.TARGET, payload, {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const headers = { 'Content-Type': 'application/json' };
+  if (__ENV.TOKEN) {
+    headers['Authorization'] = `Bearer ${__ENV.TOKEN}`;
+  }
+  const res = http.post(__ENV.TARGET, payload, { headers: headers });
   latency.add(res.timings.duration);
   failures.add(res.status !== 200);
   check(res, {
     'status is 200': (r) => r.status === 200,
     'probability present': (r) => r.status === 200 && r.json('probability') !== undefined,
-    'version reported': (r) => r.headers['X-Model-Version'] !== undefined,
+    'version reported': (r) => {
+      const hv = r.headers['X-Model-Version'] || r.headers['x-model-version'];
+      if (hv !== undefined) return true;
+      try { return r.json('model_version') !== undefined; } catch (e) { return false; }
+    },
   });
 }

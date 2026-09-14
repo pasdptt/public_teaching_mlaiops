@@ -117,12 +117,15 @@ deploy: ## Deploy inference container to managed cloud endpoint (Vertex AI)
 	print(f'Deployed {model_ref} to endpoint {endpoint}: {res}')"
 
 smoke: ## Smoke test the deployed endpoint with three known payloads
-	python scripts/smoke_test.py $(if $(TARGET),--target $(TARGET),--endpoint $(if $(ENDPOINT),$(ENDPOINT),itcs355-serve))
+	python scripts/smoke_test.py --endpoint $(if $(ENDPOINT),$(ENDPOINT),itcs355-serve)
+
+TARGET ?= https://asia-southeast1-aiplatform.googleapis.com/v1/projects/itcs355-6688249/locations/asia-southeast1/endpoints/1254122753850605568:rawPredict
+DURATION ?= 30s
 
 loadtest: ## Load test at three concurrency levels
 	@for vus in 1 10 50; do \
 	  echo "=== $$vus VUs ==="; \
-	  k6 run -e TARGET=$(TARGET) -e VUS=$$vus loadtest/k6.js || true; \
+	  k6 run -e TARGET=$(TARGET) -e TOKEN=$$(gcloud auth print-access-token 2>/dev/null) -e DURATION=$(DURATION) -e VUS=$$vus loadtest/k6.js || true; \
 	done
 
 # --- Lab 4 -------------------------------------------------------------------
