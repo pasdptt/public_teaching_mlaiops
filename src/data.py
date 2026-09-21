@@ -30,7 +30,7 @@ FEATURES = [
 SCHEMA: dict[str, str] = {
     ID: "int64",
     GROUP: "int64",
-    "temp_c": "float64",
+    "temp_c": "int32",
     "vibration_mm_s": "float64",
     "pressure_kpa": "float64",
     "hours_since_service": "float64",
