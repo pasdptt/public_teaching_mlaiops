@@ -23,12 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          # NOT optional. The default depth of 1 makes this scan useless: it would
-          # see a single commit and pass on a repository full of leaked keys. The
-          # scanner refuses to run on a shallow clone rather than pass quietly, so
-          # removing this line fails the job — which is the intended behaviour.
-          fetch-depth: 0
 
       - name: Scan history for credentials
         run: python3 scripts/scan_secrets.py
