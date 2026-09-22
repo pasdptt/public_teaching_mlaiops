@@ -8,13 +8,17 @@ on:
     paths: ['**.md', 'course/**', 'scripts/export_spec_md.py', 'scripts/site/**']
   pull_request:
     paths: ['**.md', 'course/**']
+  # The paths filters above mean a change to this file does not run it. Without a
+  # manual trigger there is no way to test an edit to this workflow except by
+  # touching an unrelated document, which is how workflows rot.
+  workflow_dispatch:
 
 jobs:
   diagrams:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
       - run: npm install --no-audit --no-fund mermaid jsdom
@@ -24,8 +28,8 @@ jobs:
   spec-in-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - run: pip install openpyxl
@@ -43,8 +47,8 @@ jobs:
   links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - name: Check relative links resolve
