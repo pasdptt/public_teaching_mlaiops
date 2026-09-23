@@ -8,9 +8,10 @@ title: ITCS355 — Machine Learning Operation and Deployment
 description: Faculty of ICT, Mahidol University
 theme: jekyll-theme-minimal
 
-# Code and instructor material stay out of the published site.
+# Code stays out of the published site. Instructor material is not here at all any
+# more — it lives in the private teaching repository, which is the only thing that
+# actually keeps it unpublished.
 exclude:
-  - instructor/
   - src/
   - service/
   - monitoring/

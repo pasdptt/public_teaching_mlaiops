@@ -15,7 +15,6 @@ service/      Layer 1            inference service
 monitoring/   Layer 1            drift, SLOs, dashboard
 cloudlayer/   Layer 3            the only place a provider SDK may be imported
 pipeline/                        the neutral DAG for Lab 5
-instructor/                      grading scripts and marking notes — DELETE before distributing
 ```
 
 ---
@@ -154,15 +153,20 @@ moves the *split*, not just the model. Your stated tolerance covers the first ki
 
 ---
 
-## Instructor material
+## Instructor material is not in this repository
 
-`instructor/` holds the teaching guide, grading scripts, and marking notes. **Remove it
-before distributing the repository to students** — `RUBRIC-labs-2-to-5.md` tells them
-exactly which judgement items carry the marks.
+Teaching guide, marking rubrics, grading scripts, drill answers, and the Session 1
+cold-open answer key live in a separate private repository. They are not here, and
+`.gitignore` carries `instructor/` so they cannot drift back in by accident.
 
-```bash
-git rm -r --cached instructor/ && echo "instructor/" >> .gitignore
-```
+This guide used to say "remove it before distributing the repository to students" and
+give the `git rm --cached` command. That advice was being followed by nobody, including
+us: the directory sat on this repository's public main branch from 4 September to 23
+September 2026. A public repository has already distributed everything in it, so the
+instruction was describing a step that could no longer be taken.
+
+If you are teaching from this material, make your own private repository for the
+answer keys before you write any. Removing them later does not unpublish them.
 
 `course/spec/Course_Specification_ITCS355_merged.xlsx` contains a **Merge Notes** sheet
 listing open decisions and every change made to the faculty template. Delete that sheet

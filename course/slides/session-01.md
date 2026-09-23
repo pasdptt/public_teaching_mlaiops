@@ -15,7 +15,8 @@ Session 1 has NO drill and NO debrief: Drill 1 is at the start of Session 2 and 
 is no previous lab to debrief. That frees the first 35 minutes, which this deck spends
 on the cold open. Sessions 2-5 use the standard shape.
 
-PREPARE BEFORE THIS SESSION: instructor/session-01-cold-open/ has the peer notebook, the
+PREPARE BEFORE THIS SESSION: the private instructor repository (`itcs355-private/teaching/`),
+folder session-01-cold-open/, has the peer notebook, the
 answer key, and spread.py for the debrief reveal. Hand the notebook out through the LMS —
 do not link it in the course channel beforehand. Run spread.py once on the room machine.
 -->
@@ -71,7 +72,8 @@ slide lands harder when the categories come out of the room rather than off the 
 Some pairs will get 0.961 and believe they succeeded. That is the most useful outcome
 in the room, and the debrief takes it away from them.
 
-Full answer key, timing and debrief script: instructor/session-01-cold-open/README.md
+Full answer key, timing and debrief script: the private instructor repository (`itcs355-private/teaching/`),
+session-01-cold-open/README.md
 -->
 
 ---
@@ -90,7 +92,8 @@ We will collect these on the board. Every failure lands in one of four places:
 You just spent 25 minutes on what a grader will spend 5 minutes on with your Lab 1 repository. The difference is that they will not be trying to help you.
 
 <!--
-Run instructor/session-01-cold-open/spread.py --runs 10 on screen here. Ten runs, none
+Run session-01-cold-open/spread.py --runs 10 from the private teaching repository on
+screen here. Ten runs, none
 of them 0.965 — the author could not reproduce their own number either. They were never
 lying; they simply never checked.
 

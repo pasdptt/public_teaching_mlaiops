@@ -23,3 +23,7 @@ __pycache__/
 
 # ruff cache
 .ruff_cache/
+
+# Instructor material lives in the private teaching repository. If this path ever
+# reappears here it is a mistake, not a convenience.
+instructor/

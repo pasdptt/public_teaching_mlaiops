@@ -49,13 +49,14 @@ Mermaid. That is the only non-obvious part of the setup.
    [`course/labs/lab-04-cicd-monitoring-drift.md`](../course/labs/lab-04-cicd-monitoring-drift.md)
    has two and is the best page to test
 
-`_config.yml` excludes `instructor/`, `src/`, `tests/`, and the rest of the code from the
-published site. **Check that exclusion after your first build.** `instructor/` contains the
-marking notes, which tell students exactly which judgement items carry the marks.
+`_config.yml` excludes `src/`, `tests/`, and the rest of the code from the published site.
+**Check that exclusion after your first build.**
 
-Excluding a directory from the *site* does not remove it from the *repository*. If the repo
-is public, `instructor/` is still readable on github.com. For a public course site, keep
-instructor material in a separate private repo.
+It no longer excludes `instructor/`, because there is no `instructor/`. Excluding a
+directory from the *site* never removed it from the *repository*: while that exclusion
+was in place, the marking notes were absent from the website and readable on github.com
+the whole time. Keeping instructor material in a separate private repository is the only
+version of this that works, and that is now where it is.
 
 ---
 
