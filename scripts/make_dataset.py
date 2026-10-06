@@ -48,7 +48,7 @@ def build(seed: int) -> pd.DataFrame:
             rows.append({
                 "reading_id": reading_id,
                 "machine_id": machine,
-                "temp_c": round(float(temp), 3),
+                "temp_celsius": round(float(temp), 3),
                 "vibration_mm_s": round(float(vib), 3),
                 "pressure_kpa": round(float(pressure), 3),
                 "hours_since_service": round(hours, 3),
