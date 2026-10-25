@@ -27,14 +27,14 @@ from your university email and issues credit valid for twelve months. If you hav
 you would rather not put a personal card behind a course exercise, this is the path with the
 fewest obstacles.
 
-Two catches, and the second is the one that shapes how you do Labs 3 and 5.
+Two catches, and the second is the one that shapes how you do Labs 2, 3 and 5.
 
 **Azure Container Registry bills a flat daily rate** — roughly USD 0.17 a day on the Basic tier —
 whether you push anything or not. GCP's Artifact Registry charges for what you store instead. Over
 a term the difference is real but comfortably inside your student credit, provided you **delete the
 registry when the course ends**. On Azure, teardown is not a formality.
 
-## The vCPU ceiling — read this before Lab 3
+## The vCPU ceiling — read this before Lab 2
 
 **Azure for Students caps you at about 3 vCPU per region, and the cap cannot be raised.**
 
@@ -43,22 +43,69 @@ only way past it is converting to Pay-As-You-Go, which means attaching a credit 
 thing this path exists to avoid. Some student subscriptions show quota **0** for certain families,
 D-series especially.
 
-Two consequences you need to plan around:
+Azure ML compute has **its own quota**, separate from the VM quota above, and the numbers differ.
+Check both before you plan anything:
+
+```bash
+az vm list-usage --location $REGION -o table          # VMs, spot included
+az ml compute list-usage --resource-group $RG \
+  --workspace-name <workspace> -o table                # what AmlCompute clusters draw on
+```
+
+Three consequences you need to plan around:
 
 | | |
 |---|---|
 | **VM sizes** | Use **B-series burstable**: `Standard_B1s` (1 vCPU) or `Standard_B2s` (2 vCPU). A 4-vCPU size such as `Standard_DS3_v2` will not deploy. |
+| **Azure ML low-priority compute (Lab 2)** | Expect **`TotalLowPriorityCores` = 0** in `az ml compute list-usage`. A low-priority AmlCompute cluster (`--tier low_priority`) then fails with `ClusterMinNodesExceedCoreQuota` at every size, and the increase is refused like any other. `az vm list-usage` may show a non-zero low-priority figure; that is the VM quota and does not apply to AmlCompute. Dedicated AmlCompute quota is small but non-zero — a few vCPU in the DSv2/Dv3 families. |
 | **Azure ML managed online endpoints** | Effectively unavailable. They reserve 20% for upgrades, so the quota needed is `ceil(1.2 x instances) x cores` — one `Standard_DS3_v2` instance asks for **8 vCPU** against a cap of 3. Even a 2-core size asks for 4. |
+
+**So Lab 2's study runs on Dedicated compute if your low-priority quota is 0.** Lab 2 asks for
+discounted compute *and* a job that resumes from a checkpoint. On Azure for Students you can meet
+the second half but not the first, so the substitution is: run the trials on a dedicated cluster
+(`--tier dedicated`), and **demonstrate the resume**. Start a trial, cancel it yourself partway
+through (`az ml job cancel`), resubmit it, and show from the logs that it picked up from the last
+checkpoint rather than from step zero. Commit that evidence with the lab. A preemption you cause by
+hand tests the same code path a real eviction would — and record in your cost column that you paid
+the dedicated rate, because that is the honest number.
+
+Before you take the substitution, run `az ml compute list-usage` and keep the output. If
+`TotalLowPriorityCores` is above zero on your subscription, use it — the lab's requirement stands.
 
 **So Lab 3 does not deploy to an Azure ML managed endpoint.** Deploy your container to **Azure
 Container Apps** instead: consumption pricing, scales to zero, no Azure ML core quota involved, and
 a monthly free grant that covers this course comfortably. The lab asks for a deployed inference
 endpoint — it does not require it to be an Azure ML one.
 
+**Create the Container Apps environment yourself, first.** Container Apps now has an **Express**
+environment tier, and Express supports only single-revision mode — no multiple revisions, no
+traffic splitting. Lab 3's canary is a 90/10 split across two revisions, so on Express it fails at
+Task 4 with `ExpressEnvironmentFeatureNotSupported ... 'Not Single Active Revisions Mode'`, after you
+have done everything else. `az containerapp up` with no `--environment` reuses whatever environment
+it finds in your resource group, or makes one with its own defaults; either way you have not chosen.
+Choose, by creating a standard Consumption environment and naming it on every deploy:
+
 ```bash
+az extension add --name containerapp --upgrade
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.OperationalInsights
+
+az containerapp env create --name itcs355-env --resource-group $RG \
+  --location $REGION --enable-workload-profiles false \
+  --tags course=itcs355
+
 az containerapp up --name itcs355-predict --resource-group $RG \
+  --environment itcs355-env \
   --image $ACR.azurecr.io/itcs355/serve:<sha> --target-port 8080 --ingress external
 ```
+
+`--enable-workload-profiles false` gives a Consumption-only environment: no workload profiles, no
+Express. If you already deployed with a bare `az containerapp up`, check which kind of environment
+you got (`az containerapp env show --name <env> --resource-group $RG`). If it is Express, create
+`itcs355-env` as above and redeploy into it — an app cannot be switched to multiple-revision mode
+while it lives in an Express environment. And if Azure emails you a notice that the environment
+has been selected for automatic migration to Express, use the opt-out form in that notice before
+Lab 3.
 
 This is not a workaround to be embarrassed about. Choosing the service that fits your constraints,
 and being able to say what the constraint was, is the whole subject.
