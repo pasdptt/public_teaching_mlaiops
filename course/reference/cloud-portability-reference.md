@@ -119,7 +119,7 @@ knowing a product and knowing the category. In Session 5 we compare adapters acr
 | Secrets | Secrets Manager / SSM Parameter Store | Key Vault | Secret Manager |
 | Runtime identity | IAM role | Managed identity | Service account |
 | Scheduler | EventBridge Scheduler | Azure ML schedules / Logic Apps | Cloud Scheduler |
-| Budget alert | AWS Budgets | Cost Management budget | Billing budget |
+| Budget alert | AWS Budgets | Cost Management budget — **not available on Azure for Students**, which watches its credit balance instead ([guide §8](../getting-started-azure.md)) | Billing budget |
 | Discount compute | Spot instances | Low-priority / spot VMs | Spot VMs |
 | Resource grouping | Tags | Resource group + tags | Labels |
 
