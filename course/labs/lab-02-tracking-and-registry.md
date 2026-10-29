@@ -54,6 +54,16 @@ At least **12 trials**, varying at least three hyperparameters. Use discounted c
 low-priority, or preemptible) and make your job resumable from a checkpoint so an interruption costs
 you minutes rather than the run.
 
+> **On Azure for Students: low-priority AmlCompute quota is usually 0.** Check with
+> `az ml compute list-usage -g $RG -w <workspace>`. If `TotalLowPriorityCores` is 0, a
+> `--tier low_priority` cluster fails with `ClusterMinNodesExceedCoreQuota` at any size, and the
+> increase is refused. The non-zero low-priority figure in `az vm list-usage` is VM quota and does
+> not apply. In that case run on a `--tier dedicated` cluster and **demonstrate the checkpoint
+> resume**: cancel a running trial yourself, resubmit it, and show from the logs that it resumed
+> from its last checkpoint. Keep the `list-usage` output and the resume evidence with your
+> submission. Details in [`../getting-started-azure.md`](../getting-started-azure.md). This changes
+> what you pay per trial, not what the lab asks for — the job must still survive an interruption.
+
 **Budget: 150 THB for this lab.** Track spend as you go, not afterwards.
 
 Log for every trial: all hyperparameters, validation and test metrics separately, wall-clock

@@ -12,7 +12,7 @@ the provider you pick for the whole term.
 
 ```mermaid
 flowchart TD
-    A["Week 0<br>install tools"] --> B["Week 0<br>subscription, storage, registry"]
+    A["Week 0<br>install tools"] --> B["Week 0<br>subscription, allowed region,<br>storage, registry"]
     B --> C["Week 0<br>cloud.env + make cloud-check"]
     C --> D["Week 1<br>make reproduce<br>no cloud needed"]
     D --> E["Week 1<br>implement cloudlayer/azure.py"]
@@ -27,14 +27,22 @@ from your university email and issues credit valid for twelve months. If you hav
 you would rather not put a personal card behind a course exercise, this is the path with the
 fewest obstacles.
 
-Two catches, and the second is the one that shapes how you do Labs 3 and 5.
+Three catches. The first two cost you an evening in Week 0 if nobody warns you; the third shapes
+how you do Labs 2, 3 and 5.
 
-**Azure Container Registry bills a flat daily rate** — roughly USD 0.17 a day on the Basic tier —
-whether you push anything or not. GCP's Artifact Registry charges for what you store instead. Over
-a term the difference is real but comfortably inside your student credit, provided you **delete the
-registry when the course ends**. On Azure, teardown is not a formality.
+**Your subscription can only deploy to a few regions, and the list is not the same for everyone.**
+Azure for Students attaches a policy that limits each subscription to roughly five regions, chosen
+per subscription. A region that works for your friend can refuse you. §3 shows how to find yours
+before you create anything.
 
-## The vCPU ceiling — read this before Lab 3
+**Azure Container Registry bills a flat daily rate** — USD 0.1666 a day on the Basic tier, about
+**42 THB a week**, whether you push anything or not. GCP's Artifact Registry charges for what you
+store instead. Kept from Week 0 to the final week, the registry alone comes to roughly 300 THB —
+a large share of the course's **800 THB target** before anything else has run. It comes out of
+your student credit, not your pocket, but it is the biggest single line on an Azure bill in this
+course. **Delete the registry when the course ends.** On Azure, teardown is not a formality.
+
+## The vCPU ceiling — read this before Lab 2
 
 **Azure for Students caps you at about 3 vCPU per region, and the cap cannot be raised.**
 
@@ -43,22 +51,75 @@ only way past it is converting to Pay-As-You-Go, which means attaching a credit 
 thing this path exists to avoid. Some student subscriptions show quota **0** for certain families,
 D-series especially.
 
-Two consequences you need to plan around:
+Azure ML compute has **its own quota**, separate from the VM quota above, and the numbers differ.
+Check both before you plan anything:
+
+```bash
+az vm list-usage --location $REGION -o table          # VMs, spot included
+az ml compute list-usage --resource-group $RG \
+  --workspace-name <workspace> -o table                # what AmlCompute clusters draw on
+```
+
+Three consequences you need to plan around:
 
 | | |
 |---|---|
 | **VM sizes** | Use **B-series burstable**: `Standard_B1s` (1 vCPU) or `Standard_B2s` (2 vCPU). A 4-vCPU size such as `Standard_DS3_v2` will not deploy. |
+| **Azure ML low-priority compute (Lab 2)** | Expect **`TotalLowPriorityCores` = 0** in `az ml compute list-usage`. A low-priority AmlCompute cluster (`--tier low_priority`) then fails with `ClusterMinNodesExceedCoreQuota` at every size, and the increase is refused like any other. `az vm list-usage` may show a non-zero low-priority figure; that is the VM quota and does not apply to AmlCompute. Dedicated AmlCompute quota is small but non-zero — a few vCPU in the DSv2/Dv3 families. |
 | **Azure ML managed online endpoints** | Effectively unavailable. They reserve 20% for upgrades, so the quota needed is `ceil(1.2 x instances) x cores` — one `Standard_DS3_v2` instance asks for **8 vCPU** against a cap of 3. Even a 2-core size asks for 4. |
+
+**So Lab 2's study runs on Dedicated compute if your low-priority quota is 0.** Lab 2 asks for
+discounted compute *and* a job that resumes from a checkpoint. On Azure for Students you can meet
+the second half but not the first, so the substitution is: run the trials on a dedicated cluster
+(`--tier dedicated`), and **demonstrate the resume**. Start a trial, cancel it yourself partway
+through (`az ml job cancel`), resubmit it, and show from the logs that it picked up from the last
+checkpoint rather than from step zero. Commit that evidence with the lab. A preemption you cause by
+hand tests the same code path a real eviction would — and record in your cost column that you paid
+the dedicated rate, because that is the honest number.
+
+Before you take the substitution, run `az ml compute list-usage` and keep the output. If
+`TotalLowPriorityCores` is above zero on your subscription, use it — the lab's requirement stands.
 
 **So Lab 3 does not deploy to an Azure ML managed endpoint.** Deploy your container to **Azure
 Container Apps** instead: consumption pricing, scales to zero, no Azure ML core quota involved, and
 a monthly free grant that covers this course comfortably. The lab asks for a deployed inference
 endpoint — it does not require it to be an Azure ML one.
 
+**Create the Container Apps environment yourself, first.** Container Apps now has an **Express**
+environment tier, and Express supports only single-revision mode — no multiple revisions, no
+traffic splitting. Lab 3's canary is a 90/10 split across two revisions, so on Express it fails at
+Task 4 with `ExpressEnvironmentFeatureNotSupported ... 'Not Single Active Revisions Mode'`, after you
+have done everything else. `az containerapp up` with no `--environment` reuses whatever environment
+it finds in your resource group, or makes one with its own defaults; either way you have not chosen.
+Choose, by creating a standard Consumption environment and naming it on every deploy:
+
 ```bash
+az extension add --name containerapp --upgrade
+az provider register --namespace Microsoft.App
+az provider register --namespace Microsoft.OperationalInsights
+
+az containerapp env create --name itcs355-env --resource-group $RG \
+  --location $REGION --enable-workload-profiles false \
+  --tags course=itcs355
+
 az containerapp up --name itcs355-predict --resource-group $RG \
-  --image $ACR.azurecr.io/itcs355/serve:<sha> --target-port 8080 --ingress external
+  --environment itcs355-env \
+  --image $ACR.azurecr.io/itcs355/serve:<sha> --target-port 8080 --ingress external \
+  --registry-server $ACR.azurecr.io --registry-identity system
 ```
+
+`--registry-identity system` is what lets the app pull from your **private** registry. It gives
+the app a managed identity and grants that identity `AcrPull` on the registry, so nothing has to
+store a registry password. Leave it off and the app is created but cannot start: the revision
+fails with an `UNAUTHORIZED` image-pull error.
+
+`--enable-workload-profiles false` gives a Consumption-only environment: no workload profiles, no
+Express. If you already deployed with a bare `az containerapp up`, check which kind of environment
+you got (`az containerapp env show --name <env> --resource-group $RG`). If it is Express, create
+`itcs355-env` as above and redeploy into it — an app cannot be switched to multiple-revision mode
+while it lives in an Express environment. And if Azure emails you a notice that the environment
+has been selected for automatic migration to Express, use the opt-out form in that notice before
+Lab 3.
 
 This is not a workaround to be embarrassed about. Choosing the service that fits your constraints,
 and being able to say what the constraint was, is the whole subject.
@@ -114,14 +175,34 @@ export SUBSCRIPTION=$(az account show --query id -o tsv)
 az account set --subscription "$SUBSCRIPTION"
 ```
 
-## 3. Create your resource group
+## 3. Find your allowed regions, then create your resource group
 
-Everything you create goes in one resource group, which is also how you delete everything later
-in one command. Use **Southeast Asia** (Singapore) unless you have a reason not to — it is the
-closest region to Bangkok and keeps Lab 3's latency numbers honest.
+**Do this before you choose a region.** Every Azure for Students subscription has a policy named
+*Allowed resource deployment regions* that limits it to a short list — typically about five — and
+**the list varies from student to student.** Create anything outside it and you get
+`RequestDisallowedByAzure ... This policy maintains a set of best available regions`. You cannot
+widen the list from your side, so read it:
 
 ```bash
-export REGION=southeastasia
+az policy assignment list --disable-scope-strict-match \
+  --query "[?displayName && (contains(displayName,'region') || contains(displayName,'ocation'))].{policy:displayName, parameters:parameters}" \
+  -o json
+```
+
+Your allowed regions are in the `parameters` block of that output. If it prints `[]`, use the
+portal: **Policy → Assignments → Allowed resource deployment regions → Parameters**.
+
+Pick **Southeast Asia** (`southeastasia`, Singapore) **if it is on your list** — it is the closest
+region to Bangkok and keeps Lab 3's latency numbers honest. If it is not, take the nearest one
+that is — `eastasia` (Hong Kong), then `japaneast`, `koreacentral` or `centralindia` — and use that
+**one region for everything**, all term. Post your region in the course channel, so a grader
+reading your Lab 3 latency numbers knows where they came from.
+
+Everything you create goes in one resource group, which is also how you delete everything later
+in one command:
+
+```bash
+export REGION=<one region from your allowed list>
 export RG=itcs355-<studentid>
 
 az group create --name $RG --location $REGION \
@@ -136,6 +217,18 @@ Lab 5 grades whether teardown actually worked.
 Storage account names are **globally unique, lowercase, 3–24 characters, letters and digits
 only** — no hyphens. Registry names have the same rule. Put your student ID in both.
 
+Register the two services first. A new subscription has most services switched off, and the
+first create then fails with `MissingSubscriptionRegistration`. Registering is harmless to repeat,
+and `--wait` returns only once it has finished:
+
+```bash
+az provider register --namespace Microsoft.Storage --wait
+az provider register --namespace Microsoft.ContainerRegistry --wait
+```
+
+Later labs register their own: `Microsoft.MachineLearningServices` for Lab 2, and `Microsoft.App`
+plus `Microsoft.OperationalInsights` for Lab 3's Container Apps (shown above).
+
 ```bash
 export SA=itcs355<studentid>          # no hyphens, lowercase
 export ACR=itcs355<studentid>
@@ -144,12 +237,18 @@ az storage account create --name $SA --resource-group $RG \
   --location $REGION --sku Standard_LRS --kind StorageV2 \
   --tags course=itcs355
 
-az storage container create --name itcs355 \
-  --account-name $SA --auth-mode login
+az storage container-rm create --name itcs355 \
+  --storage-account $SA --resource-group $RG
 
 az acr create --name $ACR --resource-group $RG \
   --sku Basic --location $REGION --tags course=itcs355
 ```
+
+`container-rm` creates the container through Azure Resource Manager, so owning the subscription
+is enough. **An earlier version of this guide used `az storage container create --auth-mode
+login` here, which is a data-plane call.** It needs the role you grant in §5, so in this order it
+failed with `AuthorizationPermissionMismatch`. If that happened to you, nothing else is wrong —
+run the `container-rm` line above and carry on.
 
 Verify:
 
@@ -179,12 +278,18 @@ allowed to read the data inside it:
 ```bash
 az role assignment create \
   --role "Storage Blob Data Contributor" \
-  --assignee $(az ad signed-in-user show --query id -o tsv) \
+  --assignee-object-id $(az ad signed-in-user show --query id -o tsv) \
+  --assignee-principal-type User \
   --scope $(az storage account show --name $SA --resource-group $RG --query id -o tsv)
 ```
 
-Skipping that produces `AuthorizationPermissionMismatch` on your first upload, which reads like a
-code bug and is not one.
+`--assignee-object-id` with `--assignee-principal-type User` skips a Microsoft Graph lookup that
+can fail on a brand-new account. The Azure CLI documents the pair for exactly that reason.
+
+Skipping the assignment produces `AuthorizationPermissionMismatch` on your first upload, which reads
+like a code bug and is not one. **A role assignment also takes a few minutes to take effect**, so
+an upload attempted straight afterwards can fail the same way. Wait five minutes and retry before
+you start debugging your code.
 
 ## 6. Get the repository and write `cloud.env`
 
@@ -199,7 +304,7 @@ committing it is an automatic deduction on the capstone.
 ```bash
 CLOUD_PROVIDER=azure
 PROJECT_ID=itcs355-<studentid>
-REGION=southeastasia
+REGION=<the region you chose in §3>
 
 BLOB_URI=https://itcs355<studentid>.blob.core.windows.net/itcs355/itcs355
 CONTAINER_REGISTRY=itcs355<studentid>.azurecr.io/itcs355
@@ -233,19 +338,28 @@ Every line should say PASS.
 what it is for. A FAIL posted on Sunday is a five-minute problem; the same FAIL found in the room
 is a lost session.
 
-## 8. Set a budget alert now, not later
+## 8. Know where to watch your credit — budgets do not work here
 
-The term target is **under 800 THB**. Lab 1 costs almost nothing; the expensive mistakes come
-later, and always from something left running.
+**Azure for Students cannot have a budget.** Microsoft lists the offer (`MS-AZR-0170P`) among those
+**Cost Management does not support**, so `az consumption budget create` and the portal's
+*Budgets* page both fail on your subscription. An earlier version of this guide told you to set a
+budget here. If you tried and got an error, that is why; there is nothing to fix.
 
-```bash
-az consumption budget create --budget-name itcs355 --amount 25 \
-  --category Cost --time-grain Monthly \
-  --start-date $(date +%Y-%m-01) --end-date $(date -v+1y +%Y-%m-01 2>/dev/null || date -d '+1 year' +%Y-%m-01)
-```
+The protection comes from the offer itself. No card is attached, so when your credit runs out —
+or twelve months pass, whichever comes first — Azure **disables the subscription** rather than
+billing you. That stops the spending and it also stops your work: on Azure the risk is losing your
+deployment the week before the capstone, not receiving an invoice.
 
-If that command is awkward on your subscription, set it in the portal instead: **Cost Management
-→ Budgets → Add**. Either way, do it before you create anything else.
+So check the balance **once a week**, when you update your cost column:
+
+- **https://www.microsoftazuresponsorships.com/balance** — sign in with the same account. It
+  shows used and remaining credit and the expiry date, and its **Usage** page shows which service
+  is spending it.
+- Or search **Education** in the portal. The Education hub's Overview page shows your remaining
+  credit too.
+
+The term target is **under 800 THB**. Lab 1 costs almost nothing beyond the registry's 42 THB a
+week. The expensive mistakes come later, and they always come from something left running.
 
 Everything you made lives in one resource group, so the end-of-term cleanup is one command:
 
@@ -316,7 +430,13 @@ make image-push
 
 | Symptom | Cause |
 |---|---|
+| `RequestDisallowedByAzure` … *best available regions* | Your subscription's allowed-regions policy (§3). Use a region from **your** list; the list cannot be widened |
+| `MissingSubscriptionRegistration` | That service's provider is not registered yet — `az provider register --namespace <the namespace in the error> --wait` (§4) |
+| `AuthorizationPermissionMismatch` on `az storage container create` | A data-plane command run before the role exists. Use `az storage container-rm create` (§4) |
 | `AuthorizationPermissionMismatch` on upload | No **Storage Blob Data Contributor** role — owning the subscription is not data-plane access (§5) |
+| Upload still fails just after you added the role | Role assignments take a few minutes to take effect. Wait and retry before debugging |
+| Budget creation fails, or Cost Management says it is unavailable | Budgets are not supported on Azure for Students (§8). Watch the balance page instead |
+| Container App created but never starts; image pull `UNAUTHORIZED` | Deployed without `--registry-identity system`, so it cannot pull from your private registry |
 | `unauthorized: authentication required` on push | You skipped `az acr login` (§5) |
 | Storage account create fails, name invalid | Names are lowercase alphanumeric, 3–24 chars, **no hyphens** |
 | Storage account create fails, name taken | Names are globally unique — add your student ID |
@@ -331,7 +451,8 @@ make image-push
 ## What to have done before Session 2
 
 - [ ] `make cloud-check` all green, output posted in the course channel
-- [ ] Budget alert set
+- [ ] Your allowed regions checked, and your one region posted in the course channel
+- [ ] The credit balance page bookmarked (§8)
 - [ ] `make reproduce` works from a **fresh clone**, not just your working directory
 - [ ] The `expected test_roc_auc:` line in the root `README.md` re-measured and updated
 - [ ] `cloudlayer/azure.py` implements `upload`, `download`, `push_image`
