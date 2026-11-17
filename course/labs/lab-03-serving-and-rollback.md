@@ -73,8 +73,9 @@ container image must be deployable on any of the three providers.
 > upgrades, so the quota needed is `ceil(1.2 × instances) × cores` — one `Standard_DS3_v2` instance
 > asks for 8 vCPU against a student cap of about 3, and **that cap cannot be raised**. Deploy to
 > **Azure Container Apps** instead: no Azure ML core quota, scales to zero, and a free monthly
-> grant. Use `Standard_B1s`/`B2s` for anything that needs a VM. Details in
-> [`../getting-started-azure.md`](../getting-started-azure.md). This changes which service you
+> grant. Use `Standard_B1s`/`B2s` for anything that needs a VM. Create the Container Apps
+> environment yourself, in an explicit non-Express mode, before you deploy — Task 4 depends on it.
+> Details in [`../getting-started-azure.md`](../getting-started-azure.md). This changes which service you
 > deploy to, not what the lab asks for — you still need an endpoint, a load test, and a rollback.
 
 Implement `deploy()` and `invoke()` in your adapter, then deploy.
@@ -132,6 +133,20 @@ faster, and what would have happened at 50/50 instead of 90/10.
 **Provider notes.** SageMaker uses production variants with weights; Azure ML uses traffic percentages
 across deployments under one endpoint; Vertex AI uses traffic split across deployed models. Same
 concept, three vocabularies.
+
+On **Azure Container Apps**, the split is revision weights, and it needs multiple-revision mode,
+which an *Express* environment does not support. Your environment must have been created with an
+explicit non-Express mode, as in [`../getting-started-azure.md`](../getting-started-azure.md);
+otherwise this task fails with `ExpressEnvironmentFeatureNotSupported`. Then:
+
+```bash
+az containerapp revision set-mode --name itcs355-predict --resource-group $RG --mode multiple
+az containerapp revision list --name itcs355-predict --resource-group $RG -o table   # revision names
+az containerapp ingress traffic set --name itcs355-predict --resource-group $RG \
+  --revision-weight <good-rev>=90 <worse-rev>=10
+```
+
+Rolling back is the same command with `<good-rev>=100 <worse-rev>=0`.
 
 ## Task 5 — Cost per thousand predictions (25 min)
 
