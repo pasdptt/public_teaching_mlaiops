@@ -7,7 +7,8 @@ will actually use.
 
 ## Option A — browse the repository directly (recommended)
 
-Push the repo to GitHub and send students the URL of [`course/README.md`](../course/README.md).
+Push the repo to GitHub and send students the repository URL. The root `README.md` is the home
+page: it links to the setup guides, every lab, the slides and the course overview.
 
 GitHub renders Markdown, tables, and **Mermaid diagrams natively** in the repository view.
 Nothing to configure, nothing to build, nothing to break the week before a session. The
@@ -17,15 +18,17 @@ What students get:
 
 | They want | They open |
 |---|---|
-| The syllabus | `course/README.md` |
+| Where to start | the root `README.md` |
+| The syllabus and assessment | `course/README.md` |
 | A lab handout | `course/labs/lab-0N-*.md` |
 | The specification | `course/spec/course-specification.md` |
 | The overview slides | `course/slides/course-deck.md` |
 | A session's teaching deck | `course/slides/session-0N.md` |
 | The code | the repository root |
 
-Set the repository description to the course code and pin `course/README.md` in the
-README, so the landing page is obvious.
+Set the repository description to the course code. The root README is already the landing
+page — on GitHub and on the Pages site, which renders it as the index — so keep it short and
+let it link out. Detail belongs in the page it links to.
 
 ---
 

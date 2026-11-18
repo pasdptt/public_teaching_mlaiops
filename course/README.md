@@ -19,8 +19,9 @@ University · 5 sessions × 3 hours + final week
 1. **[`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)**
    — before anything else. Defines the contract that makes every lab work on AWS, Azure, or
    GCP, and contains the Week 0 setup checklist.
-2. **[`../README.md`](../README.md)** — the repository you will actually work in.
-   Deeper detail in [`../docs/REPO-GUIDE.md`](../docs/REPO-GUIDE.md).
+2. **[`../docs/REPO-GUIDE.md`](../docs/REPO-GUIDE.md)** — how the repository you will work
+   in is organised. Your own README starts from the
+   [Lab 1 README template](labs/lab-01-readme-template.md).
 3. Your current lab handout, from `labs/`.
 4. **[`project/project-brief.md`](project/project-brief.md)** — read it after Session 2, not
    in the final week.

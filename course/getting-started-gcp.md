@@ -271,8 +271,9 @@ make verify      # compare the produced metric against the claim in README.md
 line after your final change. The tolerance is how far the *same* seed moves on a *different*
 machine — `make reproduce` pins the seed, so that is the only thing the grader's run can differ
 by, and measured across two architectures it is about 1e-5. It is not the spread across seeds,
-which measures the split and is nearly four thousand times larger. The block beside the claim
-line in `README.md` works through the difference; read it before you pick a number.
+which measures the split and is nearly four thousand times larger. The
+[Lab 1 README template](labs/lab-01-readme-template.md) works through the difference; read it
+before you pick a number.
 
 **If you are stuck on GCP access, do this part anyway.** It is most of the lab, and it is the
 half that is graded by a script.

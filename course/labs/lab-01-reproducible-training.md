@@ -139,6 +139,9 @@ Five runs minimum, varying something meaningful — not five identical runs with
 The README must get a stranger from clone to reproduced metric in **one command**. Assume they have
 Docker and nothing else from your setup.
 
+**Start from the [Lab 1 README template](lab-01-readme-template.md).** The root `README.md` you
+cloned is the course home page; in your repository, replace it with the template and fill it in.
+
 It must state: what the problem is, what the data is and where it comes from, the one command, the
 expected metric and tolerance, and roughly how long it takes.
 
