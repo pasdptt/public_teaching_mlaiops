@@ -8,23 +8,11 @@ University · 5 sessions × 3 hours + final week
 
 ---
 
-## Read in this order
+## How the course is organised
 
-0. **Week 0 setup, step by step.** Pick **one** provider and stay on it for the term:
-   **[`getting-started-gcp.md`](getting-started-gcp.md)** (cheaper registry; the free trial
-   wants a credit card) or **[`getting-started-azure.md`](getting-started-azure.md)** (credit
-   from your university email, no card; the registry bills daily). Either takes you from an
-   empty laptop to a finished Lab 1, and both assume minimum access — one subscription or
-   project, basic permissions, a small budget.
-1. **[`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)**
-   — before anything else. Defines the contract that makes every lab work on AWS, Azure, or
-   GCP, and contains the Week 0 setup checklist.
-2. **[`../docs/REPO-GUIDE.md`](../docs/REPO-GUIDE.md)** — how the repository you will work
-   in is organised. Your own README starts from the
-   [Lab 1 README template](labs/lab-01-readme-template.md).
-3. Your current lab handout, from `labs/`.
-4. **[`project/project-brief.md`](project/project-brief.md)** — read it after Session 2, not
-   in the final week.
+Each week has its own folder, and every folder has the same four parts — **Read**, **Prepare**,
+**Do**, **Due**. Start from the [home page](../README.md), or go straight to
+[Week 0](week-0-setup/).
 
 ```mermaid
 flowchart TD
@@ -45,14 +33,15 @@ flowchart TD
 
 ## Session map
 
-| Session | Topic | CLO | Handout | Code you touch |
+| Week | Topic | CLO | Lab | Code you touch |
 |---|---|---|---|---|
-| 1 | From Notebook to Reproducible ML | CLO1 | [Lab 1](labs/lab-01-reproducible-training.md) | `src/train.py`, `Dockerfile`, `tests/test_data.py` |
-| 2 | Pipelines, features, and managed training | CLO1 | [Lab 2](labs/lab-02-tracking-and-registry.md) | `src/tune.py`, `src/costs.py`, `scripts/compare_runs.py` |
-| 3 | Deployment, scaling, and release safety | CLO2, CLO3 | [Lab 3](labs/lab-03-serving-and-rollback.md) | `service/`, `loadtest/` |
-| 4 | CI/CD/CT, monitoring, and drift | CLO2, CLO3 | [Lab 4](labs/lab-04-cicd-monitoring-drift.md) | `.github/workflows/`, `monitoring/` |
-| 5 | Operating LLM systems and defending the bill | CLO2, CLO3 | [Lab 5](labs/lab-05-cloud-mlops-and-cost.md) | `pipeline/`, `cloudlayer/pipelines.py` |
-| Final | Presentations and defence | All | [Project brief](project/project-brief.md) | everything |
+| [0](week-0-setup/) | Set up your cloud account | — | — | `cloud.env`, `make cloud-check` |
+| [1](week-1-reproducible-training/) | From Notebook to Reproducible ML | CLO1 | [Lab 1](week-1-reproducible-training/lab-01-reproducible-training.md) | `src/train.py`, `Dockerfile`, `tests/test_data.py` |
+| [2](week-2-tracking-and-registry/) | Pipelines, features, and managed training | CLO1 | [Lab 2](week-2-tracking-and-registry/lab-02-tracking-and-registry.md) | `src/tune.py`, `src/costs.py`, `scripts/compare_runs.py` |
+| [3](week-3-serving-and-rollback/) | Deployment, scaling, and release safety | CLO2, CLO3 | [Lab 3](week-3-serving-and-rollback/lab-03-serving-and-rollback.md) | `service/`, `loadtest/` |
+| [4](week-4-cicd-monitoring-drift/) | CI/CD/CT, monitoring, and drift | CLO2, CLO3 | [Lab 4](week-4-cicd-monitoring-drift/lab-04-cicd-monitoring-drift.md) | `.github/workflows/`, `monitoring/` |
+| [5](week-5-llm-systems-and-cost/) | Operating LLM systems and defending the bill | CLO2, CLO3 | [Lab 5](week-5-llm-systems-and-cost/lab-05-cloud-mlops-and-cost.md) | `pipeline/`, `cloudlayer/pipelines.py` |
+| [Final](week-final-capstone/) | Presentations and defence | All | [Capstone brief](project/project-brief.md) | everything |
 
 ---
 
@@ -94,21 +83,21 @@ readable as [`spec/course-specification.md`](spec/course-specification.md), auth
 
 ```
 course/
-├── spec/       Faculty course specification. Course_Specification_691_ITCSB_ITCS355.xlsx
-│               is the file issued by the university system, kept unmodified for
-│               provenance. The *_merged.xlsx is that file's seven sheets plus four
-│               course-design sheets, and is what scripts/export_spec_md.py turns into
-│               the .md that renders on GitHub.
-├── slides/     course-deck.md is the course overview; session-01..05.md are the
-│               teaching decks for each session. All render on GitHub and build to
-│               slides or PDF with Marp. ITCS355-course-deck.html is a separately
-│               styled rendering of the overview only.
-├── reference/  The cloud portability contract. Read first.
-├── getting-started-gcp.md
-├── getting-started-azure.md
-│               Week 0 and Week 1, step by step. Do one, not both.
-├── labs/       Five take-home lab handouts.
-└── project/    Capstone brief, milestones, and rubric.
+├── week-0-setup/                    the two setup guides — do one, not both
+├── week-1-reproducible-training/    each week folder holds its README (Read, Prepare,
+├── week-2-tracking-and-registry/    Do, Due), that session's slides, and that week's
+├── week-3-serving-and-rollback/     lab handout
+├── week-4-cicd-monitoring-drift/
+├── week-5-llm-systems-and-cost/
+├── week-final-capstone/
+│
+│   Used every week, so kept in one place:
+├── project/      the capstone brief, milestones and rubric
+├── reference/    the cloud portability contract
+├── slides/       course-deck.md, the whole course on one page (also as styled HTML)
+└── spec/         the faculty course specification. Course_Specification_691_ITCSB_ITCS355.xlsx
+                  is the university's file, unmodified; *_merged.xlsx adds four course-design
+                  sheets, and scripts/export_spec_md.py renders it as course-specification.md
 ```
 
 ---

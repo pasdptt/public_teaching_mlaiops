@@ -79,7 +79,7 @@ you minutes rather than the run.
 > say in your README that you substituted, and keep the `list-usage` output and the resume
 > evidence with your submission. This changes what you pay per trial, not what the lab asks
 > for — the job must still survive an interruption. Details in
-> [`../getting-started-azure.md`](../getting-started-azure.md).
+> [`../week-0-setup/getting-started-azure.md`](../week-0-setup/getting-started-azure.md).
 
 **Budget: 150 THB for this lab.** Track spend as you go, not afterwards.
 

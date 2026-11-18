@@ -6,7 +6,7 @@ with Docker and nothing else from your setup runs one command and compares the r
 your claim line.
 
 ```bash
-cp course/labs/lab-01-readme-template.md README.md
+cp course/week-1-reproducible-training/lab-01-readme-template.md README.md
 ```
 
 Then delete this introduction — everything above `# <Your project title>` — edit every `<...>`,

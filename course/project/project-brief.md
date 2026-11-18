@@ -2,7 +2,7 @@
 
 **45 marks · Teams of 2–3 · Proposal end of Session 3 · Presented final week · Repository due +7 days**
 
-Lab handouts are in [`../labs/`](../labs/); this brief covers the capstone only. Read
+Lab handouts are in each week's folder, listed on the [home page](../../README.md); this brief covers the capstone only. Read
 [`../reference/cloud-portability-reference.md`](../reference/cloud-portability-reference.md)
 first — the project inherits the same three-layer contract, and `make portability-audit`
 applies here too.

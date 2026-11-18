@@ -21,7 +21,7 @@ email with no card at all.
 in the university's Workspace tenant, so sign in with a personal Google account. That is a
 setting on our side, not something you can fix.
 
-> **Read [`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)
+> **Read [`reference/cloud-portability-reference.md`](../reference/cloud-portability-reference.md)
 > alongside this.** It explains *why* the repository is shaped the way it is. This guide is the
 > *how*, in order, with the commands.
 
@@ -250,7 +250,7 @@ Send that table to whoever administers your project.
 
 # Week 1 — Lab 1
 
-Full handout: [`labs/lab-01-reproducible-training.md`](labs/lab-01-reproducible-training.md).
+Full handout: [`../week-1-reproducible-training/lab-01-reproducible-training.md`](../week-1-reproducible-training/lab-01-reproducible-training.md).
 This section is the order to do it in, not a replacement for reading it.
 
 ## The part that needs no cloud at all
@@ -272,7 +272,7 @@ line after your final change. The tolerance is how far the *same* seed moves on 
 machine — `make reproduce` pins the seed, so that is the only thing the grader's run can differ
 by, and measured across two architectures it is about 1e-5. It is not the spread across seeds,
 which measures the split and is nearly four thousand times larger. The
-[Lab 1 README template](labs/lab-01-readme-template.md) works through the difference; read it
+[Lab 1 README template](../week-1-reproducible-training/lab-01-readme-template.md) works through the difference; read it
 before you pick a number.
 
 **If you are stuck on GCP access, do this part anyway.** It is most of the lab, and it is the
@@ -286,7 +286,7 @@ that runs under emulation and is slow — several minutes is normal, not a hang.
 ## The GCP part
 
 Lab 1 asks you to implement three of the ten adapter methods in
-[`cloudlayer/gcp.py`](../cloudlayer/gcp.py): `upload`, `download`, and `push_image`. The other
+[`cloudlayer/gcp.py`](../../cloudlayer/gcp.py): `upload`, `download`, and `push_image`. The other
 seven raise `NotImplementedError` until Labs 2 to 5.
 
 ```bash

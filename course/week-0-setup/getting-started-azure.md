@@ -4,7 +4,7 @@ The Azure path through Week 0. Its sibling is
 [`getting-started-gcp.md`](getting-started-gcp.md) — do **one** of them, not both, and stay on
 the provider you pick for the whole term.
 
-> **Read [`reference/cloud-portability-reference.md`](reference/cloud-portability-reference.md)
+> **Read [`reference/cloud-portability-reference.md`](../reference/cloud-portability-reference.md)
 > alongside this.** It explains *why* the repository is shaped the way it is. This guide is the
 > *how*, in order, with the commands.
 
@@ -395,7 +395,7 @@ az group delete --name $RG --yes          # deletes storage, registry, everythin
 
 # Week 1 — Lab 1
 
-Full handout: [`labs/lab-01-reproducible-training.md`](labs/lab-01-reproducible-training.md).
+Full handout: [`../week-1-reproducible-training/lab-01-reproducible-training.md`](../week-1-reproducible-training/lab-01-reproducible-training.md).
 
 ## The part that needs no cloud at all
 
@@ -421,7 +421,7 @@ that is slow — several minutes is normal, not a hang.
 ## The Azure part
 
 Lab 1 asks you to implement three of the eleven adapter methods in
-[`cloudlayer/azure.py`](../cloudlayer/azure.py): `upload`, `download`, and `push_image`.
+[`cloudlayer/azure.py`](../../cloudlayer/azure.py): `upload`, `download`, and `push_image`.
 
 ```bash
 pip install azure-storage-blob azure-identity

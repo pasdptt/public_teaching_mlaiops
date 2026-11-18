@@ -75,7 +75,7 @@ container image must be deployable on any of the three providers.
 > **Azure Container Apps** instead: no Azure ML core quota, scales to zero, and a free monthly
 > grant. Use `Standard_B1s`/`B2s` for anything that needs a VM. Create the Container Apps
 > environment yourself, in an explicit non-Express mode, before you deploy — Task 4 depends on it.
-> Details in [`../getting-started-azure.md`](../getting-started-azure.md). This changes which service you
+> Details in [`../week-0-setup/getting-started-azure.md`](../week-0-setup/getting-started-azure.md). This changes which service you
 > deploy to, not what the lab asks for — you still need an endpoint, a load test, and a rollback.
 
 Implement `deploy()` and `invoke()` in your adapter, then deploy.
@@ -136,7 +136,7 @@ concept, three vocabularies.
 
 On **Azure Container Apps**, the split is revision weights, and it needs multiple-revision mode,
 which an *Express* environment does not support. Your environment must have been created with an
-explicit non-Express mode, as in [`../getting-started-azure.md`](../getting-started-azure.md);
+explicit non-Express mode, as in [`../week-0-setup/getting-started-azure.md`](../week-0-setup/getting-started-azure.md);
 otherwise this task fails with `ExpressEnvironmentFeatureNotSupported`. Then:
 
 ```bash

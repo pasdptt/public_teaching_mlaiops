@@ -152,7 +152,7 @@ Write what the system allowed to happen, and what would have caught it.
 
 ## Lab 4 — handover
 
-**[`labs/lab-04-cicd-monitoring-drift.md`](../labs/lab-04-cicd-monitoring-drift.md)** · 8 marks · due before Session 5
+**[`lab-04-cicd-monitoring-drift.md`](lab-04-cicd-monitoring-drift.md)** · 8 marks · due before Session 5
 
 CI/CD with data-contract and model-behaviour tests, a dashboard, a scheduled drift detector, and **one working alert**.
 

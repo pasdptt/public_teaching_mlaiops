@@ -213,7 +213,7 @@ first failure happen and read the error together.
 
 ## Lab 2 — handover
 
-**[`labs/lab-02-tracking-and-registry.md`](../labs/lab-02-tracking-and-registry.md)** · 8 marks · due before Session 3
+**[`lab-02-tracking-and-registry.md`](lab-02-tracking-and-registry.md)** · 8 marks · due before Session 3
 
 A study of **at least 12 trials**, the best model registered with lineage back to commit and data version, and a written justification of your choice.
 

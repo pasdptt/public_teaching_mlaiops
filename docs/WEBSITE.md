@@ -20,10 +20,11 @@ What students get:
 |---|---|
 | Where to start | the root `README.md` |
 | The syllabus and assessment | `course/README.md` |
-| A lab handout | `course/labs/lab-0N-*.md` |
+| A week's work: Read, Prepare, Do, Due | `course/week-N-*/README.md` |
+| A lab handout | `course/week-N-*/lab-0N-*.md` |
 | The specification | `course/spec/course-specification.md` |
 | The overview slides | `course/slides/course-deck.md` |
-| A session's teaching deck | `course/slides/session-0N.md` |
+| A session's teaching deck | `course/week-N-*/session-0N.md` |
 | The code | the repository root |
 
 Set the repository description to the course code. The root README is already the landing
@@ -49,7 +50,7 @@ Mermaid. That is the only non-obvious part of the setup.
 1. Settings → Pages → Source: *Deploy from a branch* → `main`, folder `/ (root)`
 2. Confirm `_config.yml` and `_layouts/default.html` are committed
 3. Wait for the build, then check that a page with a diagram actually renders one —
-   [`course/labs/lab-04-cicd-monitoring-drift.md`](../course/labs/lab-04-cicd-monitoring-drift.md)
+   [`../course/week-4-cicd-monitoring-drift/lab-04-cicd-monitoring-drift.md`](../course/week-4-cicd-monitoring-drift/lab-04-cicd-monitoring-drift.md)
    has two and is the best page to test
 
 `_config.yml` excludes `src/`, `tests/`, and the rest of the code from the published site.

@@ -155,7 +155,7 @@ The third number — predictions served by the bad model — is the one you will
 
 ## Lab 3 — handover
 
-**[`labs/lab-03-serving-and-rollback.md`](../labs/lab-03-serving-and-rollback.md)** · 8 marks · due before Session 4
+**[`lab-03-serving-and-rollback.md`](lab-03-serving-and-rollback.md)** · 8 marks · due before Session 4
 
 A deployed inference endpoint, a load-test report at **three** concurrency levels, and a canary or blue/green configuration.
 

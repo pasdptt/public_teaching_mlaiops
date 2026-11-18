@@ -7,7 +7,7 @@ title: ITCS355 Session 1 — From Notebook to Reproducible ML
 
 <!--
 Teaching deck for Session 1. Renders three ways: on GitHub as a readable document,
-as slides via `marp course/slides/session-01.md -o session-01.html`, and as PDF with
+as slides via `marp course/week-1-reproducible-training/session-01.md -o session-01.html`, and as PDF with
 `--pdf`. Instructor notes are HTML comments — they do not render, but the raw file is
 public, so nothing confidential goes in them.
 
@@ -244,7 +244,7 @@ their work got worse far longer than they remember a warning about leakage.
 
 ## Lab 1 — handover
 
-**[`labs/lab-01-reproducible-training.md`](../labs/lab-01-reproducible-training.md)** · 8 marks · due before Session 2
+**[`lab-01-reproducible-training.md`](lab-01-reproducible-training.md)** · 8 marks · due before Session 2
 
 A grader with Docker and nothing else from your setup runs **one command** and compares the result against your claim.
 

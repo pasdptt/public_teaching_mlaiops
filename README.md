@@ -9,33 +9,40 @@ Everything around it is.
 
 ## Start here
 
-1. **Set up your cloud account.** Pick one provider and stay on it all term.
-   - [Google Cloud](course/getting-started-gcp.md) — the free trial asks for a credit card
-   - [Azure](course/getting-started-azure.md) — Azure for Students, no card needed
-2. **Read the [portability reference](course/reference/cloud-portability-reference.md).** It
-   explains why the code is split the way it is.
-3. **Open this week's lab** from the table below.
+1. **Begin with [Week 0](course/week-0-setup/)** — set up Google Cloud or Azure before
+   Session 1.
+2. **Each week, open that week's folder.** Every one has the same four parts:
+
+   | | |
+   |---|---|
+   | **Read** | the session slides, and any reading set for the week |
+   | **Prepare** | what to have done before the session starts |
+   | **Do** | the lab, and any capstone step |
+   | **Due** | what you hand in, by when, and for how many marks |
 
 Stuck on setup? Post your `make cloud-check` output in the course channel — don't wait for the
 session.
 
-## Sessions and labs
+## Weeks
 
-| Session | Topic | Lab | Slides |
-|---|---|---|---|
-| 1 | From notebook to reproducible ML | [Lab 1](course/labs/lab-01-reproducible-training.md) | [Session 1](course/slides/session-01.md) |
-| 2 | Pipelines, features and managed training | [Lab 2](course/labs/lab-02-tracking-and-registry.md) | [Session 2](course/slides/session-02.md) |
-| 3 | Deployment, scaling and release safety | [Lab 3](course/labs/lab-03-serving-and-rollback.md) | [Session 3](course/slides/session-03.md) |
-| 4 | CI/CD/CT, monitoring and drift | [Lab 4](course/labs/lab-04-cicd-monitoring-drift.md) | [Session 4](course/slides/session-04.md) |
-| 5 | Operating LLM systems and defending the bill | [Lab 5](course/labs/lab-05-cloud-mlops-and-cost.md) | [Session 5](course/slides/session-05.md) |
-| Final | Presentation and defence | [Capstone brief](course/project/project-brief.md) | |
+| Week | Topic | Lab |
+|---|---|---|
+| [Week 0](course/week-0-setup/) | Set up your cloud account | — |
+| [Week 1](course/week-1-reproducible-training/) | From notebook to reproducible ML | Lab 1, due before Session 2 |
+| [Week 2](course/week-2-tracking-and-registry/) | Pipelines, features and managed training | Lab 2, due before Session 3 |
+| [Week 3](course/week-3-serving-and-rollback/) | Deployment, scaling and release safety | Lab 3, due before Session 4 |
+| [Week 4](course/week-4-cicd-monitoring-drift/) | CI/CD/CT, monitoring and drift | Lab 4, due before Session 5 |
+| [Week 5](course/week-5-llm-systems-and-cost/) | Operating LLM systems and defending the bill | Lab 5, due before the final week |
+| [Final week](course/week-final-capstone/) | Presentation and defence | Capstone |
 
 ## Find something else
 
 | Looking for | Go to |
 |---|---|
 | Marks, assessment and how the course runs | [Course overview](course/README.md) |
-| What to put in your own README | [Lab 1 README template](course/labs/lab-01-readme-template.md) |
+| The capstone project | [Capstone brief](course/project/project-brief.md) |
+| Why the code is split into three layers | [Portability reference](course/reference/cloud-portability-reference.md) |
+| What to put in your own README | [Lab 1 README template](course/week-1-reproducible-training/lab-01-readme-template.md) |
 | How the code is organised | [Repository guide](docs/REPO-GUIDE.md) |
 | The whole course on one page | [Course deck](course/slides/course-deck.md) |
 | The official course specification | [Specification](course/spec/course-specification.md) |
@@ -52,4 +59,4 @@ This trains the reference model in Docker. It takes about 40 seconds on 4 cores 
 cloud account. `make verify` then checks the result against the line above.
 
 In your own repository, this file becomes your project's README. Start from the
-[Lab 1 README template](course/labs/lab-01-readme-template.md).
+[Lab 1 README template](course/week-1-reproducible-training/lab-01-readme-template.md).

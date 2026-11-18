@@ -181,7 +181,7 @@ marks. Do not let it be cut for the cost teardown.
 
 ## Lab 5 — handover
 
-**[`labs/lab-05-cloud-mlops-and-cost.md`](../labs/lab-05-cloud-mlops-and-cost.md)** · 8 marks · due before final week
+**[`lab-05-cloud-mlops-and-cost.md`](lab-05-cloud-mlops-and-cost.md)** · 8 marks · due before final week
 
 **Part A — defending the bill.** Managed platform, least privilege, portability proof, cost report.
 **Part B — operating an LLM step.** Your own golden set of 10+ cases, a baseline, a gate run that fails, and three token-cost figures.
