@@ -48,21 +48,38 @@ is not a sign you have done something wrong. The job's *submit-time* identity an
 identity are different things. Read the error, fix the specific missing permission, and record what
 it was — Drill 2 asks.
 
+> **On Azure ML, four things fail that work locally.** Each one looks like a bug in your code.
+> - **Outputs cannot go to an `https://` path.** Azure ML accepts job outputs only on an
+>   `azureml://datastores/<datastore>/paths/<path>` URI, so the `BLOB_URI` in your `cloud.env` is
+>   rejected as an output. Register your storage container as a datastore and translate `BLOB_URI`
+>   into the datastore form inside your adapter, not in `src/`.
+> - **Inputs on `https://` work only for public data.** Your storage account is private, so an
+>   `https://` input cannot be mounted. Use the same datastore URI, or `wasbs://` /
+>   `abfss://` with identity-based access.
+> - **Job names must be unique in the workspace.** A fixed name works once and collides on the
+>   second run. Leave the name out so Azure generates one, or append something unique, and return
+>   that name as your `job_id`.
+> - **Azure ML points MLflow at itself.** On Azure ML compute it configures MLflow tracking for you,
+>   through `MLFLOW_*` environment variables that expect the `azureml-mlflow` plugin your image
+>   does not have. Set the tracking URI your job should use explicitly, and log
+>   `mlflow.get_tracking_uri()` at startup so you can see which one won.
+
 ## Task 2 — Run a budgeted study (75 min)
 
 At least **12 trials**, varying at least three hyperparameters. Use discounted compute (spot,
 low-priority, or preemptible) and make your job resumable from a checkpoint so an interruption costs
 you minutes rather than the run.
 
-> **On Azure for Students: low-priority AmlCompute quota is usually 0.** Check with
-> `az ml compute list-usage -g $RG -w <workspace>`. If `TotalLowPriorityCores` is 0, a
-> `--tier low_priority` cluster fails with `ClusterMinNodesExceedCoreQuota` at any size, and the
-> increase is refused. The non-zero low-priority figure in `az vm list-usage` is VM quota and does
-> not apply. In that case run on a `--tier dedicated` cluster and **demonstrate the checkpoint
-> resume**: cancel a running trial yourself, resubmit it, and show from the logs that it resumed
-> from its last checkpoint. Keep the `list-usage` output and the resume evidence with your
-> submission. Details in [`../getting-started-azure.md`](../getting-started-azure.md). This changes
-> what you pay per trial, not what the lab asks for — the job must still survive an interruption.
+> **On Azure for Students, low-priority Azure ML compute may not exist for you.** Azure ML compute
+> has its own low-priority quota, separate from the VM quota, and on student subscriptions it can be
+> 0 — the cluster create then fails with `ClusterMinNodesExceedCoreQuota`, and the increase is
+> refused. Check with `az ml compute list-usage` first. If it is 0, use a **Dedicated** cluster and
+> **demonstrate** the interruption: cancel a running trial, resume the study, and show in your logs
+> that it continued from the checkpoint. That satisfies the checkpoint and interruption items below;
+> say in your README that you substituted, and keep the `list-usage` output and the resume
+> evidence with your submission. This changes what you pay per trial, not what the lab asks
+> for — the job must still survive an interruption. Details in
+> [`../getting-started-azure.md`](../getting-started-azure.md).
 
 **Budget: 150 THB for this lab.** Track spend as you go, not afterwards.
 
