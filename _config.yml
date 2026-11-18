@@ -8,6 +8,12 @@ title: ITCS355 — Machine Learning Operation and Deployment
 description: Faculty of ICT, Mahidol University
 theme: jekyll-theme-minimal
 
+# The old page paths, from before each week had its own folder, are kept as short stubs so
+# bookmarks and LMS links still work. On this site their `redirect_to` sends readers on
+# automatically; on github.com the stub shows the new link instead.
+plugins:
+  - jekyll-redirect-from
+
 # Code stays out of the published site. Instructor material is not here at all any
 # more — it lives in the private teaching repository, which is the only thing that
 # actually keeps it unpublished.
